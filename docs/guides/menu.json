@@ -1,0 +1,20 @@
+[
+  {
+    "title": "Overview",
+    "icon": "hgi-home-05",
+    "href": "/guides/overview",
+    "section": "guides"
+  },
+  {
+    "title": "Designing",
+    "icon": "hgi-pen-tool-03",
+    "section": "guides",
+    "children": [
+      {
+        "title": "Drag and drop",
+        "href": "/guides/designing/drag-and-drop",
+        "section": "guides"
+      }
+    ]
+  }
+]

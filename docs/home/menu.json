@@ -1,0 +1,75 @@
+[
+  {
+    "title": "Introduction",
+    "icon": "hgi-home-05",
+    "href": "/",
+    "section": "home"
+  },
+  {
+    "title": "Getting Started",
+    "icon": "hgi-waving-hand-02",
+    "section": "home",
+    "children": [
+      {
+        "title": "Create a project",
+        "href": "/getting-started/create-a-project",
+        "section": "home"
+      },
+      {
+        "title": "Project Settings",
+        "href": "/getting-started/project-settings",
+        "section": "home"
+      },
+      {
+        "title": "Build the app",
+        "href": "/getting-started/build-the-app",
+        "section": "home"
+      }
+    ]
+  },
+  {
+    "title": "AI",
+    "icon": "hgi-ai-magic",
+    "section": "home",
+    "children": [
+      {
+        "title": "Overview",
+        "href": "/ai/overview",
+        "section": "home"
+      },
+      {
+        "title": "Models",
+        "href": "/ai/models",
+        "section": "home"
+      },
+      {
+        "title": "Attach Drawings",
+        "href": "/ai/attach-drawings",
+        "section": "home"
+      },
+      {
+        "title": "UI Style",
+        "href": "/ai/ui-style",
+        "section": "home"
+      }
+    ]
+  },
+  {
+    "title": "Integrations",
+    "icon": "hgi-connect",
+    "badgeIcon": "hgi-hot-price",
+    "section": "home",
+    "children": [
+      {
+        "title": "Figma",
+        "href": "/integration/figma",
+        "section": "home"
+      },
+      {
+        "title": "Apple",
+        "href": "/integration/apple",
+        "section": "home"
+      }
+    ]
+  }
+]
