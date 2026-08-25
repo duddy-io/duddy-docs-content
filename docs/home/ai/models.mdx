@@ -25,17 +25,24 @@ Every model carries a tier, and your plan decides which tiers you can select.
 
 | Tier | Who has it |
 |---|---|
-| **Free** | Every plan, including the trial. |
+| **Free** | Every paid plan, whichever features it holds. |
 | **Standard** | Paid plans. |
 | **Premium** | The top plans — the largest, most capable models. |
+
+The **trial is the exception**: it runs on one model — DeepSeek V4 Flash, the model a new
+account already starts on — and every other model in the picker is locked, free tier
+included, until you move to a paid plan. It is the same model Duddy's own pipeline uses by
+default, so a trial can plan and build a whole app on it. What it cannot do is see: it is a
+text-only model, so attachments and the **Ultra** detail level need a paid plan and a vision
+model.
 
 A locked model shows a badge in the picker. Selecting one you are not entitled to is
 refused when the turn runs, not silently downgraded, so you always know which model
 answered.
 
 <Callout type="info">
-  New accounts start on a fast, low-cost free-tier model. It is a good default for questions
-  and edits — reach for something bigger when you are generating a whole app.
+  New accounts start on a fast, low-cost model, and on the trial it is the only one — a paid
+  plan is what opens the rest of the picker for a whole app or a hard layout.
 </Callout>
 
 ## What the badges mean
