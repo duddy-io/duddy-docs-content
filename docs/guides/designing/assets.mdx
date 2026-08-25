@@ -1,0 +1,69 @@
+---
+title: Images, fonts and files
+description: Upload images, fonts and raw files into a project, generate images with AI, and reference them from components.
+---
+
+Assets are the files your app ships with. They live with the project, are available on
+every screen, and are compiled into the app when you build.
+
+Open the assets area with `6`.
+
+## The three kinds
+
+| Kind | Holds | Used by |
+|---|---|---|
+| **Drawables** | Images — PNG, JPG, SVG, WebP. | `Image`, backgrounds, icons, the launcher icon and splash. |
+| **Fonts** | Font families you upload. | Every Typography row in the properties panel. |
+| **Raw** | Anything else — JSON, Lottie animations, audio, small data files. | `Lottie`, `AudioPlayer`, and your logic. |
+
+<Callout type="warning">
+  Each file has to be **under 1 MB**. That is a real constraint on app size, not an arbitrary one:
+  every asset ships inside the app on every device that installs it.
+</Callout>
+
+## Adding an asset
+
+<Steps>
+  <Step>Open the assets area and choose the kind of asset you are adding.</Step>
+  <Step>Upload from your machine, or pull one in from a connected source such as Pixabay.</Step>
+  <Step>Use it: pick it in an `Image` component's property, or in a background, or by name from your logic.</Step>
+</Steps>
+
+Replacing a file keeps its name, so every component already pointing at it picks up the new
+version — the usual way to swap an icon set or a photo without touching any screens.
+
+## Generating an image
+
+Nothing in the library fits? Generate one:
+
+- In the asset picker, use **Generate with AI**.
+- Or in the [Vibe chat](/ai/overview), `/imagine a flat illustration of a delivery scooter,
+  cream background`.
+
+Styles on offer include realistic, 2D vector illustration, 3D illustration, cartoonish,
+anime, realistic portrait, fantasy, cyberpunk and pixel art. Generated images land straight
+in your drawables and are used like any other asset. Generation spends
+[credits](/getting-started/credits-and-plans).
+
+## Photography
+
+With [Unsplash](https://unsplash.com/oauth/applications) or Pixabay connected in your
+dashboard, the AI can fill generated screens with real photographs rather than grey boxes,
+and the asset picker gains a search over those libraries. Everything offered is licensed
+for commercial use.
+
+<Callout type="info">
+  When no source has a photograph of your subject, Duddy uses a colour block built from your own
+  theme rather than an unrelated stock photo. It is a placeholder that says so.
+</Callout>
+
+## Naming
+
+Asset names become resource names in the built app. Stick to lowercase letters, numbers and
+underscores — `hero_banner.png`, not `Hero Banner (final) v2.png` — and you will never have
+to think about it again.
+
+<NextPrev
+  prev={{ title: "Themes and styling", href: "/guides/designing/theme" }}
+  next={{ title: "Logic blocks", href: "/guides/logic/blocks" }}
+/>

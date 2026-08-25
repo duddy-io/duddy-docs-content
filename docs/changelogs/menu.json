@@ -4,26 +4,5 @@
     "icon": "hgi-home-05",
     "href": "/changelogs/overview",
     "section": "changelogs"
-  },
-  {
-    "title": "Latest Version",
-    "href": "/changelogs/latest-version",
-    "section": "changelogs"
-  },
-  {
-    "title": "Previous Versions",
-    "section": "changelogs",
-    "children": [
-      {
-        "title": "V-1.9.4",
-        "href": "/changelogs/previous-versions/v-1.9.4",
-        "section": "changelogs"
-      },
-      {
-        "title": "V-1.9.3",
-        "href": "/changelogs/previous-versions/v-1.9.3",
-        "section": "changelogs"
-      }
-    ]
   }
 ]

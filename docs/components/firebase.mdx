@@ -1,0 +1,81 @@
+---
+title: Firebase components
+description: Authentication, databases, file storage, push messaging and analytics, backed by your own Firebase project.
+---
+
+Authentication, databases, file storage, push messaging and analytics, backed by your own Firebase project.
+
+<Callout type="danger">
+  A project using any Firebase component needs its config files set under
+  [Settings → Integrations](/getting-started/project-settings#integrations). Without them the build
+  stops with an explicit error rather than shipping an app that cannot connect.
+</Callout>
+
+| Component | Does |
+|---|---|
+| [FirebaseAuth](#firebaseauth) | Firebase Authentication for email and password accounts, covering sign up, sign in, sign out, password reset and the identity of the signed-in user. |
+| [FirebaseDB](#firebasedb) | Stores and reads JSON data in a Firebase Realtime Database, and can watch a path so the app is told the moment a value changes. |
+| [Firestore](#firestore) | Stores app data as documents inside collections in Cloud Firestore, and can watch a document or a whole collection for live updates. |
+| [FirebaseStorage](#firebasestorage) | Uploads files to Firebase Cloud Storage, downloads them back into the app, deletes them, and reports upload or download progress as a percentage. |
+| [FirebaseNotifications](#firebasenotifications) | Receives push notifications sent through Firebase Cloud Messaging, hands the app the device token to send to, and manages topic subscriptions. |
+| [FirebaseAnalytics](#firebaseanalytics) | Non-visual Firebase Analytics logging for events, screen views and user properties. |
+
+## FirebaseAuth
+
+Firebase Authentication for email and password accounts, covering sign up, sign in, sign out, password reset and the identity of the signed-in user.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Sign Up Success`, `Sign Up Failed`, `Sign In Success`, `Sign In Failed`, `Sign Out Success`, `Password Reset Sent`, `Password Reset Failed`, `Auth State Changed`
+
+**Functions** — `Sign Up With Email`, `Sign In With Email`, `Sign Out`, `Send Password Reset Email`, `Get Current User Email`, `Get Current User Uid`, `Is Signed In`, `Send Email Verification`, `Reload User`
+
+## FirebaseDB
+
+Stores and reads JSON data in a Firebase Realtime Database, and can watch a path so the app is told the moment a value changes.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Data Changed`, `Data Received`, `Operation Success`, `Operation Failed`
+
+**Functions** — `Set Value`, `Get Value`, `Push Value`, `Remove Value`, `Listen To Path`, `Unlisten Path`
+
+## Firestore
+
+Stores app data as documents inside collections in Cloud Firestore, and can watch a document or a whole collection for live updates.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Document Received`, `Collection Received`, `Document Changed`, `Operation Success`, `Operation Failed`
+
+**Functions** — `Add Document`, `Set Document`, `Update Document`, `Get Document`, `Delete Document`, `Listen To Document`, `Listen To Collection`
+
+## FirebaseStorage
+
+Uploads files to Firebase Cloud Storage, downloads them back into the app, deletes them, and reports upload or download progress as a percentage.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Upload Finished`, `Download Finished`, `Download URL Ready`, `Deleted`, `Progress`, `Error`
+
+**Functions** — `Upload File`, `Download File`, `Delete File`, `Get Download URL`
+
+## FirebaseNotifications
+
+Receives push notifications sent through Firebase Cloud Messaging, hands the app the device token to send to, and manages topic subscriptions.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Token Received`, `Notification Received`, `Notification Opened`, `Subscribe Success`, `Subscribe Failed`
+
+**Functions** — `Get Token`, `Subscribe To Topic`, `Unsubscribe From Topic`
+
+**Android permissions** — `POST_NOTIFICATIONS`
+
+## FirebaseAnalytics
+
+Non-visual Firebase Analytics logging for events, screen views and user properties. Numeric parameters are logged as numbers so Firebase can aggregate them.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Functions** — `Log Event`, `Set User Property`, `Set User ID`, `Log Screen View`

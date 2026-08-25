@@ -1,6 +1,78 @@
 ---
 title: Create a project
-description: Start a new duddy project.
+description: The four ways to start a Duddy project, and what happens after you press Create.
 ---
 
-This local MDX page is wired to the home section route `/getting-started/create-a-project`.
+Every app starts as a **project** in your dashboard at
+[app.duddy.io](https://app.duddy.io). A project holds your screens, your logic, your
+assets and your settings, and it builds for Android, iOS and the web no matter how it
+was started.
+
+Press **Create** and you get four ways to begin.
+
+## Describe it, and let AI build it
+
+The AI tab takes a sentence about the app you want:
+
+> An expense tracker that scans receipts, groups spends by month, and reminds me
+> before a bill is due.
+
+Pick a starting theme, optionally attach a screenshot or a sketch for the AI to work
+from, and create. Duddy opens the build board and streams the app into existence —
+screens appear one at a time as they are designed and wired.
+
+<Steps>
+  <Step>Write what the app is for. Two or three sentences beat two words: name the screens you expect and what each one is for.</Step>
+  <Step>Pick a theme. It sets the starting palette; you can change every colour later under **Settings → Theme**.</Step>
+  <Step>Create. The project is ready immediately — the screens fill in as they are built, and you can open the canvas at any point.</Step>
+</Steps>
+
+<Callout type="info">
+  A generated app is a normal project. Everything it writes is an ordinary component tree
+  and ordinary blocks, so you can drag, rename, delete and rewire any of it.
+</Callout>
+
+Generating an app spends credits. See [Credits and plans](/getting-started/credits-and-plans).
+
+## Start from a Figma design
+
+If you have connected [Figma](/integration/figma), paste a file link and pick the frames
+you want. Duddy reads the design server-side — the credential never reaches your browser —
+and builds screens to match.
+
+You can add a note alongside the design ("keep the layout, use our own palette") and the
+AI will follow it.
+
+## Start from the library
+
+The library tab searches public Duddy projects by name or tag, so you can see how a
+working project is put together before you build your own.
+
+<Callout type="warning" title="Still landing">
+  Picking a library project today creates the project and opens the canvas, but does not yet
+  copy the screens across. Until it does, use the library to browse and learn, and start real
+  work from one of the other three tabs.
+</Callout>
+
+## Start blank
+
+A name, and nothing else. You get one empty screen and the full canvas. Vibe mode is
+still there in the editor whenever you want a screen written for you.
+
+## What happens next
+
+A new project spends a moment setting itself up — the card in your dashboard shows a
+spinner until it is ready, then opens straight into the designer.
+
+Before you build for a store, fill in the identity fields under
+[Project settings](/getting-started/project-settings): the app name, the package name and
+the entry screen are required, and a build fails while the package name is empty.
+
+<CardGrid>
+  <Card title="Project settings" href="/getting-started/project-settings">
+    App name, package name, icon, permissions, keys and collaborators.
+  </Card>
+  <Card title="Design a screen" href="/guides/designing/drag-and-drop">
+    The canvas, the palette and the properties panel.
+  </Card>
+</CardGrid>

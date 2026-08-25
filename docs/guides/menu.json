@@ -14,7 +14,79 @@
         "title": "Drag and drop",
         "href": "/guides/designing/drag-and-drop",
         "section": "guides"
+      },
+      {
+        "title": "Screens and navigation",
+        "href": "/guides/designing/screens",
+        "section": "guides"
+      },
+      {
+        "title": "Layout and sizing",
+        "href": "/guides/designing/layout-and-sizing",
+        "section": "guides"
+      },
+      {
+        "title": "Themes and styling",
+        "href": "/guides/designing/theme",
+        "section": "guides"
+      },
+      {
+        "title": "Images, fonts and files",
+        "href": "/guides/designing/assets",
+        "section": "guides"
       }
     ]
+  },
+  {
+    "title": "Logic",
+    "icon": "hgi-puzzle",
+    "section": "guides",
+    "children": [
+      {
+        "title": "Logic blocks",
+        "href": "/guides/logic/blocks",
+        "section": "guides"
+      },
+      {
+        "title": "Data, APIs and storage",
+        "href": "/guides/logic/data-and-apis",
+        "section": "guides"
+      }
+    ]
+  },
+  {
+    "title": "Team",
+    "icon": "hgi-user-group",
+    "section": "guides",
+    "children": [
+      {
+        "title": "Collaboration",
+        "href": "/guides/collaboration/teamwork",
+        "section": "guides"
+      }
+    ]
+  },
+  {
+    "title": "Marketplace",
+    "icon": "hgi-store-01",
+    "section": "guides",
+    "children": [
+      {
+        "title": "Publish a component",
+        "href": "/guides/marketplace/publish-a-component",
+        "section": "guides"
+      },
+      {
+        "title": "duddy-package.json",
+        "href": "/guides/marketplace/component-package",
+        "section": "guides"
+      }
+    ]
+  },
+  {
+    "title": "Component reference",
+    "icon": "hgi-grid-view",
+    "href": "/components/overview",
+    "section": "components"
   }
 ]

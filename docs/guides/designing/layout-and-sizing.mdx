@@ -1,0 +1,93 @@
+---
+title: Layout and sizing
+description: Rows, Columns and Stacks, what Fill and Auto mean, and how to build a screen that holds together on every device.
+---
+
+Duddy screens are built out of nested containers, the same way native layouts are. Get the
+containers right and the screen works on a small phone and a tablet without you touching it
+again.
+
+## The four containers
+
+| Container | Arranges children |
+|---|---|
+| **Column** | Top to bottom. Forms, lists of cards, most screens. |
+| **Row** | Left to right. Toolbars, an icon beside a label, a price beside a title. |
+| **Stack** | On top of each other, positioned by alignment. Badges, overlays, an image with text over it. |
+| **ScrollableColumn** / **ScrollableRow** | The same as Column and Row, inside a scrolling area. |
+
+A screen is itself a vertical container, so anything you drop straight onto it stacks
+downwards.
+
+## Sizing: a number, Auto, or Fill
+
+Width and Height each take one of three answers.
+
+| Setting | Means |
+|---|---|
+| A number (`px` or `%`) | Exactly this size. |
+| **Auto** | As big as the content inside needs, and no bigger. |
+| **Fill** | Take the space the parent has left. |
+
+Fill is the one that does the work. In a Row, several children set to Fill share the
+remaining width between them; in a Column, they share the height. That is how you build a
+header where the title takes all the space and the icon takes only what it needs.
+
+<Callout type="warning">
+  **Inside a scrolling container, Fill means "as tall as the content" on the scrolling axis** —
+  there is no fixed height to divide up. A child set to Fill inside a `ScrollableColumn` therefore
+  wraps its content rather than filling the screen. Set an explicit height when you need one.
+</Callout>
+
+## Spacing
+
+- **Padding** is inside the component — the gap between its edge and its children.
+- **Margin** is outside it — the gap between it and its siblings.
+- A container's **gap** spaces its children evenly, which is almost always better than
+  putting a margin on each child.
+
+Pick one spacing step and stick to it (4, 8, 12, 16, 24). Screens read as designed when the
+spacing repeats and as improvised when it does not.
+
+## Alignment
+
+A container aligns its children along two axes: the direction it lays them out in, and the
+one across it. In a Row, that is horizontal distribution and vertical alignment; in a
+Column, the reverse. A Stack positions each child independently — top-left, centre,
+bottom-right — which is what makes it the right container for badges and floating buttons.
+
+## Recipes
+
+<Accordion>
+  <AccordionItem value="header" title="A header: title on the left, actions on the right">
+    A **Row**, vertically centred. The title has Width **Fill**; each icon has Width **Auto**.
+    The title takes everything the icons do not.
+  </AccordionItem>
+  <AccordionItem value="scroll" title="A screen that scrolls">
+    Put a **ScrollableColumn** at the root with Height **Fill**, and everything else inside it.
+    Keep bars (TopBar, BottomNavigation) outside the scroller so they stay put.
+  </AccordionItem>
+  <AccordionItem value="card" title="A card with an image and text below it">
+    A **Column** with a background, corner radius and padding. The image has Width **Fill** and a
+    fixed height; the text is **Auto** in both directions.
+  </AccordionItem>
+  <AccordionItem value="badge" title="A badge on an avatar">
+    A **Stack**. The avatar is the first child; the badge is the second, aligned to the top-right,
+    with a small margin to pull it over the edge.
+  </AccordionItem>
+  <AccordionItem value="footer" title="Content at the top, a button pinned to the bottom">
+    A **Column** with Height **Fill**. Between the content and the button, an empty container with
+    Height **Fill** — the spacer takes everything left over and pushes the button down.
+  </AccordionItem>
+</Accordion>
+
+## Long lists
+
+A Column with fifty children builds fifty components. Use a
+[RecyclerView](/components/content) instead: it builds a handful of rows and reuses them as
+they scroll, and fills each one in from its **Bind Item** event.
+
+<NextPrev
+  prev={{ title: "Screens and navigation", href: "/guides/designing/screens" }}
+  next={{ title: "Themes and styling", href: "/guides/designing/theme" }}
+/>

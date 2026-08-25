@@ -1,0 +1,150 @@
+---
+title: Layout components
+description: Containers that decide where everything else goes — plus the bars, tabs and overlays a screen is framed by.
+---
+
+Containers that decide where everything else goes — plus the bars, tabs and overlays a screen is framed by.
+
+<Callout type="info">
+  Sizing behaves differently inside a scrolling container: on the scrolling axis, **Fill** means
+  "as tall as the content". See [Layout and sizing](/guides/designing/layout-and-sizing).
+</Callout>
+
+| Component | Does |
+|---|---|
+| [Screen](#screen) | The root of every screen in an app: it holds the components placed on it and owns the theme, the background and the system status and navigation bars. |
+| [Column](#column) | A layout container that stacks its children top to bottom. |
+| [Row](#row) | A layout container that lays its children out side by side, left to right. |
+| [Stack](#stack) | A layout container that layers child components on top of each other along the z-axis. |
+| [ScrollableColumn](#scrollablecolumn) | A vertical stack of children inside a scrolling area, so content taller than the space available can be scrolled through. |
+| [ScrollableRow](#scrollablerow) | A horizontal strip of children that scrolls sideways, for carousels and chip rails whose children are wider than the screen. |
+| [CardView](#cardview) | A tappable container with rounded corners, a border and a drop shadow, used to group related content into a raised card. |
+| [TopBar](#topbar) | The bar across the top of a screen, holding a title, an optional subtitle, a navigation icon on the left, and tappable action icons on the right. |
+| [BottomNavigation](#bottomnavigation) | A bar pinned to the bottom of the screen holding up to five labeled icons, used to switch between the main sections of an app. |
+| [TabLayout](#tablayout) | A row of tabs that pairs itself with a ViewPager on the same screen: swiping moves the tabs, tapping moves the pager. |
+| [ViewPager](#viewpager) | A container whose children each become one full-size page the user swipes between, and which pairs automatically with a TabLayout on the same screen. |
+| [Dialog](#dialog) | A modal container the user fills with any components, shown in its own window over the screen. |
+| [BottomSheet](#bottomsheet) | A panel that slides up from the bottom of the screen over the current content and holds child widgets. |
+| [DynamicLoader](#dynamicloader) | A container that renders a Duddy document your server sends at run time — server-driven UI inside a shipped app. |
+
+## Screen
+
+The root of every screen in an app: it holds the components placed on it and owns the theme, the background and the system status and navigation bars.
+
+*Drawn on the screen.*
+
+**Events** — `Initialize`
+
+## Column
+
+A layout container that stacks its children top to bottom. Use it for lists, forms and cards, and style it with a background, border, corners and shadow.
+
+*Drawn on the screen.*
+
+**Events** — `Click`, `Long Click`
+
+## Row
+
+A layout container that lays its children out side by side, left to right. Use it for toolbars, button strips and icon-and-text rows.
+
+*Drawn on the screen.*
+
+**Events** — `Click`, `Long Click`
+
+## Stack
+
+A layout container that layers child components on top of each other along the z-axis. Supports alignment positioning and z-indexing.
+
+*Drawn on the screen.*
+
+**Events** — `Click`, `Long Click`
+
+## ScrollableColumn
+
+A vertical stack of children inside a scrolling area, so content taller than the space available can be scrolled through. No scrollbar is drawn.
+
+*Drawn on the screen.*
+
+**Events** — `Click`, `Long Click`
+
+## ScrollableRow
+
+A horizontal strip of children that scrolls sideways, for carousels and chip rails whose children are wider than the screen. No scrollbar is drawn.
+
+*Drawn on the screen.*
+
+**Events** — `Click`, `Long Click`
+
+## CardView
+
+A tappable container with rounded corners, a border and a drop shadow, used to group related content into a raised card.
+
+*Drawn on the screen.*
+
+**Events** — `Click`, `Long Press`, `Focus`, `Blur`
+
+## TopBar
+
+The bar across the top of a screen, holding a title, an optional subtitle, a navigation icon on the left, and tappable action icons on the right.
+
+*Drawn on the screen.*
+
+**Events** — `Navigation Click`
+
+## BottomNavigation
+
+A bar pinned to the bottom of the screen holding up to five labeled icons, used to switch between the main sections of an app.
+
+*Drawn on the screen.*
+
+**Events** — `Item Selected`
+
+## TabLayout
+
+A row of tabs that pairs itself with a ViewPager on the same screen: swiping moves the tabs, tapping moves the pager. Works on its own too.
+
+*Drawn on the screen.*
+
+**Events** — `Tab Selected`
+
+**Functions** — `Select Tab`, `Tab Count`
+
+## ViewPager
+
+A container whose children each become one full-size page the user swipes between, and which pairs automatically with a TabLayout on the same screen.
+
+*Drawn on the screen.*
+
+**Events** — `Page Changed`
+
+**Functions** — `Next Page`, `Previous Page`, `Go To Page`
+
+## Dialog
+
+A modal container the user fills with any components, shown in its own window over the screen. Used for confirmations, alerts and short forms.
+
+*Drawn on the screen.*
+
+**Events** — `Shown`, `Dismissed`
+
+**Functions** — `is Showing`, `Show`, `Dismiss`
+
+## BottomSheet
+
+A panel that slides up from the bottom of the screen over the current content and holds child widgets. Used for menus, filters and quick actions.
+
+*Drawn on the screen.*
+
+**Events** — `Shown`, `Dismissed`
+
+**Functions** — `is Showing`, `Show`, `Dismiss`
+
+## DynamicLoader
+
+A container that renders a Duddy document your server sends at run time — server-driven UI inside a shipped app. Load a document into it, patch it a commit at a time, and call the logic it declares by name.
+
+*Drawn on the screen.*
+
+**Events** — `Loaded`, `Error Occurred`
+
+**Functions** — `Load`, `Apply`, `Reset`, `Call Block`

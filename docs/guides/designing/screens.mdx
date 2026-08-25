@@ -1,0 +1,78 @@
+---
+title: Screens and navigation
+description: Add screens, pick the one the app opens on, and move between them from your logic.
+---
+
+An app is a set of screens. Each one has its own component tree, its own logic workspace,
+and its own theme, and every screen you add builds into the app.
+
+Open the screens panel with `3`.
+
+## Adding and managing screens
+
+<Steps>
+  <Step>Add a screen from the screens panel, and name it for what it is — `Home`, `Checkout`, `OrderConfirmed`.</Step>
+  <Step>Duplicate one when the new screen is a variation of an existing screen.</Step>
+  <Step>Delete from the same panel. A screen that other screens navigate to leaves those blocks pointing at nothing, so fix them in the same sitting.</Step>
+</Steps>
+
+The **entry screen** — the one the app opens on after the splash — is set under
+[Project settings → Project → Identity](/getting-started/project-settings). It is not
+"whichever screen is first".
+
+<Callout type="info">
+  A screen's name is what your logic addresses it by. Renaming one is safe in the designer, but
+  do it before you have wired a dozen navigation blocks to it, not after.
+</Callout>
+
+## The Screen component
+
+Every screen has a root `Screen` component. Select it — from the component tree, or by
+clicking the canvas background — and the properties panel gives you the things that belong
+to the screen as a whole: its theme, its background, and how it treats the system status
+and navigation bars.
+
+The `Screen` component also has an **Initialize** event, which fires when the screen opens.
+It is where a screen loads its data.
+
+## Moving between screens
+
+Navigation is logic, so it lives in the [block editor](/guides/logic/blocks): open a screen
+in response to an event, and close it to come back.
+
+<Steps>
+  <Step>Select the button (or row, or icon) that should navigate.</Step>
+  <Step>In the block editor, take that component's **Click** event.</Step>
+  <Step>Inside it, put the block that opens a screen and choose the destination.</Step>
+</Steps>
+
+Closing a screen returns to the one that opened it. Screens stack, so an app that opens
+without ever closing keeps every screen alive underneath — close the ones the user has
+finished with.
+
+## Bars, tabs and pages
+
+Some navigation is a component rather than a block:
+
+- **TopBar** — the title bar, with a navigation icon on the left and action icons on the right.
+- **BottomNavigation** — up to five labelled icons pinned to the bottom for the app's main
+  sections. It reports the item the user chose; what happens next is your logic.
+- **TabLayout + ViewPager** — a row of tabs above a swipeable set of pages. Put both on one
+  screen and they pair themselves: swiping the pager moves the tabs and tapping a tab moves
+  the pager.
+- **Dialog** and **BottomSheet** — overlays over the current screen rather than new screens.
+  Use them for confirmations and quick actions, and keep real destinations as screens.
+
+## Passing data between screens
+
+Screens do not share their variables. Two ways to carry a value across:
+
+- **A global value in your logic** — set it before you navigate, read it in the destination's
+  Initialize event.
+- **[AppStorage](/components/storage)** — when the value should survive the app being closed,
+  not just the trip between two screens.
+
+<NextPrev
+  prev={{ title: "Drag and drop", href: "/guides/designing/drag-and-drop" }}
+  next={{ title: "Layout and sizing", href: "/guides/designing/layout-and-sizing" }}
+/>

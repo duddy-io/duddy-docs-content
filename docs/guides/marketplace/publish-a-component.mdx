@@ -1,0 +1,121 @@
+---
+title: Publish a component
+description: Write a native component once for Android, iOS and web, and publish it to the Duddy library with the duddy CLI.
+isExperimental: true
+---
+
+Duddy's component library is extensible. A component is native code — Java for Android,
+Swift for iOS, an ES module for the web — wrapped in annotations that describe its
+properties, events and functions. Duddy compiles it, validates the three halves against
+each other, and lists it for other builders to import.
+
+<Callout type="warning" title="In testing">
+  Component publishing is being hardened with the developers using it, and the public storefront
+  for browsing everything published is still being built. Importing a published component in the
+  builder already works. Ask on the [community forum](https://community.duddy.io) to get set up
+  with the CLI.
+</Callout>
+
+## What a component is
+
+One directory produces up to three native halves plus its marketplace metadata:
+
+```
+MyWidget/
+  duddy-package.json                              metadata, dependencies, iOS pods
+  preview.svg                                     the palette icon
+  android/src/io/duddy/components/MyWidget.java   required
+  ios/src/MyWidgetModule.swift                    optional
+  web/src/MyWidget.js                             optional
+```
+
+**Android is authoritative.** The Java class declares the whole programmable surface with
+annotations, and the Swift and web halves are validated member for member against it at
+publish time. Delete the `ios/` or `web/` directory to skip a platform; `android/` is
+mandatory, because a component's identity *is* its Java package plus its `@Component` class.
+
+<Callout type="danger">
+  That identity — `io.duddy.components.MyWidget` — is permanent. Renaming the package or the class
+  publishes a **new** component and orphans everyone who already imported the old one.
+</Callout>
+
+## The annotations
+
+| Annotation | Declares |
+|---|---|
+| `@Component` | The component itself: name, description and category. |
+| `@Property` | A value the designer or a block can set, and read where it makes sense to. |
+| `@Designer` | How that property is edited in the properties panel — the editor type, its category, defaults, and when the row applies. |
+| `@Event` | Something the component tells the app about. Becomes an event block. |
+| `@Function` | Something the app can tell the component to do. Becomes a function block. |
+
+Give a property a getter only when the value is genuinely readable state — a label's text,
+a slider's value. Write-only styling needs none, and over-declaring costs you three
+platforms of dead code.
+
+## The workflow
+
+<Steps>
+  <Step>**Sign in.** `duddy login` opens a device sign-in and stores a token under `./.duddy/`. Add `.duddy/` to your `.gitignore` before you run it — it holds a real session.</Step>
+  <Step>**Scaffold.** `duddy init MyWidget` writes a complete three-platform component that builds with zero edits. Start from it rather than an empty directory.</Step>
+  <Step>**Write the component.** Java first, then mirror every declared member on the Swift Model and the web class.</Step>
+  <Step>**Build.** `duddy build MyWidget` zips the sources, uploads them, and streams the remote build log back to your terminal.</Step>
+  <Step>**Publish.** `duddy publish MyWidget` submits the built version for review.</Step>
+  <Step>**Review.** A reviewer approves it, and the approved version is what buyers are offered.</Step>
+</Steps>
+
+<Terminal command="duddy init MyWidget" />
+<Terminal command="duddy build MyWidget" />
+<Terminal command="duddy publish MyWidget" />
+
+## Useful commands
+
+| Command | Does |
+|---|---|
+| `duddy login` | Device sign-in; writes the config in the working directory. |
+| `duddy beta` / `duddy prod` | Switch which environment the CLI talks to. |
+| `duddy init <Name>` | Scaffold a three-platform component. |
+| `duddy install` | Resolve declared Android libraries into `duddy-libs/` for your IDE. |
+| `duddy build <Name>` | Zip, upload, and stream the build log. `--increment` bumps the version first. |
+| `duddy bump` | Increment the patch version of changed components. |
+| `duddy publish <Name>` | Submit the built version for review. |
+| `duddy release` | Build, publish and (with `-approve`) approve every component whose sources changed. |
+| `duddy version` | Print the CLI version. |
+
+<Callout type="info">
+  A dropped connection is not a failed build. The job is queued server-side and keeps compiling; the
+  CLI re-attaches and polls until the build reaches a terminal state.
+</Callout>
+
+## Versioning
+
+Every upload needs a **strictly greater** `metadata.version` than the last approved one, and
+that check runs after a full three-platform compile — so bump the version *before* you
+build, not after a rejection.
+
+While a new version is in review, the previously approved version stays on sale. A failed
+rebuild never pulls a live component off the marketplace.
+
+## Things that fail publishing
+
+- A member declared in Java with no matching member on the Swift Model or the web class.
+  Names and arity are checked on both; types are checked on Swift.
+- A missing `preview.svg`, or one that is not tintable. It must be a 24×24 viewBox using
+  `stroke="currentColor"` — the builder paints it as a mask, so a hardcoded colour renders
+  invisible.
+- An `@Designer(visibleWhen = …)` clause naming a property the component does not declare.
+- A version that is not greater than the approved one.
+
+## Writing a good component
+
+<Steps>
+  <Step>**Report capability gaps, never fake them.** If a platform cannot observe something, return an obviously empty value rather than a plausible default.</Step>
+  <Step>**Declare only what the component can honour.** `Enabled` belongs to interactive controls; a component sized entirely by its own property should not offer Width and Height.</Step>
+  <Step>**Prefer a picker to a permission.** The system pickers for images, files and contacts need no permission at all.</Step>
+  <Step>**Turn the platform widget's own chrome off** and rebuild it from your properties, or it becomes a fourth opinion the canvas knows nothing about.</Step>
+</Steps>
+
+<NextPrev
+  prev={{ title: "Collaboration", href: "/guides/collaboration/teamwork" }}
+  next={{ title: "duddy-package.json", href: "/guides/marketplace/component-package" }}
+/>

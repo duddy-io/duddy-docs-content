@@ -1,0 +1,108 @@
+---
+title: Connectivity components
+description: Talking to the network: HTTP requests, live sockets, maps, web pages and the state of the connection itself.
+---
+
+Talking to the network: HTTP requests, live sockets, maps, web pages and the state of the connection itself.
+
+<Callout type="warning">
+  Never ship a secret inside an app. Anything compiled into a build can be read back out of it: keys
+  that must stay private belong on a server you control.
+</Callout>
+
+| Component | Does |
+|---|---|
+| [HttpRequest](#httprequest) | A non-visual component that calls a web address over HTTP and hands the status code and response body back to your blocks. |
+| [WebSocket](#websocket) | A non-visual two-way connection to a WebSocket server, for sending and receiving text messages live instead of polling an API. |
+| [NetworkTools](#networktools) | A non-visual connectivity monitor reporting whether the device is online, over what transport, and whether the connection is metered. |
+| [WifiManager](#wifimanager) | A non-visual component reporting Wi-Fi connection details. |
+| [Bluetooth](#bluetooth) | Discovers nearby Bluetooth Low Energy devices and reports the name, address and signal strength of each. |
+| [WebViewer](#webviewer) | An embedded browser panel that loads a web page inside the app, with history navigation, zoom control and JavaScript evaluation. |
+| [GoogleMaps](#googlemaps) | An interactive Google Maps surface with pins, camera control and four map types. |
+| [MapView](#mapview) | A pannable map that needs no API key, drawn from OpenStreetMap tiles on Android and MapKit on iOS. |
+
+## HttpRequest
+
+A non-visual component that calls a web address over HTTP and hands the status code and response body back to your blocks. Sends and accepts JSON.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Got Response`, `Error Occurred`
+
+**Functions** — `Set Header`, `Clear Headers`, `Make Request`
+
+**Android permissions** — `INTERNET`
+
+## WebSocket
+
+A non-visual two-way connection to a WebSocket server, for sending and receiving text messages live instead of polling an API.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Connection Established`, `Message Received`, `Connection Closed`, `Error Occurred`
+
+**Functions** — `Connect`, `Send Message`, `Disconnect`
+
+## NetworkTools
+
+A non-visual connectivity monitor reporting whether the device is online, over what transport, and whether the connection is metered.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Disconnected`
+
+**Functions** — `Check Connection`
+
+**Android permissions** — `ACCESS_NETWORK_STATE`
+
+## WifiManager
+
+A non-visual component reporting Wi-Fi connection details. Android exposes signal strength and link speed; iOS only reports whether the device is on Wi-Fi.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Functions** — `Open Wifi Settings`
+
+**Android permissions** — `ACCESS_WIFI_STATE`
+
+## Bluetooth
+
+Discovers nearby Bluetooth Low Energy devices and reports the name, address and signal strength of each. Scanning only, with no connecting or data exchange.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Device Found`, `Scan Started`, `Scan Stopped`, `Permission Granted`, `Permission Denied`, `Error`
+
+**Functions** — `Request Permission`, `Start Scan`, `Stop Scan`
+
+**Android permissions** — `BLUETOOTH_SCAN`, `BLUETOOTH_CONNECT`, `ACCESS_FINE_LOCATION`
+
+## WebViewer
+
+An embedded browser panel that loads a web page inside the app, with history navigation, zoom control and JavaScript evaluation.
+
+*Drawn on the screen.*
+
+**Events** — `Page Loaded`, `Evaluate Script Result`
+
+**Functions** — `Go Back`, `Go Forward`, `Reload`, `Stop Loading`, `Evaluate Script`
+
+## GoogleMaps
+
+An interactive Google Maps surface with pins, camera control and four map types. Needs the project-wide Maps API Key set once in App Settings.
+
+*Drawn on the screen.*
+
+**Events** — `Map Ready`, `Map Click`, `Marker Click`
+
+**Functions** — `Move To`, `Add Marker`, `Remove Marker`, `Clear Markers`
+
+## MapView
+
+A pannable map that needs no API key, drawn from OpenStreetMap tiles on Android and MapKit on iOS. Use GoogleMaps when Google tiles are required.
+
+*Drawn on the screen.*
+
+**Events** — `Marker Click`
+
+**Functions** — `Move To`, `Add Marker`, `Remove Marker`, `Clear Markers`

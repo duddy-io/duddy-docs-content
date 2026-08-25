@@ -1,6 +1,105 @@
 ---
-title: AI overview
-description: Learn how AI fits into duddy.
+title: Vibe mode
+description: Describe a screen, an edit or a whole app in the chat, and Duddy builds it into your project as ordinary components and blocks.
 ---
 
-This local MDX page is wired to the home section route `/ai/overview`.
+Vibe mode is the AI chat in the designer. You describe what you want, it builds it — a
+section on the screen you are looking at, a set of new screens, the logic behind a button,
+or a change to the theme.
+
+What it writes is not a special AI layer. It is the same component tree and the same
+blocks you would have made by hand, so every one of them can be selected, dragged,
+renamed and rewired afterwards.
+
+## What a turn can do
+
+Duddy decides what kind of turn you asked for and runs the matching pipeline.
+
+| Kind | Example |
+|---|---|
+| **Answer** | "What does Weight do on a Row?" |
+| **Edit** | "Make the card corners rounder and the price bold." |
+| **Design** | "Add a filter bar under the title." |
+| **New screens** | "Add a checkout screen and an order confirmation screen." |
+| **Whole app** | "A recipe app with a browse screen, search, and a saved list." |
+| **Logic** | "When Sign in is tapped, validate the email and go to Home." |
+| **Project actions** | Renaming a screen, changing the theme, finding or generating an asset. |
+
+If you would rather choose the route yourself, type `/` in the chat and pick a command:
+
+| Command | Does |
+|---|---|
+| `/edit` | Change something already on screen. |
+| `/section` | Design new UI on the current screen. |
+| `/screens` | Design one or more new screens. |
+| `/logic` | Wire behaviour on components that already exist. |
+| `/theme` | Change the whole app's colour scheme. |
+| `/asset` | Find, upload or manage assets. |
+| `/screen` | Rename or delete a screen. |
+| `/settings` | Project settings, or leave a note. |
+| `/figma` | Point the AI at one of your [Figma](/integration/figma) designs. |
+| `/imagine` | Generate an image straight into your assets. |
+
+## Watching it build
+
+A build turn works screen by screen. For each one it designs the screen first and shows
+you that design, then translates it into real components, checks its own work, and wires
+the logic last. Screens appear on the canvas as they finish — you do not wait for the
+whole app before you can look at anything.
+
+You can keep working while it runs. If you close the tab, the turn carries on.
+
+## Settings
+
+Open the settings icon in the chat header. Five choices, and they are genuinely different
+knobs rather than one quality slider:
+
+| Setting | What it changes |
+|---|---|
+| **Model** | Which AI writes your app. See [Models](/ai/models). |
+| **Thinking** | How much the model deliberates before answering — Off, or Low/Medium/High where the model supports it. |
+| **Detail** | *Which* stages a build runs. **Reduced** is one pass, **Normal** is a full design pass then build, **Ultra** adds states and edge cases and reviews a render of the finished screen. |
+| **Quality** | *How hard* each stage is pushed. **Fast** does the fewest passes, **Balanced** is the default, **Best** adds a design critique and reviews every screen. |
+| **UI style** | The look it defaults to. See [UI style](/ai/ui-style). |
+
+<Callout type="info">
+  **Ultra** looks at a render of the screen it just built, so it needs a model that can see
+  images. Pick a vision model and the option becomes available.
+</Callout>
+
+Bigger settings cost more credits and take longer. A wording tweak does not need Ultra and
+Best; a first-draft app screen usually deserves them.
+
+## Giving it context
+
+- **Attach an image** — a screenshot, a photo of a whiteboard, a competitor's screen. Under 1 MB.
+- **Draw it** — sketch the layout you want in the built-in drawing pad. See
+  [Attach drawings](/ai/attach-drawings).
+- **Point at a design** — `/figma` attaches one of your Figma files as the reference.
+
+## Sessions
+
+Chats are saved per project. Start a new chat when you move to a different piece of work —
+the old conversation stays in the history where you can reopen it, so nothing is thrown
+away to get a clean slate.
+
+## When it gets something wrong
+
+Everything an AI turn does arrives as ordinary project history, so you have three ways out:
+
+<Steps>
+  <Step>Tell it. "Not that — keep the layout, just change the palette" is usually one cheap turn.</Step>
+  <Step>Fix it by hand on the canvas. Nothing it wrote is locked.</Step>
+  <Step>Revert the turn from the history panel. The whole turn goes back, including screens it created.</Step>
+</Steps>
+
+## What it costs
+
+Every turn spends credits, charged by what the turn actually used — see
+[Credits and plans](/getting-started/credits-and-plans). If a turn is refused, the chat
+says which of the three reasons it was: not enough credits, a model your plan does not
+include, or Vibe being switched off for your plan.
+
+<NextPrev
+  next={{ title: "Models", href: "/ai/models", description: "Choosing the model behind a turn" }}
+/>

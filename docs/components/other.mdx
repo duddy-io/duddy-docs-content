@@ -1,0 +1,104 @@
+---
+title: Device and utility components
+description: Device facts, sharing, calls, messages, purchases and a few tools that fit nowhere else.
+---
+
+Device facts, sharing, calls, messages, purchases and a few tools that fit nowhere else.
+
+| Component | Does |
+|---|---|
+| [DeviceInfo](#deviceinfo) | A non-visual component exposing read-only facts about the device and app: model, OS version, screen size, locale, dark mode and battery level. |
+| [DeviceLock](#devicelock) | A non-visual component reporting device lock, screen and power-save state, and able to hold the screen awake for readers, video or navigation. |
+| [Clock](#clock) | A non-visual timer that fires repeatedly on an interval, plus helpers for reading the current time and formatting timestamps. |
+| [Share](#share) | Opens the system share sheet so the user can send text, a link or a file to another app. |
+| [ActivityStarter](#activitystarter) | A non-visual component that starts another app by intent on Android, and by URL scheme on iOS and the web, reporting the result where the platform has one. |
+| [Caller](#caller) | A non-visual component that opens the dialer or places a phone call, and reports the call state where the platform allows it. |
+| [SMS](#sms) | A non-visual component that sends an SMS through the system composer or directly where permitted, and receives incoming messages on Android. |
+| [InAppPurchase](#inapppurchase) | A non-visual in-app purchase component for one-off products, on Google Play Billing and StoreKit 2. |
+| [CryptoUtils](#cryptoutils) | A non-visual toolbox for scrambling and checksumming text: SHA-256 and MD5 hashes, Base64 encoding, and AES encryption with a passphrase. |
+
+## DeviceInfo
+
+A non-visual component exposing read-only facts about the device and app: model, OS version, screen size, locale, dark mode and battery level.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+## DeviceLock
+
+A non-visual component reporting device lock, screen and power-save state, and able to hold the screen awake for readers, video or navigation.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+## Clock
+
+A non-visual timer that fires repeatedly on an interval, plus helpers for reading the current time and formatting timestamps.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Fire`
+
+**Functions** — `Format Date Time`, `Get Current Time Ms`, `Get Hour`, `Get Minute`, `Get Second`
+
+## Share
+
+Opens the system share sheet so the user can send text, a link or a file to another app. Nothing is drawn on screen.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Shared`, `Error`
+
+**Functions** — `Share Text`, `Share Link`, `Share File`
+
+## ActivityStarter
+
+A non-visual component that starts another app by intent on Android, and by URL scheme on iOS and the web, reporting the result where the platform has one.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Activity Result`, `Activity Cancelled`, `Error`
+
+**Functions** — `Put Extra`, `Clear Extras`, `Start Activity`, `Resolve Activity`
+
+## Caller
+
+A non-visual component that opens the dialer or places a phone call, and reports the call state where the platform allows it.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Call Placed`, `Call State Changed`, `Permission Granted`, `Permission Denied`, `Error`
+
+**Functions** — `Dial`, `Call Direct`, `Request Permission`, `Start Monitoring`, `Stop Monitoring`
+
+**Android permissions** — `CALL_PHONE`, `READ_PHONE_STATE`
+
+## SMS
+
+A non-visual component that sends an SMS through the system composer or directly where permitted, and receives incoming messages on Android.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Message Sent`, `Message Received`, `Permission Granted`, `Permission Denied`, `Error`
+
+**Functions** — `Send Message`, `Send Direct`, `Request Permission`
+
+**Android permissions** — `SEND_SMS`, `RECEIVE_SMS`
+
+## InAppPurchase
+
+A non-visual in-app purchase component for one-off products, on Google Play Billing and StoreKit 2. Product IDs are set once under Integrations settings so they match your store listings.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Ready`, `Products Loaded`, `Purchased`, `Purchase Cancelled`, `Purchase Restored`, `Restore Finished`, `Error`
+
+**Functions** — `Load Products`, `Buy`, `Restore Purchases`, `Get Price`, `Get Title`
+
+**Android permissions** — `BILLING`
+
+## CryptoUtils
+
+A non-visual toolbox for scrambling and checksumming text: SHA-256 and MD5 hashes, Base64 encoding, and AES encryption with a passphrase.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Functions** — `Sha256`, `Md5`, `Aes Encrypt`, `Aes Decrypt`, `Base64 Encode`, `Base64 Decode`

@@ -1,0 +1,95 @@
+---
+title: Content components
+description: Everything that shows something: text, pictures, icons, shapes, lists and progress.
+---
+
+Everything that shows something: text, pictures, icons, shapes, lists and progress.
+
+<Callout type="info">
+  Building a long list out of a Column creates one component per item. Use **RecyclerView** instead —
+  it builds a handful of rows and reuses them as they scroll.
+</Callout>
+
+| Component | Does |
+|---|---|
+| [TextView](#textview) | Displays a piece of read-only text, from a one-word label to a paragraph, with control over font, size, color, alignment and truncation. |
+| [Image](#image) | A picture drawn from an uploaded asset, with control over how it fills its frame plus rounded corners, a border and a shadow. |
+| [Icon](#icon) | A single square icon picked from the built-in icon set, tinted and sized from the properties panel. |
+| [Shape](#shape) | A vector shape — a rectangle, a circle, one of the expressive shapes such as a cookie, a clover or an arch, or a custom outline — drawn with a fill and an outline. |
+| [RecyclerView](#recyclerview) | A scrollable list or grid whose row views are built once and reused as they scroll, each row filled in by the Bind Item event. |
+| [GraphView](#graphview) | Draws a line, bar or pie chart from a list of labelled values, and reports the point, bar or slice the user tapped. |
+| [ProgressBar](#progressbar) | A horizontal bar that fills to show how far along a task is, either at a set percentage or as an endless animation while the length is unknown. |
+| [CircularProgress](#circularprogress) | A round progress ring that either spins to show the app is busy or fills up to show how far a task has got. |
+| [Notifier](#notifier) | A non-visual helper that shows brief toast messages and alert, confirm and popup dialogs on top of the current screen. |
+
+## TextView
+
+Displays a piece of read-only text, from a one-word label to a paragraph, with control over font, size, color, alignment and truncation.
+
+*Drawn on the screen.*
+
+## Image
+
+A picture drawn from an uploaded asset, with control over how it fills its frame plus rounded corners, a border and a shadow. It also reports taps.
+
+*Drawn on the screen.*
+
+**Events** — `Click`, `Long Press`, `Load`, `Error`
+
+## Icon
+
+A single square icon picked from the built-in icon set, tinted and sized from the properties panel. Used beside labels, inside buttons and in navigation rows.
+
+*Drawn on the screen.*
+
+## Shape
+
+A vector shape — a rectangle, a circle, one of the expressive shapes such as a cookie, a clover or an arch, or a custom outline — drawn with a fill and an outline. Children placed inside are clipped to it.
+
+*Drawn on the screen.*
+
+**Events** — `Click`, `Long Press`
+
+## RecyclerView
+
+A scrollable list or grid whose row views are built once and reused as they scroll, each row filled in by the Bind Item event.
+
+*Drawn on the screen.*
+
+**Events** — `Bind Item`, `Refresh`, `Scroll`
+
+**Functions** — `Refresh Data`, `Scroll To Position`, `Get Row Component`
+
+## GraphView
+
+Draws a line, bar or pie chart from a list of labelled values, and reports the point, bar or slice the user tapped.
+
+*Drawn on the screen.*
+
+**Events** — `Value Selected`
+
+**Functions** — `Set Data`, `Clear Data`, `Set Graph Type`
+
+## ProgressBar
+
+A horizontal bar that fills to show how far along a task is, either at a set percentage or as an endless animation while the length is unknown.
+
+*Drawn on the screen.*
+
+**Events** — `Click`
+
+## CircularProgress
+
+A round progress ring that either spins to show the app is busy or fills up to show how far a task has got.
+
+*Drawn on the screen.*
+
+## Notifier
+
+A non-visual helper that shows brief toast messages and alert, confirm and popup dialogs on top of the current screen.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Alert Closed`, `Confirm Selected`, `Popup Closed`
+
+**Functions** — `Show Toast Default`, `Show Toast`, `Show Alert`, `Show Confirm`, `Show Popup`

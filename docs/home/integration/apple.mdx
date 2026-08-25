@@ -1,6 +1,73 @@
 ---
 title: Apple
-description: Configure Apple integration for duddy.
+description: Connect an App Store Connect API key so Duddy can sign your iOS builds and send them to TestFlight.
+isExperimental: true
 ---
 
-This local MDX page is wired to the home section route `/integration/apple`.
+iOS builds have to be signed by Apple, with your account — nobody else can do it for you.
+Duddy uses an **App Store Connect API key** to sign a build and, when you want it, upload
+that build to TestFlight.
+
+Without a key connected, iOS builds cannot be produced at all.
+
+## What you need
+
+- An **Apple Developer Program** membership (the paid one — a free Apple ID cannot sign
+  distributable builds).
+- An **App Store Connect API key** with enough access to manage certificates, profiles and
+  builds.
+
+## Create the key
+
+<Steps>
+  <Step>Sign in to [App Store Connect](https://appstoreconnect.apple.com/access/integrations/api) and open **Users and Access → Integrations → App Store Connect API**.</Step>
+  <Step>Create a key with a role that can manage certificates and builds, and give it a name you will recognise.</Step>
+  <Step>Download the `.p8` file. **Apple lets you download it once** — keep a copy somewhere safe.</Step>
+  <Step>Note the **Issuer ID** shown above the key list, and the **Key ID** on the key's row.</Step>
+</Steps>
+
+<Callout type="danger">
+  A `.p8` key can sign and upload builds for your account. Treat it like a password: do not commit
+  it to a repository, and revoke it in App Store Connect if it ever leaks.
+</Callout>
+
+## Connect it to Duddy
+
+<Steps>
+  <Step>Open **Integrations** in your dashboard and choose **Apple Developer**.</Step>
+  <Step>Paste the **Issuer ID** and the **Key ID**, and upload the `.p8` file.</Step>
+  <Step>Save. iOS builds are now signed with this key.</Step>
+</Steps>
+
+## Before your first iOS build
+
+Duddy runs a preflight against your Apple setup when you start an iOS build and tells you
+what it found:
+
+- **Warnings** are things Duddy can create for you — a missing signing certificate or a
+  provisioning profile.
+- **Failures** are things only you can fix. The two common ones are a key that Apple has
+  rejected (expired or revoked), and no app record in App Store Connect for your package
+  name.
+
+<Callout type="info">
+  Create the app record in App Store Connect with **exactly** the package name from
+  [Project settings](/getting-started/project-settings). Apple calls it the Bundle ID, and the
+  two have to match character for character.
+</Callout>
+
+## After the build
+
+A finished `.ipa` can go to TestFlight for testers, and from there to review. iOS builds
+cannot be installed from a link the way an Android `.apk` can — that is Apple's rule, not
+Duddy's.
+
+<Callout type="warning">
+  If the integration row turns amber, Apple has rejected the key and iOS builds are paused until
+  you connect a new one. Generate a fresh key in App Store Connect and reconnect.
+</Callout>
+
+<NextPrev
+  prev={{ title: "Figma", href: "/integration/figma" }}
+  next={{ title: "Build the app", href: "/getting-started/build-the-app" }}
+/>

@@ -1,6 +1,47 @@
 ---
-title: UI Style
-description: Guide AI output with UI style preferences.
+title: UI style
+description: Set the look Vibe mode reaches for by default — minimal, playful, professional, bold, elegant or modern.
 ---
 
-This local MDX page is wired to the home section route `/ai/ui-style`.
+**UI style** is the visual default Vibe mode designs to when your prompt does not say
+otherwise. It is set once in the chat's settings and applies to every screen it builds
+afterwards.
+
+## The styles
+
+| Style | Reaches for |
+|---|---|
+| **Auto** | Whatever suits the brief — the AI picks per request. |
+| **Minimal** | Whitespace, near-monochrome, saying more with less. |
+| **Playful** | Rounded, colourful, energetic and approachable. |
+| **Professional** | A structured grid, a conservative palette, calm and trustworthy. |
+| **Bold** | High contrast, oversized type, dramatic and unmissable. |
+| **Elegant** | A muted palette, refined type, understated luxury. |
+| **Modern** | Soft gradients, glassy depth, contemporary polish. |
+
+## How it interacts with everything else
+
+<Steps>
+  <Step>**Your prompt wins.** "Make this screen look like a receipt" overrides the style for that turn — the setting is a default, not a constraint.</Step>
+  <Step>**Your theme still rules the colours.** Style shapes shape, weight, spacing and emphasis; the palette comes from your project [theme](/guides/designing/theme).</Step>
+  <Step>**It applies going forward.** Changing the style does not restyle screens that already exist. Ask for that explicitly, screen by screen, or with `/theme` for the palette.</Step>
+</Steps>
+
+<Callout type="info">
+  Auto is a reasonable default for a first app, and a poor one for a consistent one. Once you know
+  the look you want, pick it explicitly — every later screen then starts from the same place.
+</Callout>
+
+## Getting a specific look
+
+Style names are shorthand, not a design system. When you have something particular in
+mind, say it in the prompt — the AI follows concrete instructions far better than adjectives:
+
+- "Cards with a 16dp corner radius and a soft shadow, no borders."
+- "Section headers in uppercase, letter-spaced, with a hairline rule underneath."
+- "Full-bleed image at the top, content overlapping its bottom edge."
+
+<NextPrev
+  prev={{ title: "Attach drawings", href: "/ai/attach-drawings" }}
+  next={{ title: "Figma", href: "/integration/figma" }}
+/>

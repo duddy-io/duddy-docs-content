@@ -1,0 +1,78 @@
+---
+title: Ad components
+description: Banner, interstitial and rewarded placements from AdMob and Meta Audience Network.
+---
+
+Banner, interstitial and rewarded placements from AdMob and Meta Audience Network.
+
+<Callout type="info">
+  Ad network IDs are project-level and set once under
+  [Settings → Integrations](/getting-started/project-settings#integrations). Every ad component carries
+  a **Test Mode** wired to the network's real test units — leave it on until you ship.
+</Callout>
+
+| Component | Does |
+|---|---|
+| [AdMobBanner](#admobbanner) | A Google AdMob banner ad strip, sized entirely by its Ad Size and usually pinned along the top or bottom of a screen. |
+| [AdMobInterstitial](#admobinterstitial) | A non-visual Google AdMob full-screen ad, loaded in advance and shown at a natural break such as the end of a level or an article. |
+| [AdMobRewarded](#admobrewarded) | A non-visual rewarded video ad. |
+| [FacebookBanner](#facebookbanner) | A banner ad served by Meta Audience Network, sized by its Ad Size and refreshed with Load Ad. |
+| [FacebookInterstitial](#facebookinterstitial) | A full-screen Meta Audience Network ad shown at natural breaks in an app, such as between screens or after a game level. |
+
+## AdMobBanner
+
+A Google AdMob banner ad strip, sized entirely by its Ad Size and usually pinned along the top or bottom of a screen.
+
+*Drawn on the screen.*
+
+**Events** — `Ad Loaded`, `Ad Failed To Load`, `Ad Opened`, `Ad Closed`, `Ad Clicked`
+
+**Functions** — `Load Ad`
+
+**Android permissions** — `INTERNET`, `ACCESS_NETWORK_STATE`
+
+## AdMobInterstitial
+
+A non-visual Google AdMob full-screen ad, loaded in advance and shown at a natural break such as the end of a level or an article.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Ad Loaded`, `Ad Failed To Load`, `Ad Opened`, `Ad Closed`, `Ad Clicked`
+
+**Functions** — `Load Ad`, `Show Ad`, `Is Loaded`
+
+**Android permissions** — `INTERNET`, `ACCESS_NETWORK_STATE`
+
+## AdMobRewarded
+
+A non-visual rewarded video ad. The reward event fires only when genuinely earned, never on dismissal.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Ad Loaded`, `Ad Failed To Load`, `Ad Shown`, `Ad Dismissed`, `Reward Earned`
+
+**Functions** — `Is Loaded`, `Load Ad`, `Show Ad`
+
+## FacebookBanner
+
+A banner ad served by Meta Audience Network, sized by its Ad Size and refreshed with Load Ad. Requires a placement id from Meta Monetization Manager.
+
+*Drawn on the screen.*
+
+**Events** — `Ad Loaded`, `Ad Failed To Load`, `Ad Opened`, `Ad Clicked`
+
+**Functions** — `Load Ad`
+
+**Android permissions** — `INTERNET`, `ACCESS_NETWORK_STATE`
+
+## FacebookInterstitial
+
+A full-screen Meta Audience Network ad shown at natural breaks in an app, such as between screens or after a game level.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Ad Loaded`, `Ad Failed To Load`, `Ad Opened`, `Ad Closed`, `Ad Clicked`
+
+**Functions** — `Load Ad`, `Show Ad`, `Is Loaded`
+
+**Android permissions** — `INTERNET`, `ACCESS_NETWORK_STATE`

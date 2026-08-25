@@ -1,0 +1,80 @@
+---
+title: Data, APIs and storage
+description: Call a web service, read the response, keep data on the device, and hold a live connection open.
+---
+
+Most apps are a screen plus a request. Duddy covers the request half with components that
+have no visible form: drop one on a screen and it contributes blocks, nothing else.
+
+## Calling an API
+
+`HttpRequest` calls a web address and hands you back the status code and the response body.
+
+<Steps>
+  <Step>Drop an **HttpRequest** onto the screen. It draws nothing.</Step>
+  <Step>Set headers if you need them — an API key, a content type — with **Set Header**.</Step>
+  <Step>Call **Make Request** with the URL, the method and (for a POST or PUT) the body.</Step>
+  <Step>Handle **Got Response** for the result and **Error Occurred** for a failure. Both will happen in the wild; handle both.</Step>
+</Steps>
+
+The response body arrives as text. JSON becomes a dictionary you read with the Dictionary
+blocks, and a JSON array becomes a list you can loop over.
+
+<Callout type="warning">
+  A request is not instant. Show something while it runs — a `CircularProgress`, or a button that
+  disables itself — and turn it off in **both** the response and the error handler.
+</Callout>
+
+### Reading a JSON response
+
+<Steps>
+  <Step>Parse the body into a dictionary.</Step>
+  <Step>Pull values out by key. Nested objects are dictionaries inside dictionaries; arrays are lists.</Step>
+  <Step>Feed a list straight into a [RecyclerView](/components/content) and fill each row in its **Bind Item** event.</Step>
+</Steps>
+
+<Callout type="info">
+  Never put a secret in an app. Anything shipped inside a build can be read out of it, so keys that
+  must stay private belong on a server you control, with the app calling that.
+</Callout>
+
+## Keeping data on the device
+
+| Component | For |
+|---|---|
+| **AppStorage** | Small key-value values that must survive the app closing: a token, a preference, the last screen. |
+| **SQLite** | Structured data in tables, queried with SQL, working offline. |
+| **FileManager** | Reading and writing files in the app's private storage. |
+| **FileDownloader** | Pulling a file down in the background, with progress. |
+| **Clipboard** | Copying text out to other apps and pasting text in. |
+
+`AppStorage` stores text. Store a number as text and convert it back when you read it; store
+a structure by writing it as JSON.
+
+## Live connections
+
+`WebSocket` keeps a two-way connection open, so the server can push to the app instead of
+the app polling for changes. Connect, handle **Message Received**, send with **Send
+Message**, and disconnect when the screen closes — a connection nobody closes is a battery
+cost nobody sees.
+
+## A backend without building one
+
+If you would rather not run a server, the Firebase components cover authentication, a
+database, file storage, push messaging and analytics. Connect a Firebase project under
+[Integrations](/getting-started/project-settings#integrations), then wire the blocks like any
+others. See [Firebase components](/components/firebase).
+
+## A shape that works
+
+<Steps>
+  <Step>**Screen Initialize** — show a loading indicator, then make the request.</Step>
+  <Step>**Got Response** — hide the indicator, parse the body, fill the list.</Step>
+  <Step>**Error Occurred** — hide the indicator, show a message, offer a retry.</Step>
+  <Step>Cache what you can into `AppStorage`, so the screen has something to show before the request comes back.</Step>
+</Steps>
+
+<NextPrev
+  prev={{ title: "Logic blocks", href: "/guides/logic/blocks" }}
+  next={{ title: "Collaboration", href: "/guides/collaboration/teamwork" }}
+/>

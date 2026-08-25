@@ -16,13 +16,18 @@
         "section": "home"
       },
       {
-        "title": "Project Settings",
+        "title": "Project settings",
         "href": "/getting-started/project-settings",
         "section": "home"
       },
       {
         "title": "Build the app",
         "href": "/getting-started/build-the-app",
+        "section": "home"
+      },
+      {
+        "title": "Credits and plans",
+        "href": "/getting-started/credits-and-plans",
         "section": "home"
       }
     ]
@@ -33,7 +38,7 @@
     "section": "home",
     "children": [
       {
-        "title": "Overview",
+        "title": "Vibe mode",
         "href": "/ai/overview",
         "section": "home"
       },
@@ -43,12 +48,12 @@
         "section": "home"
       },
       {
-        "title": "Attach Drawings",
+        "title": "Attach drawings",
         "href": "/ai/attach-drawings",
         "section": "home"
       },
       {
-        "title": "UI Style",
+        "title": "UI style",
         "href": "/ai/ui-style",
         "section": "home"
       }
@@ -71,5 +76,17 @@
         "section": "home"
       }
     ]
+  },
+  {
+    "title": "Guides",
+    "icon": "hgi-book-open-01",
+    "href": "/guides/overview",
+    "section": "guides"
+  },
+  {
+    "title": "Components",
+    "icon": "hgi-grid-view",
+    "href": "/components/overview",
+    "section": "components"
   }
 ]

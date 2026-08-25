@@ -1,6 +1,66 @@
 ---
-title: Attach Drawings
-description: Use drawings as context for AI generation.
+title: Attach drawings
+description: Sketch a layout or attach a screenshot, and have Vibe mode build the screen you drew.
 ---
 
-This local MDX page is wired to the home section route `/ai/attach-drawings`.
+A rough drawing says more about a layout than a paragraph does. Vibe mode takes both:
+sketch the screen in the built-in drawing pad, or attach an image you already have, and
+the AI builds against it.
+
+## Attach an image
+
+Press the attachment button beside the chat input and choose **Attach an image**.
+
+- Any image format, **under 1 MB**.
+- Screenshots, photos of a whiteboard, an exported design, a competitor's screen you want
+  the structure of.
+- If your message is empty, Duddy fills in a starting prompt for you — replace it with
+  something specific and you will get a better result.
+
+<Callout type="info">
+  The attachment button only lights up when the selected **chat model can see images**. Pick a
+  vision model in the [model picker](/ai/models) and it becomes available.
+</Callout>
+
+## Draw it instead
+
+Choose **Create a drawing** to open a drawing pad inside the chat. Boxes, arrows, text,
+freehand — enough to say "search at the top, a grid of cards, a tab bar at the bottom".
+Press **Compose** and the sketch is attached to your next message as an image.
+
+<Steps>
+  <Step>Block out the screen: one rectangle per region, roughly to scale.</Step>
+  <Step>Label the parts you care about — "search", "price", "buy button". Labels are read.</Step>
+  <Step>Press **Compose**, then write what the screen is for and anything the drawing cannot say.</Step>
+</Steps>
+
+## Writing the message that goes with it
+
+The drawing carries structure; your words carry everything else. A sketch plus one good
+sentence beats either alone.
+
+| Say | Instead of |
+|---|---|
+| "Build this as a product screen. The grid is two columns, cards are tappable, the bar at the bottom is navigation." | "Make this." |
+| "Same layout, but use our theme colours rather than the greys in the image." | "Fix the colours." |
+| "Only the header — leave the rest of the screen as it is." | "Redo the top." |
+
+<Callout type="warning">
+  An attachment is context for **one message**. Attach it again if a follow-up turn needs to see
+  it too, or describe the change in words instead.
+</Callout>
+
+## What it is good at, and what it is not
+
+**Good at:** structure and hierarchy — what sits where, what is a list, what is a bar, what
+is emphasised.
+
+**Not a copier:** it will not reproduce a screenshot pixel for pixel, and it should not — the
+result is built from real components that resize, theme and behave. If you need exact
+values, set them in the properties panel afterwards, or start from a
+[Figma design](/integration/figma) instead.
+
+<NextPrev
+  prev={{ title: "Models", href: "/ai/models" }}
+  next={{ title: "UI style", href: "/ai/ui-style" }}
+/>

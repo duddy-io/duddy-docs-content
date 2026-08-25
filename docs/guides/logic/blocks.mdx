@@ -1,0 +1,88 @@
+---
+title: Logic blocks
+description: Wire behaviour with blocks — events, conditions, variables, lists and procedures — in the block editor.
+---
+
+Logic in Duddy is built out of blocks that snap together. If two blocks do not belong
+together, they will not connect, so a project cannot quietly hold logic that never runs.
+
+Switch between the designer and the block editor with `Ctrl` + `Shift` + `E`. Each screen
+has its own workspace.
+
+## The shape of a program
+
+Everything starts with an **event**: something happened. Inside the event you put
+**actions**: things to do about it.
+
+<Steps>
+  <Step>Select a component in the toolbox — `SignInButton`, say.</Step>
+  <Step>Drag out its **Click** event. That is the hat block everything else goes inside.</Step>
+  <Step>Fill it with actions: read a field, check a condition, open a screen, call an API.</Step>
+</Steps>
+
+## What is in the toolbox
+
+The left of the block editor holds two kinds of blocks.
+
+**Per component** — every component on the screen contributes its own:
+
+| Block | Is |
+|---|---|
+| **Events** | Something the component tells you about: Click, Text Changed, Got Response, Location Changed. |
+| **Properties** | Get or set anything the component exposes — a label's Text, a switch's Checked, a container's Background. |
+| **Functions** | Things you can tell the component to do: Show, Play, Make Request, Store Value. |
+
+Every component's events and functions are listed in the
+[component reference](/components/overview).
+
+**Built in** — the general-purpose families:
+
+| Family | Holds |
+|---|---|
+| **Logic** | `if / else`, comparisons, `and` / `or` / `not`, true and false. |
+| **Control** | Loops, repeat, break, wait. |
+| **Math** | Arithmetic, rounding, random numbers, min and max. |
+| **Text** | Join, length, substring, case, replace, split, format. |
+| **Lists** | Create, add, length, contains, get, replace and remove by index. |
+| **Dictionaries** | Key-value structures — what a JSON response becomes. |
+| **Variables** | Named values you set and read. |
+| **Procedures** | Your own reusable blocks, with parameters and a return value. |
+
+## Variables
+
+Create a variable for anything you need to remember between events — the item a user
+selected, a running total, whether a request is already in flight.
+
+<Callout type="info">
+  Variables belong to the screen that declares them. To carry a value to another screen, set a
+  global value before you navigate, or write it to
+  [AppStorage](/components/storage) when it should survive the app closing.
+</Callout>
+
+## Procedures
+
+When the same five blocks appear in three handlers, make them a procedure and call it from
+all three. Procedures take parameters and can return a value, and they show up in the
+toolbox beside the built-in blocks.
+
+## Keeping a workspace readable
+
+- **Name components before you wire them.** Blocks address components by name, and
+  `Button1` tells you nothing six screens later.
+- **One event, one job.** If a Click handler is twenty blocks tall, most of it wants to be a
+  procedure.
+- **Validation runs as you build.** A block with an empty socket, a duplicate handler for the
+  same event, or a reference to a component you deleted is flagged in the editor — fix those
+  before you build, because they compile to nothing.
+
+## Asking the AI for logic
+
+`/logic` in the [Vibe chat](/ai/overview) wires behaviour onto components that already
+exist: "when Sign in is tapped, check the email field is not empty, then open Home".
+What it writes is ordinary blocks in the same workspace, so you can open it up and adjust
+anything it did.
+
+<NextPrev
+  prev={{ title: "Images, fonts and files", href: "/guides/designing/assets" }}
+  next={{ title: "Data, APIs and storage", href: "/guides/logic/data-and-apis" }}
+/>

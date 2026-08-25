@@ -1,6 +1,168 @@
 ---
-title: Project Settings
-description: Configure a duddy project.
+title: Project settings
+description: Every setting behind the gear icon in the designer — identity, build, theme, permissions, keys, signing, deep links, collaborators and the public listing.
 ---
 
-This local MDX page is wired to the home section route `/getting-started/project-settings`.
+Settings are per project, and they are what turns a design into a shippable app: the
+name under the launcher icon, the package your store listing is registered against, the
+permissions the app asks for, the keys it talks to services with.
+
+Open them from the gear in the designer's header. Every page saves on its own **Save**
+button — nothing is written as you type.
+
+## Project
+
+Four tabs, one Save. Everything here is required before a store build makes sense.
+
+### Identity
+
+| Field | What it does |
+|---|---|
+| **App name** | Shown under the launcher icon on the device. Letters and numbers only — no spaces or symbols. |
+| **Package name** | The app's permanent identity, in reverse-domain form (`com.pictora.app`). **A build fails while this is empty**, and it can never be changed once the app is published to a store. |
+| **Entry screen** | The first screen after the splash. |
+
+<Callout type="warning">
+  Choose the package name as if it is permanent, because it is. Google Play and the App
+  Store both key a listing to it, and changing it later means publishing a second, unrelated app.
+</Callout>
+
+### Build
+
+| Field | What it does |
+|---|---|
+| **Version code** | A whole number that must increase on every store upload. Stores reject an upload whose version code is not higher than the last. |
+| **Version name** | What people read on the store listing — `1.0.0`, `2.4`, anything you like. |
+| **Target SDK** | The Android API level the app is built against. Keep this at the newest level your app works on; stores enforce a floor. |
+| **Min SDK** | The oldest Android version the app installs on. Min SDK 21 reaches roughly 99% of active Android devices. |
+
+### Assets
+
+- **Launcher icon** — a square PNG with no rounded corners. Duddy masks it per platform,
+  so bake nothing into the corners yourself.
+- **Splash image** — fills the screen while the app starts.
+
+### Danger zone
+
+Archiving and deleting the project. Nothing here is part of an ordinary build.
+
+## Theme
+
+A project's palette lives here as named colours rather than hex codes scattered across
+screens: components reference `primary`, `surface`, `onSurface` and the rest, so changing a
+brand colour is one edit instead of a search through every screen.
+
+You can keep several collections and switch a screen between them, build a palette out of
+an uploaded image, or have the AI generate one. See [Themes and styling](/guides/designing/theme).
+
+## Permissions
+
+The list is assembled from the components you have actually used — place a
+[LocationSensor](/components/sensors) and its location permissions appear here; delete it
+and they can be removed. Refresh re-reads the screens.
+
+Prefer a picker over a permission wherever both exist: `ImagePicker`, `FilePicker`,
+`ContactPicker` and `BarcodeScanner` need no permission on either platform, because the
+system UI does the asking for you.
+
+<Callout type="info">
+  Ask for a permission in your logic at the moment it is needed, not on app start. Both stores
+  review this, and users decline a prompt that arrives with no context.
+</Callout>
+
+<Callout type="info" title="The list follows your components">
+  A build declares what your components require, which is the list on this page. To drop a
+  permission, drop the component that needs it.
+</Callout>
+
+## Manifest
+
+A raw editor for the Android manifest entries Duddy cannot infer — extra `<meta-data>`, an
+exported activity, a queries block. Everything else on this page is generated for you.
+
+<Callout type="warning" title="What ships today">
+  Snippets saved here are stored with the project but are not yet merged into a build. Everything
+  Duddy can infer — components, permissions, the launcher activity — is generated for you either way.
+</Callout>
+
+## Keystore
+
+The signing key your Android release builds are signed with. Upload a `.jks` or
+`.keystore` file and select it, or leave the page alone — if no keystore is set, Duddy
+generates one when you build.
+
+<Callout type="danger" title="Keep your keystore">
+  Google Play ties an app to the key it was first uploaded with. Upload your own keystore
+  and keep a copy of it somewhere safe: without it you cannot ship an update to a published app.
+</Callout>
+
+## Deep links
+
+Let a link on the web open a screen inside your app. Each row is a screen, a type and a
+value:
+
+- **Host** — a web address you own, so a real link opens the app instead of a browser tab
+  (`https://pictora.app/receipt/12`).
+- **File** — a file type, given as a MIME type such as `image/png`, so your app is offered
+  as a way to open files of that kind.
+
+Add one row per screen you want reachable.
+
+<Callout type="warning" title="What ships today">
+  Deep links are saved with the project but are not yet written into a build, so a link will not
+  open the app until they are. Everything you configure here is kept and will apply once it lands.
+</Callout>
+
+## Integrations
+
+Project-level keys and IDs. These are read by the platform before any component runs,
+which is why several components share one field rather than each carrying its own.
+
+| Group | Holds |
+|---|---|
+| **Google** | Maps API key, Google app ID. A missing Maps key builds fine and draws a blank grid. |
+| **Firebase** | The `google-services.json` and `GoogleService-Info.plist` config for Auth, Realtime Database, Firestore, Storage and Cloud Messaging. |
+| **Pixabay** | Royalty-free photos and illustrations in the asset picker. |
+| **Ads** | AdMob app ID, Meta app ID and client token. Without an AdMob ID, builds fall back to Google's official test unit. |
+| **In-App Purchases** | The product and subscription IDs sold through the App Store and Play Store. |
+
+<Callout type="danger" title="Firebase has no fallback">
+  A project using a Firebase component with no config file fails the build with an explicit
+  error rather than shipping something that silently cannot connect.
+</Callout>
+
+Account-level connections — Figma, Unsplash, Pixabay, Firebase and Apple — are set once
+for your whole account under **Integrations** in the dashboard. See
+[Figma](/integration/figma) and [Apple](/integration/apple).
+
+## Collaboration
+
+Invite people by email address. Three levels:
+
+| Role | Can |
+|---|---|
+| **Read only** | View screens and preview the app. |
+| **Read & write** | Edit screens, logic and assets. |
+| **Admin** | Everything above, plus manage collaborators. |
+
+Everyone in a project edits the same canvas live — cursors, selections and property
+changes appear as they happen, with no merge step. See
+[Working together](/guides/collaboration/teamwork).
+
+## About
+
+The listing for the project: cover image, name, one-line pitch, category, tags, licence
+and a Readme written in Markdown. Licences on offer include the Duddy License, MIT,
+Apache 2.0, GPL v3, BSD 2/3-Clause, MPL and Creative Commons.
+
+## Hosting
+
+The control surface for a web build that is online: the live link, what it costs per
+period, and what it has cost so far. A build is not a publish — building the web app
+stages it, and **Update live app** is what moves it. See
+[Build the app](/getting-started/build-the-app#host-the-web-build).
+
+<NextPrev
+  prev={{ title: "Create a project", href: "/getting-started/create-a-project" }}
+  next={{ title: "Build the app", href: "/getting-started/build-the-app" }}
+/>

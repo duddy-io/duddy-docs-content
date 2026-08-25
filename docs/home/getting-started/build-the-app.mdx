@@ -1,6 +1,99 @@
 ---
 title: Build the app
-description: Build your duddy app for supported platforms.
+description: Compile your project into an Android, iOS or web app, watch the build log, and put the web build online.
 ---
 
-This local MDX page is wired to the home section route `/getting-started/build-the-app`.
+Building turns the project you have been designing into a real, installable app. Duddy
+generates native source for the target you pick and runs that platform's own toolchain
+over it — Gradle for Android, Xcode for iOS.
+
+Press **Build** in the designer header and choose a target.
+
+## The targets
+
+| Target | You get | Notes |
+|---|---|---|
+| **Android App (`.apk`)** | An installable file you can send to a phone or a tester. | The fastest way to get the app into someone's hands. |
+| **Android App Bundle (`.aab`)** | The upload format Google Play requires. | Play generates per-device APKs from it. |
+| **iOS App (`.ipa`)** <Badge type="beta" /> | A signed iOS build. | Needs a connected [Apple Developer account](/integration/apple). |
+| **Web App (`.zip`)** <Badge type="beta" /> | A web bundle you can host anywhere, or [host on Duddy](#host-the-web-build). | Installs as a PWA. |
+
+Before your first build, fill in **App name**, **Package name** and **Entry screen** under
+[Project settings](/getting-started/project-settings) — a build fails while the package
+name is empty.
+
+## The build console
+
+The console opens as soon as a build starts and streams every line the toolchain prints.
+
+<Steps>
+  <Step>**Queued** — your request is waiting for a free build worker.</Step>
+  <Step>**Building** — source generation, then the platform toolchain. A first Android build takes longer than later ones.</Step>
+  <Step>**Done** — download the artifact, or copy an install link to open on a phone.</Step>
+</Steps>
+
+The console also carries the build's version, target and minimum SDK, the package name it
+was built with, and a preview of the entry screen — worth a glance before you send the
+file to anyone.
+
+<Callout type="info">
+  A failed build keeps its log. Download it from the console and read from the bottom: the
+  first real error is usually a missing key or a required field left empty in project settings.
+</Callout>
+
+## What a build costs
+
+Builds spend credits and are capped per hour by your plan, so a stuck loop cannot drain an
+account overnight. Check your balance under **Credits** in the dashboard, or read
+[Credits and plans](/getting-started/credits-and-plans).
+
+## iOS builds <Badge type="beta" />
+
+An iOS build needs an App Store Connect API key on your account — Duddy signs the build
+with it and can send it to TestFlight. Connect one under
+[Apple Developer](/integration/apple).
+
+Before an iOS build starts, Duddy runs a preflight over your Apple setup and shows you
+what it found:
+
+- A **warning** is something Duddy can create for you, such as a missing certificate or
+  provisioning profile.
+- A **failure** is something only you can fix — an expired key, or a missing app record in
+  App Store Connect — and the build is refused rather than queued.
+
+<Callout type="warning">
+  iOS builds run on macOS machines with a full Xcode install. When none is free, a build waits
+  in the queue rather than failing — give it a few minutes before starting another one.
+</Callout>
+
+## Host the web build
+
+A web build can go online at a link you can share, straight from
+**Settings → Hosting** in the designer.
+
+<Steps>
+  <Step>Build for the web at least once.</Step>
+  <Step>Open **Settings → Hosting** and put the app online. You get a live link you can copy or open.</Step>
+  <Step>Keep designing. Later builds are staged, not published — the page tells you when a newer build is ready, and **Update live app** moves it.</Step>
+</Steps>
+
+Hosting is metered: the page shows the rate, the next charge, and roughly how long your
+current balance covers. Stop the app whenever you like — your files and your link are kept,
+so starting it again returns the same address.
+
+<Callout type="info" title="A build is not a publish">
+  Building the web app never changes what is live. That is deliberate: it means you can build
+  freely while a link you have already shared keeps serving the version you chose.
+</Callout>
+
+## Sending a build to testers
+
+- **Android** — share the `.apk` or the install link from the console. Testers need to allow
+  installs from unknown sources.
+- **iOS** — go through TestFlight; iOS builds cannot be installed by link.
+- **Web** — share the hosted link. Nothing to install at all.
+
+<NextPrev
+  prev={{ title: "Project settings", href: "/getting-started/project-settings" }}
+  next={{ title: "Credits and plans", href: "/getting-started/credits-and-plans" }}
+/>

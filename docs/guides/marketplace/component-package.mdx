@@ -1,0 +1,82 @@
+---
+title: duddy-package.json
+description: The manifest every Duddy component carries — version, visibility, dependencies, permissions and iOS pods.
+isExperimental: true
+---
+
+Every component directory carries a `duddy-package.json` beside its sources. It holds what
+the Java source cannot state: the version, how it is listed, and what it needs from the
+platforms to compile.
+
+The component's **name, description and category** are not here — they come from the
+`@Component` annotation in the Java source, which is parsed at build time.
+
+<CodeBlock language="json" filename="duddy-package.json" code={`{
+  "metadata": {
+    "version": "1.0",
+    "public": true,
+    "visible": true,
+    "credits": 0,
+    "link": ""
+  },
+  "permissions": [
+    "android.permission.ACCESS_FINE_LOCATION"
+  ],
+  "dependencies": [
+    { "group": "com.airbnb.android", "artifact": "lottie", "version": "6.4.0" }
+  ],
+  "repositories": [],
+  "ios": {
+    "pods": [{ "name": "lottie-ios", "version": "4.4.1" }],
+    "infoPlist": {
+      "NSLocationWhenInUseUsageDescription": "This app uses your location to show where you are."
+    },
+    "frameworks": []
+  }
+}`} />
+
+## metadata
+
+| Key | Type | Means |
+|---|---|---|
+| `version` | string | Semantic version. Every upload must be **strictly greater** than the last approved one. |
+| `public` | boolean | Whether the component is listed in the marketplace. **A missing value reads as `false`** — the component uploads and is never offered to anyone. |
+| `visible` | boolean | Whether the component draws something. `true` for widgets; `false` for logic-only components that contribute blocks and no view. |
+| `credits` | number | What importing it costs. Must be a **number** — a string fails the parse. |
+| `link` | string | An optional link to your own page for the component. |
+
+## permissions
+
+Android permission strings the component genuinely needs, listed in full
+(`android.permission.CAMERA`). Ask only on the API levels that require it, pair each with a
+Request Permission function and Granted/Denied events, and prefer a system picker where one
+exists — the image, file and contact pickers need no permission at all.
+
+## dependencies and repositories
+
+Android libraries resolved by Gradle on the build server. Each entry is a `group`,
+`artifact` and `version`; `repositories` adds a Maven repository beyond the defaults.
+
+<Callout type="warning">
+  Everything a component imports beyond the platform SDK must be declared here. Libraries resolved
+  locally by `duddy install` are for your IDE only — an undeclared import compiles on your machine
+  and fails on the build server.
+</Callout>
+
+## ios
+
+| Key | Holds |
+|---|---|
+| `pods` | CocoaPods dependencies, as a **list** of `{ name, version }` objects. A non-empty list is what switches the iOS build to a workspace build. |
+| `infoPlist` | String values written into the app's `Info.plist` — permission usage strings live here. Values must be **strings**. |
+| `frameworks` | Extra frameworks to link. System frameworks such as `MessageUI` and `CallKit` auto-link and need no entry. |
+
+<Callout type="info">
+  Anything you add to `ios.infoPlist` reaches the user as text on a permission prompt. Write the
+  sentence Apple's reviewer would want to read: what the app does with the thing it is asking for.
+</Callout>
+
+<NextPrev
+  prev={{ title: "Publish a component", href: "/guides/marketplace/publish-a-component" }}
+  next={{ title: "Component overview", href: "/components/overview" }}
+/>

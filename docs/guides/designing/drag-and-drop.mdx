@@ -1,6 +1,93 @@
 ---
 title: Drag and drop
-description: Drag and drop page of guides section.
+description: Place components on the canvas, nest them, select them, and set their properties.
 ---
 
-This local MDX page is wired to the home section route `/guides/designing/drag-and-drop`.
+The canvas is the middle of the designer: a phone-shaped surface showing one screen. You
+build a screen by dragging components onto it and nesting them inside layout containers.
+
+## The palette
+
+The left rail (`1`) lists every component available to the project, grouped the same way
+the [component reference](/components/overview) is — Layout, Content, Input, Media,
+Connectivity, Storage, Firebase, Sensors, Ads and everything else. Search by name if you
+know what you want.
+
+Drag a component from the palette onto the canvas to place it.
+
+## Where it lands
+
+Duddy shows you the drop before you commit to it:
+
+- **In a Row, Column or scrolling container**, an insertion line shows exactly where the
+  component will go among the existing children.
+- **In a Stack**, a crosshair shows the position it will take, because a Stack layers
+  children rather than queueing them.
+- **In an empty container**, the container highlights. An empty container has no size of
+  its own, so it can look like a thin strip until it holds something.
+
+<Callout type="info">
+  Some components draw nothing at all — `HttpRequest`, `AppStorage`, `Clock`. Drop one anywhere on
+  the screen and it joins the screen as a logic-only component: no box on the canvas, but its
+  blocks are available in the block editor.
+</Callout>
+
+## Overlays
+
+`Dialog` and `BottomSheet` live over the screen rather than in it. While one is visible on
+the canvas it is the only thing you can drop into, which is what lets you build its
+contents; hide it again and the screen underneath comes back.
+
+## Selecting and rearranging
+
+- Click a component to select it. Its box is outlined and the properties panel fills in.
+- Drag a placed component to move it — the same insertion line rules apply.
+- `Ctrl` + `Left` / `Ctrl` + `Right` walk the selection through the tree.
+- `Shift` + `D` duplicates, `Del` deletes, `F2` renames.
+
+The **component tree** (`2`) is the same structure as a list. It is the reliable way to
+select something small, something behind something else, or a container whose children fill
+it completely.
+
+<Callout type="warning">
+  Renaming a component changes the name your logic blocks refer to it by. Rename early — before
+  you wire behaviour to it — and the change costs nothing.
+</Callout>
+
+## Hidden layers
+
+A component whose **Visible** property is off still exists: it moves to the hidden-layers
+rail rather than disappearing from the project. Peek at one from the rail to see it on the
+canvas without turning it back on — useful for the empty state of a list, or an error
+message that only shows when something fails.
+
+## The properties panel
+
+Selecting a component fills the right-hand panel with everything that component can be
+told. Properties are grouped — Dimension, Spacing, Layout, Style, Typography, Behavior — and
+the panel shows only the rows that apply right now. A row that disappears when you change
+another one is the component telling you it no longer applies, not a bug.
+
+<Steps>
+  <Step>**Dimension** — Width and Height. Each takes a number in `px` or `%`, or one of **Auto** and **Fill**.</Step>
+  <Step>**Spacing** — Padding inside the component, Margin around it.</Step>
+  <Step>**Layout** — how a container arranges its children: orientation, alignment and the gap between them.</Step>
+  <Step>**Style** — background, corner radius, border, shadow and opacity.</Step>
+  <Step>**Typography** — font, size, weight, colour, alignment and truncation for anything showing text.</Step>
+</Steps>
+
+See [Layout and sizing](/guides/designing/layout-and-sizing) for what Fill and Auto actually
+do inside each kind of container.
+
+## Checking your work
+
+- **Device and zoom** (`5`) changes the canvas frame so you can see the screen at another
+  size. `Ctrl` + `0` fits it, `Ctrl` + scroll zooms.
+- **Preview** opens a board of every screen at once — the fastest way to check a flow
+  without a build.
+- Nothing here is a build. When you want the app on a device, see
+  [Build the app](/getting-started/build-the-app).
+
+<NextPrev
+  next={{ title: "Screens and navigation", href: "/guides/designing/screens" }}
+/>

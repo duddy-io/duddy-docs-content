@@ -1,0 +1,78 @@
+---
+title: Themes and styling
+description: Build a palette once as named colours, and change the whole app by editing one value.
+---
+
+A theme is a collection of **named colours** — `primary`, `surface`, `onSurface`,
+`danger`, whatever you call them — that components reference instead of a hex code.
+Change the value once and every screen using that name follows.
+
+Open **Settings → Theme** in the designer.
+
+## Collections
+
+A theme is stored as a named collection of variables. Most projects need one; keep several
+when you want a light and a dark set, or a seasonal variant, and switch a screen between
+them from the `Screen` component's **Theme** property.
+
+<Steps>
+  <Step>Create a collection. Names start with a letter and use letters, numbers and underscores.</Step>
+  <Step>Add variables to it, one per role: not `blue600`, but `primary`, `surface`, `textMuted`.</Step>
+  <Step>Use those names everywhere on the canvas instead of picking a colour by hand.</Step>
+</Steps>
+
+<Callout type="warning">
+  Deleting a collection takes its variables with it, and anything using them falls back to a
+  default colour. Rename rather than delete-and-recreate.
+</Callout>
+
+## Two shortcuts to a palette
+
+- **From an image** — upload a picture and Duddy pulls a palette out of it. Good when the
+  brand already exists as a logo or a photograph.
+- **Generated** — describe the look you want ("warm, editorial, cream paper and ink") and
+  have it generated into the collection.
+
+Both write ordinary variables, so you can edit any of them afterwards.
+
+## What a colour can be
+
+Anywhere a colour is set — a background, a text colour, a border — you can choose:
+
+| Kind | Use it for |
+|---|---|
+| **Theme colour** | Almost everything. A named variable from the current collection. |
+| **Custom colour** | A one-off that genuinely belongs to a single component. |
+| **Image** | A photograph or texture as a background. |
+| **Gradient** | Two or more stops with a direction. |
+| **Material** | A translucent, blurred surface — frosted, liquid glass, tinted or clear — with control over blur, tint, highlight and depth. |
+
+<Callout type="info">
+  A material samples what is behind it, so it only reads as glass when there is something behind
+  it worth seeing. Over a plain background it just looks like a lighter box.
+</Callout>
+
+## Type
+
+Fonts are project assets. Upload a family under **Assets → Fonts** and it becomes available
+in every Typography row, or use one of the fonts that ship with Duddy. Keep a scale — a
+display size, a title, a body, a caption — and set it on the components rather than typing a
+new number each time.
+
+## Shapes and corners
+
+Corner radius is a normal Style property. For anything that is not a rounded rectangle,
+the `Shape` component draws real vector shapes — circles, pills, arches, clovers, or an
+outline you draw yourself — and clips its children to that outline.
+
+## Letting the AI restyle
+
+`/theme` in the [Vibe chat](/ai/overview) changes the whole app's colour scheme in one turn.
+It rewrites the theme's variables, so screens follow immediately. Anything you set as a
+custom colour rather than a theme colour stays exactly where it is — which is the practical
+argument for using theme names in the first place.
+
+<NextPrev
+  prev={{ title: "Layout and sizing", href: "/guides/designing/layout-and-sizing" }}
+  next={{ title: "Images, fonts and files", href: "/guides/designing/assets" }}
+/>

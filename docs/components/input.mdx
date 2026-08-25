@@ -1,0 +1,130 @@
+---
+title: Input components
+description: Controls the user touches — buttons, fields, toggles and pickers.
+---
+
+Controls the user touches — buttons, fields, toggles and pickers.
+
+<Callout type="info">
+  Give every input a name before you wire it. Blocks address components by name, and `Input1` tells
+  you nothing three screens later.
+</Callout>
+
+| Component | Does |
+|---|---|
+| [Button](#button) | A tappable control with a text label and an optional icon, used to submit a form, move to another screen, or run any piece of logic. |
+| [Input](#input) | A single-line text field the user types into. |
+| [Checkbox](#checkbox) | A square box the user taps to tick or untick, used for yes or no answers and for picking several items from a list. |
+| [Switch](#switch) | An on/off toggle the user slides or taps, for a single yes-or-no choice such as enabling notifications or dark mode. |
+| [RadioButton](#radiobutton) | A single round selection control the user taps to choose one option; place several together to build a group where one choice is picked at a time. |
+| [Slider](#slider) | A track the user drags to pick a number between a minimum and a maximum, used for volume, brightness, price ranges and similar settings. |
+| [RatingBar](#ratingbar) | A row of tappable stars for collecting a rating, or for showing an existing score read-only when Editable is off. |
+| [DropdownMenu](#dropdownmenu) | A single-choice field that shows the current selection and opens a popup list of options when tapped. |
+| [ListPicker](#listpicker) | Opens a single-choice list dialog and reports the item the user picked. |
+| [DatePicker](#datepicker) | Opens the native calendar dialog and reports the date the user chooses. |
+| [TimePicker](#timepicker) | A non-visual component that opens the platform time dialog and reports the chosen time. |
+| [ContactPicker](#contactpicker) | Opens the device contacts app so the user can choose one person, then reports that contact name, phone number and email. |
+
+## Button
+
+A tappable control with a text label and an optional icon, used to submit a form, move to another screen, or run any piece of logic.
+
+*Drawn on the screen.*
+
+**Events** — `Click`, `Long Press`, `Press In`, `Press Out`
+
+## Input
+
+A single-line text field the user types into. Used for forms, search bars, login screens and anywhere free text has to be collected.
+
+*Drawn on the screen.*
+
+**Events** — `Focus`, `Blur`, `Text Changed`, `Submit`, `Left Icon Press`, `Right Icon Press`
+
+## Checkbox
+
+A square box the user taps to tick or untick, used for yes or no answers and for picking several items from a list.
+
+*Drawn on the screen.*
+
+**Events** — `Changed`
+
+## Switch
+
+An on/off toggle the user slides or taps, for a single yes-or-no choice such as enabling notifications or dark mode.
+
+*Drawn on the screen.*
+
+**Events** — `Changed`
+
+## RadioButton
+
+A single round selection control the user taps to choose one option; place several together to build a group where one choice is picked at a time.
+
+*Drawn on the screen.*
+
+**Events** — `Changed`
+
+## Slider
+
+A track the user drags to pick a number between a minimum and a maximum, used for volume, brightness, price ranges and similar settings.
+
+*Drawn on the screen.*
+
+**Events** — `Changed`
+
+## RatingBar
+
+A row of tappable stars for collecting a rating, or for showing an existing score read-only when Editable is off.
+
+*Drawn on the screen.*
+
+**Events** — `Rating Changed`
+
+## DropdownMenu
+
+A single-choice field that shows the current selection and opens a popup list of options when tapped. Used for pickers such as country, category or size.
+
+*Drawn on the screen.*
+
+**Events** — `Item Selected`
+
+## ListPicker
+
+Opens a single-choice list dialog and reports the item the user picked. Options are one comma-separated string, the format DropdownMenu also uses.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Item Selected`, `Cancelled`
+
+**Functions** — `Open Picker`, `Set Selected Index`, `Get Item`, `Add Item`, `Clear Items`
+
+## DatePicker
+
+Opens the native calendar dialog and reports the date the user chooses. It draws nothing on screen, so wire Open Picker to a button tap or any other trigger.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Date Set`, `Cancelled`
+
+**Functions** — `Open Picker`, `Set Date`, `Format Date`
+
+## TimePicker
+
+A non-visual component that opens the platform time dialog and reports the chosen time. Wire Open Picker to a button or any other trigger.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Time Set`, `Cancelled`
+
+**Functions** — `Open Picker`, `Set Time`, `Format Time`
+
+## ContactPicker
+
+Opens the device contacts app so the user can choose one person, then reports that contact name, phone number and email. Needs no contacts permission.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Contact Picked`, `Cancelled`, `Error`
+
+**Functions** — `Open Picker`, `Clear`

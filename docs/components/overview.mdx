@@ -1,6 +1,71 @@
 ---
-title: Overview
-description: Overview page of components section.
+title: Components
+description: What a Duddy component is, how properties, events and functions work, and the full library grouped by category.
 ---
 
-This local MDX page is wired to the home section route `/components`.
+Components are the pieces an app is made of. Some draw something — a button, an image, a
+list. Some draw nothing and exist purely to do a job — call an API, store a value, read the
+device's location.
+
+Every component is native code on each platform, so a Duddy app is built from real platform
+widgets rather than a web page pretending to be one.
+
+## Three surfaces
+
+Every component exposes the same three kinds of thing, and they are what you work with in
+the designer and the block editor.
+
+| | Where you use it | Example |
+|---|---|---|
+| **Properties** | The properties panel, and get/set blocks. | A button's `Text`, a container's `Background`, a switch's `Checked`. |
+| **Events** | The block editor — a hat block you put actions inside. | `Click`, `Text Changed`, `Got Response`, `Location Changed`. |
+| **Functions** | The block editor — an action you call. | `Show`, `Play`, `Make Request`, `Store Value`. |
+
+Drop a component onto a screen and its blocks appear in the block editor's toolbox under
+its name.
+
+## Visual and logic-only
+
+A **visual** component has a box on the canvas that you size, position and style. A
+**logic-only** component has none: drag it anywhere onto the screen and it joins the screen
+as a component you can address from blocks. `HttpRequest`, `AppStorage` and `Clock` are
+logic-only; they never show up in the layout.
+
+<Callout type="info">
+  A property row that disappears when you change another one is the component saying it does not
+  apply right now — an ad banner does not offer padding, a slider offers no text alignment.
+</Callout>
+
+## The library
+
+<CardGrid>
+  <Card title="Layout" href="/components/layout">Screen, Row, Column, Stack, cards, bars, tabs, sheets and dialogs.</Card>
+  <Card title="Content" href="/components/content">Text, images, icons, shapes, lists, charts and progress.</Card>
+  <Card title="Input" href="/components/input">Buttons, fields, switches, sliders and pickers.</Card>
+  <Card title="Media" href="/components/media">Video, audio, camera, animation, speech.</Card>
+  <Card title="Connectivity" href="/components/connectivity">HTTP, WebSocket, maps, web views, network state.</Card>
+  <Card title="Storage" href="/components/storage">Key-value, SQLite, files, downloads, clipboard.</Card>
+  <Card title="Firebase" href="/components/firebase">Auth, databases, storage, messaging, analytics.</Card>
+  <Card title="Sensors" href="/components/sensors">Location, motion, proximity, haptics, scanning.</Card>
+  <Card title="Ads" href="/components/ads">AdMob and Meta Audience Network placements.</Card>
+  <Card title="Device and utilities" href="/components/other">Device info, sharing, calls, messages, purchases.</Card>
+</CardGrid>
+
+## Imported components
+
+Alongside the components Duddy ships, a project can import components published by other
+developers. An imported component behaves exactly like a built-in one: it has properties,
+events and functions, and it appears in the palette and the block toolbox in its own
+category.
+
+<Callout type="info">
+  A component's identity is its full name — `io.duddy.components.Button`. That is what a project
+  stores, so a component keeps working the same way in every project that imports it.
+</Callout>
+
+## Reading these pages
+
+Each category page lists its components with what the component does, whether it draws
+anything, its events and functions, and any Android permission it needs. Properties are not
+listed page by page: the properties panel in the designer always shows exactly what the
+component you have selected supports, which is the one list that can never be out of date.

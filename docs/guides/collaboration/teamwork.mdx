@@ -1,0 +1,67 @@
+---
+title: Collaboration
+description: Invite people to a project, edit the same canvas live, leave comments on components, and roll back to any point.
+---
+
+A Duddy project is multiplayer. Invite someone by email address and you are both editing
+the same screens, with no branches to merge and no seats to provision.
+
+## Invite someone
+
+<Steps>
+  <Step>Open **Settings → Collaboration** in the designer.</Step>
+  <Step>Enter the person's email address and choose a role.</Step>
+  <Step>They get an invitation. Accepting adds the project to their dashboard.</Step>
+</Steps>
+
+| Role | Can |
+|---|---|
+| **Read only** | View screens and preview the app. |
+| **Read & write** | Edit screens, logic and assets. |
+| **Admin** | Everything above, plus manage collaborators. |
+
+Remove someone from the same page. The project owner cannot be removed.
+
+## Editing at the same time
+
+Everyone in a project sees the same canvas: cursors, selections and property changes appear
+as they happen.
+
+- **Selection is visible.** When somebody has a component selected, you can see it — which is
+  usually enough to stay out of each other's way.
+- **Changes arrive as they are made**, not on save. There is nothing to push or pull.
+- **Read-only collaborators** can open everything and change nothing; controls that would
+  write are simply inert for them.
+
+<Callout type="info">
+  Two people editing the same component at the same moment is the one case worth avoiding — the
+  last write wins, as it does everywhere. Split by screen and it never comes up.
+</Callout>
+
+## Comments
+
+Press `Alt` + `C`, or open comments from the header, and pin feedback to a specific
+component rather than describing it in a chat thread. Because a comment is attached to the
+component, it survives the screen being rearranged around it.
+
+Mention a collaborator to notify them.
+
+## History and versions
+
+Press `Alt` + `V` for the history panel. It lists what changed, who changed it, and when —
+including changes made by the AI, grouped by the turn and labelled with the prompt that
+caused them.
+
+<Steps>
+  <Step>**Preview** an entry to see the screen as it was at that point, without committing to anything.</Step>
+  <Step>**Restore** to bring a screen back to that state.</Step>
+  <Step>**Revert an AI turn** from its card to undo everything that turn did, including screens it created.</Step>
+</Steps>
+
+Save a named version whenever you are about to try something risky. Experiments stay cheap
+when undoing one is free.
+
+<NextPrev
+  prev={{ title: "Data, APIs and storage", href: "/guides/logic/data-and-apis" }}
+  next={{ title: "Publish a component", href: "/guides/marketplace/publish-a-component" }}
+/>

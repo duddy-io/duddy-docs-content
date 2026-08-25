@@ -1,76 +1,78 @@
 ---
 title: Duddy documentation
-description: Start building native apps for iOS, Android, and the web with Duddy.
-isNew: true
-isExperimental: true
-isDeprecated: true
+description: Design an app in the browser and compile it for Android, iOS and the web — with drag and drop, logic blocks, or a sentence.
 ---
 
-## Build without limits
+Duddy is an app builder that runs in your browser. You design screens on a canvas,
+describe behaviour with blocks that snap together, and Duddy compiles the result into
+a real Android app, a real iOS app, and a web app — from one project.
 
-Duddy is an AI-enabled, no-code app builder that compiles your project for **iOS**, **Android**, and the **web**.
+There is no code to write, and nothing to install.
+
+<CardGrid>
+  <Card title="Create a project" href="/getting-started/create-a-project" badge="1">
+    Start from a sentence, a Figma file, a template, or an empty canvas.
+  </Card>
+  <Card title="Design a screen" href="/guides/designing/drag-and-drop" badge="2">
+    Drag components in, nest them, and set every property by hand.
+  </Card>
+  <Card title="Add behaviour" href="/guides/logic/blocks" badge="3">
+    Wire taps, requests and storage with logic blocks.
+  </Card>
+  <Card title="Build the app" href="/getting-started/build-the-app" badge="4">
+    Compile an `.apk`, an `.aab`, an `.ipa`, or a web bundle.
+  </Card>
+</CardGrid>
+
+## How a project becomes an app
+
+A Duddy project is a set of **screens**. Each screen holds a tree of **components** —
+a Column with a TopBar, some text, an image, a button — and a **logic workspace** where
+blocks describe what happens when someone uses it.
+
+When you build, Duddy compiles that project into native source for the target you picked
+and runs the platform's real toolchain over it. An Android build is compiled Java running
+in a real Android app; an iOS build is Swift built with Xcode; a web build is a bundle you
+can host or install as a PWA. There is no interpreter shipped in the middle, which is why
+the result behaves like an app rather than a website in a wrapper.
+
+## Three ways to build the same thing
+
+Nothing here is a separate mode you have to commit to. All three write into the same
+project, and you can move between them mid-screen.
+
+| | What it is | Best for |
+|---|---|---|
+| **Canvas** | Drag components from the palette, nest them, size and style them in the properties panel. | Precise layout, and changing anything the AI produced. |
+| **Blocks** | A visual logic editor. Events, conditions, requests and storage are blocks that only connect where they make sense. | Behaviour: taps, navigation, API calls, saved data. |
+| **Vibe (AI)** | Describe a screen or a whole app in the chat and it gets built. | Getting past a blank canvas, and bulk edits. |
 
 <Callout type="info">
-  This page is rendered from a local MDX document on the server.
+  Anything the AI produces is ordinary project structure — the same component tree and the
+  same blocks you get by hand. There is no generated layer to untangle before you can edit it.
 </Callout>
 
-<Callout type="success">
-  This is success callout component example.
-</Callout>
+## What you get
 
-<Callout type="danger">
-  This is danger callout component example.
-</Callout>
+- **Android** — an `.apk` to sideload or an `.aab` to upload to Google Play.
+- **iOS** <Badge type="beta" /> — an `.ipa`, built on real Xcode and signed with your own
+  Apple key.
+- **Web** <Badge type="beta" /> — a bundle you can download, or host on a live link straight
+  from the builder.
 
-<Callout type="warning">
-  This is warning callout component example.
-</Callout>
+## Where to go next
 
-## What you can document
-
-- Build app screens with drag and drop.
-- Add logic without writing application code.
-- Publish one project across supported platforms.
-
-### A Sub-heading example
-
-- This is example of subheading
-- Used to show the table of content navigation works
-
-### List example
-
-- Item 1
-- Item 2
-- Item 3
-- Item 4
-- Item 5
-- Item 6
-- Item 7
-- Item 8
-- Item 9
-- Item 10
-- Item 11
-- Item 12
-- Item 13
-- Item 14
-- Item 15
-- Item 16
-- Item 17
-- Item 18
-- Item 19
-- Item 20
-- Item 21
-- Item 22
-- Item 23
-- Item 24
-- Item 25
-
-## Example
-
-Use `Callout` anywhere in MDX to highlight important guidance.
-
-```tsx
-<Callout type="success">Your app is ready to publish.</Callout>
-```
-
-Read more at [duddy.io](https://duddy.io).
+<CardGrid>
+  <Card title="Getting started" href="/getting-started/create-a-project">
+    Create a project, set it up, and ship the first build.
+  </Card>
+  <Card title="Build with AI" href="/ai/overview">
+    What Vibe mode does, what it costs, and how to steer it.
+  </Card>
+  <Card title="Guides" href="/guides/overview">
+    Task-by-task walkthroughs of the designer.
+  </Card>
+  <Card title="Component reference" href="/components/overview">
+    Every component in the library, what it does, and the blocks it exposes.
+  </Card>
+</CardGrid>

@@ -1,0 +1,119 @@
+---
+title: Media components
+description: Video, audio, the camera, animation, and turning speech into text and back.
+---
+
+Video, audio, the camera, animation, and turning speech into text and back.
+
+<Callout type="info">
+  The pickers — **ImagePicker**, and the file and contact pickers in other categories — need no
+  permission on either platform, because the system UI does the asking. Prefer one wherever it fits.
+</Callout>
+
+| Component | Does |
+|---|---|
+| [VideoPlayer](#videoplayer) | A surface that plays a video from a web URL, a file on the device, or a bundled asset, with optional playback controls, looping and autoplay. |
+| [AudioPlayer](#audioplayer) | Plays an audio file from a URL or an uploaded asset with no visible view on the screen. |
+| [Lottie](#lottie) | Plays a Lottie (JSON) animation from a bundled asset or an https URL, with looping, speed and playback control. |
+| [CameraView](#cameraview) | A live camera preview embedded in the screen, used to show what the lens sees and to take pictures from inside the app. |
+| [CameraCapture](#cameracapture) | A non-visual component for capturing photos and recording videos using the device camera. |
+| [ImagePicker](#imagepicker) | A non-visual component that picks images from the device gallery and reports real file paths. |
+| [Microphone](#microphone) | Records audio from the device microphone into an m4a file in private app storage, with permission handling and a live amplitude reading for level meters. |
+| [SpeechRecognizer](#speechrecognizer) | Listens through the microphone and turns speech into text, reporting words as they are spoken. |
+| [TextToSpeech](#texttospeech) | A non-visual component that speaks text aloud using the device's speech engine, with language, pitch and rate control. |
+
+## VideoPlayer
+
+A surface that plays a video from a web URL, a file on the device, or a bundled asset, with optional playback controls, looping and autoplay.
+
+*Drawn on the screen.*
+
+**Events** — `Prepared`, `Completed`, `Error`
+
+**Functions** — `Play`, `Pause`, `Stop`, `Seek To`
+
+## AudioPlayer
+
+Plays an audio file from a URL or an uploaded asset with no visible view on the screen. Used for background music, sound effects and voice clips.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Playback Started`, `Playback Paused`, `Playback Completed`, `Error Occurred`
+
+**Functions** — `Play`, `Pause`, `Stop`, `Seek To`
+
+## Lottie
+
+Plays a Lottie (JSON) animation from a bundled asset or an https URL, with looping, speed and playback control.
+
+*Drawn on the screen.*
+
+**Events** — `Animation Finished`
+
+**Functions** — `Play`, `Pause`, `Stop`
+
+## CameraView
+
+A live camera preview embedded in the screen, used to show what the lens sees and to take pictures from inside the app.
+
+*Drawn on the screen.*
+
+**Events** — `Picture Taken`, `Picture Take Error`, `Camera Started`, `Camera Stopped`
+
+**Functions** — `Start Preview`, `Stop Preview`, `Switch Camera`, `Take Picture`
+
+**Android permissions** — `CAMERA`
+
+## CameraCapture
+
+A non-visual component for capturing photos and recording videos using the device camera.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Photo Captured`, `Video Recorded`, `Error Occurred`
+
+**Functions** — `Take Photo`, `Record Video`
+
+## ImagePicker
+
+A non-visual component that picks images from the device gallery and reports real file paths. Uses the permission-free system photo picker on both platforms.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Image Picked`, `Images Picked`, `Cancelled`, `Error`
+
+**Functions** — `Open Picker`, `Get Path`, `Clear`
+
+## Microphone
+
+Records audio from the device microphone into an m4a file in private app storage, with permission handling and a live amplitude reading for level meters.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Recording Started`, `Recording Stopped`, `Permission Granted`, `Permission Denied`, `Error`
+
+**Functions** — `Request Permission`, `Start Recording`, `Stop Recording`, `Amplitude`
+
+**Android permissions** — `RECORD_AUDIO`
+
+## SpeechRecognizer
+
+Listens through the microphone and turns speech into text, reporting words as they are spoken. Nothing is drawn, and microphone permission is required.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Ready`, `Result`, `Partial Result`, `Permission Granted`, `Permission Denied`, `Error`
+
+**Functions** — `Request Permission`, `Start Listening`, `Stop Listening`, `Cancel`
+
+**Android permissions** — `RECORD_AUDIO`
+
+## TextToSpeech
+
+A non-visual component that speaks text aloud using the device's speech engine, with language, pitch and rate control.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Ready`, `Speech Started`, `Speech Finished`, `Error`
+
+**Functions** — `Speak`, `Speak Queued`, `Stop`, `Is Language Available`

@@ -6,20 +6,59 @@
     "section": "components"
   },
   {
-    "title": "Design",
-    "icon": "hgi-pen-tool-03",
-    "section": "components",
-    "children": [
-      {
-        "title": "Image",
-        "href": "/components/design/image",
-        "section": "components"
-      },
-      {
-        "title": "Layout",
-        "href": "/components/design/layout",
-        "section": "components"
-      }
-    ]
+    "title": "Layout",
+    "href": "/components/layout",
+    "section": "components"
+  },
+  {
+    "title": "Content",
+    "href": "/components/content",
+    "section": "components"
+  },
+  {
+    "title": "Input",
+    "href": "/components/input",
+    "section": "components"
+  },
+  {
+    "title": "Media",
+    "href": "/components/media",
+    "section": "components"
+  },
+  {
+    "title": "Connectivity",
+    "href": "/components/connectivity",
+    "section": "components"
+  },
+  {
+    "title": "Storage",
+    "href": "/components/storage",
+    "section": "components"
+  },
+  {
+    "title": "Firebase",
+    "href": "/components/firebase",
+    "section": "components"
+  },
+  {
+    "title": "Sensors",
+    "href": "/components/sensors",
+    "section": "components"
+  },
+  {
+    "title": "Ads",
+    "href": "/components/ads",
+    "section": "components"
+  },
+  {
+    "title": "Device and utilities",
+    "href": "/components/other",
+    "section": "components"
+  },
+  {
+    "title": "Guides",
+    "icon": "hgi-book-open-01",
+    "href": "/guides/overview",
+    "section": "guides"
   }
 ]

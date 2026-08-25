@@ -1,0 +1,89 @@
+---
+title: Sensor components
+description: What the device can feel and see: motion, location, proximity, haptics and codes.
+---
+
+What the device can feel and see: motion, location, proximity, haptics and codes.
+
+<Callout type="info">
+  Ask for a permission at the moment it is needed, not on app start. Each of these components has a
+  **Request Permission** function and Granted/Denied events for exactly that.
+</Callout>
+
+| Component | Does |
+|---|---|
+| [LocationSensor](#locationsensor) | Reports where the device is: latitude, longitude, altitude, accuracy and speed from GPS or the network, plus reverse geocoding and distance measurement. |
+| [Accelerometer](#accelerometer) | A non-visual sensor reporting device acceleration on three axes in m/s2, with a Shake event. |
+| [Gyroscope](#gyroscope) | A non-visual sensor reporting the device's rotation rate around three axes in radians per second. |
+| [Pedometer](#pedometer) | A non-visual step counter reporting steps taken since it was enabled. |
+| [ProximitySensor](#proximitysensor) | A non-visual sensor reporting whether something is near the device's screen, as used to blank a phone during a call. |
+| [Vibration](#vibration) | Non-visual haptic feedback: buzz the device once for a set number of milliseconds, or play a repeating on and off pattern. |
+| [BarcodeScanner](#barcodescanner) | Reads a barcode or QR code with the device camera and hands back the decoded text. |
+
+## LocationSensor
+
+Reports where the device is: latitude, longitude, altitude, accuracy and speed from GPS or the network, plus reverse geocoding and distance measurement.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Location Changed`, `Permission Granted`, `Permission Denied`, `Error`
+
+**Functions** — `Request Permission`, `Get Address`, `Distance To`
+
+**Android permissions** — `ACCESS_FINE_LOCATION`, `ACCESS_COARSE_LOCATION`
+
+## Accelerometer
+
+A non-visual sensor reporting device acceleration on three axes in m/s2, with a Shake event.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Reading`, `Shake`
+
+## Gyroscope
+
+A non-visual sensor reporting the device's rotation rate around three axes in radians per second.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Reading`
+
+## Pedometer
+
+A non-visual step counter reporting steps taken since it was enabled.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Step`
+
+**Functions** — `Request Permission`, `Reset`
+
+**Android permissions** — `ACTIVITY_RECOGNITION`
+
+## ProximitySensor
+
+A non-visual sensor reporting whether something is near the device's screen, as used to blank a phone during a call.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Proximity Changed`
+
+## Vibration
+
+Non-visual haptic feedback: buzz the device once for a set number of milliseconds, or play a repeating on and off pattern.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Functions** — `Vibrate`, `Vibrate Pattern`, `Cancel`
+
+**Android permissions** — `VIBRATE`
+
+## BarcodeScanner
+
+Reads a barcode or QR code with the device camera and hands back the decoded text. Needs no camera permission on Android; iOS asks for one.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Scanned`, `Cancelled`, `Error`
+
+**Functions** — `Scan`

@@ -1,6 +1,76 @@
 ---
 title: Models
-description: Understand AI model options in duddy.
+description: Choosing which AI model writes your app — tiers, vision, thinking, and what each choice costs.
 ---
 
-This local MDX page is wired to the home section route `/ai/models`.
+Vibe mode runs on models from several providers — Google, OpenAI, Anthropic, DeepSeek,
+xAI, Meta, Qwen, and others — and you choose which one a turn uses. Open the settings
+icon in the chat header and pick from the **Models** section.
+
+## Chat and output are two choices
+
+| Setting | Used for |
+|---|---|
+| **Chat** | Conversation, planning and reasoning — working out what to build. |
+| **Output** | Writing the UI layouts and the logic blocks themselves. |
+
+They can be the same model, and **Match chat** sets the output model back to whatever the
+chat model is. Splitting them is useful when you want a strong model to plan and a fast one
+to type: the plan is where most of the quality lives, and the translation step is mostly
+mechanical.
+
+## Tiers
+
+Every model carries a tier, and your plan decides which tiers you can select.
+
+| Tier | Who has it |
+|---|---|
+| **Free** | Every plan, including the trial. |
+| **Standard** | Paid plans. |
+| **Premium** | The top plans — the largest, most capable models. |
+
+A locked model shows a badge in the picker. Selecting one you are not entitled to is
+refused when the turn runs, not silently downgraded, so you always know which model
+answered.
+
+<Callout type="info">
+  New accounts start on a fast, low-cost free-tier model. It is a good default for questions
+  and edits — reach for something bigger when you are generating a whole app.
+</Callout>
+
+## What the badges mean
+
+- **Relative cost (`×`)** — how expensive a model is against the picker's baseline model.
+  A `4×` model costs roughly four times as much per turn as a `1×` one for the same work.
+- **Vision** — the model can look at images. Required for attaching screenshots and sketches,
+  and for the **Ultra** detail level, which reviews a render of the screen it just built.
+- **Thinking** — the model can reason before answering. Some models offer graded levels
+  (Low / Medium / High), others are simply on or off, and a few cannot think at all. The
+  Thinking control shows only the levels the selected model actually supports.
+
+## Picking one
+
+<Steps>
+  <Step>**Questions, small edits, renames** — a free-tier model is fine, and it is the fastest.</Step>
+  <Step>**A screen you care about** — a mid-tier model with Thinking on Low or Medium.</Step>
+  <Step>**A whole app, or a hard layout** — a premium model as the Chat model, Thinking Medium or High, and Detail on Normal or Ultra.</Step>
+  <Step>**Working from a screenshot or a sketch** — any vision model; without one the attachment button stays off.</Step>
+</Steps>
+
+<Callout type="warning">
+  Thinking and Detail multiply what a turn costs. If credits matter more than the last 10% of
+  polish, turn Thinking down before you switch to a cheaper model — deliberation is usually the
+  larger share of the bill.
+</Callout>
+
+## The catalogue changes
+
+Models are added, re-priced and retired by their providers, so the picker in the builder is
+the authoritative list — it shows what you can select today, with each model's tier, cost
+multiplier and capabilities. This page describes how the choice works, not which models
+exist this week.
+
+<NextPrev
+  prev={{ title: "Vibe mode", href: "/ai/overview" }}
+  next={{ title: "Attach drawings", href: "/ai/attach-drawings" }}
+/>

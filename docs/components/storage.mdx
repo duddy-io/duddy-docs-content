@@ -1,0 +1,78 @@
+---
+title: Storage components
+description: Keeping data on the device — key-value, SQL, files and the clipboard.
+---
+
+Keeping data on the device — key-value, SQL, files and the clipboard.
+
+<Callout type="info">
+  **AppStorage** stores text. Keep a number by converting it back when you read it, and keep a
+  structure by writing it as JSON.
+</Callout>
+
+| Component | Does |
+|---|---|
+| [AppStorage](#appstorage) | A non-visual key-value store that saves text on the device, so values survive closing and reopening the app. |
+| [SQLite](#sqlite) | A SQLite database kept on the device, for storing structured data in tables that survives the app closing and needs no network. |
+| [FileManager](#filemanager) | Reads, writes, deletes and checks text files on the device; a plain file name is resolved inside the app private storage, an absolute path is used as given. |
+| [FilePicker](#filepicker) | Opens the device document chooser so the user can pick files, copies each one into app storage and reports a real file path. |
+| [FileDownloader](#filedownloader) | Downloads a file from an HTTP or HTTPS address in the background and saves it on the device, reporting progress while it runs. |
+| [Clipboard](#clipboard) | Reads and writes the device clipboard, so an app can copy text out for other apps and paste text a user copied elsewhere. |
+
+## AppStorage
+
+A non-visual key-value store that saves text on the device, so values survive closing and reopening the app.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Functions** — `Store Value`, `Get Value`, `Remove Value`, `Clear Storage`
+
+## SQLite
+
+A SQLite database kept on the device, for storing structured data in tables that survives the app closing and needs no network.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Sql Executed`, `Query Result`, `Database Error`
+
+**Functions** — `Execute Sql`, `Query`, `Insert`, `Update`, `Delete`, `Close Database`
+
+## FileManager
+
+Reads, writes, deletes and checks text files on the device; a plain file name is resolved inside the app private storage, an absolute path is used as given.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `File Written`, `Error Occurred`
+
+**Functions** — `Write File`, `Read File`, `Delete File`, `File Exists`, `Get Documents Directory`, `Get Cache Directory`
+
+## FilePicker
+
+Opens the device document chooser so the user can pick files, copies each one into app storage and reports a real file path. Needs no storage permission.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `File Picked`, `Files Picked`, `Cancelled`, `Error`
+
+**Functions** — `Open Picker`, `Get Path`, `Get Name`, `Clear`
+
+## FileDownloader
+
+Downloads a file from an HTTP or HTTPS address in the background and saves it on the device, reporting progress while it runs.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Download Progress`, `Download Completed`, `Download Failed`
+
+**Functions** — `Download File`
+
+## Clipboard
+
+Reads and writes the device clipboard, so an app can copy text out for other apps and paste text a user copied elsewhere.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Events** — `Copied`, `Error`
+
+**Functions** — `Copy`, `Paste`, `Clear`

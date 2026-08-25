@@ -1,6 +1,66 @@
 ---
 title: Figma
-description: Connect Figma with duddy.
+description: Connect Figma once, add the files you want, and have Vibe mode build screens from your designs.
 ---
 
-This local MDX page is wired to the home section route `/integration/figma`.
+Connecting Figma lets Duddy read your designs and build screens to match — either when
+you create a project, or any time in the chat with `/figma`.
+
+Access is read-only, and the credential never reaches your browser: Duddy reads the file
+server-side and sends back only what it needs to draw with.
+
+## Connect it
+
+<Steps>
+  <Step>Open **Integrations** in your dashboard and find **Figma**.</Step>
+  <Step>Press connect and sign in with Figma. You are approving read-only access to files you can already open.</Step>
+  <Step>You come back to Duddy with the connection listed as active.</Step>
+</Steps>
+
+## Add a file
+
+Figma does not let an app list your files for you, so you tell Duddy which designs to
+work from by pasting each file's link.
+
+<Steps>
+  <Step>In Figma, use **Share → Copy link** on the file.</Step>
+  <Step>In Duddy, paste it into the Figma panel — in the create-project dialog, or after `/figma` in the chat.</Step>
+  <Step>The file joins your list and stays there. Paste more links whenever you want; remove one you no longer need.</Step>
+</Steps>
+
+<Callout type="info">
+  Make sure the file is one your Figma account can open. A link to a file you were only sent a
+  screenshot of will not resolve.
+</Callout>
+
+## Build from a design
+
+In the chat, type `/figma`, pick the file and the frames you want, and add a note about what
+you actually want done with them:
+
+- "Build these three frames as screens, keep the layout, use our theme colours."
+- "This is the design language — build a settings screen that matches it."
+- "What type sizes does this use?"
+
+`/figma` attaches the design as context; it does not force a particular kind of turn, so a
+question about a design and a request to build one both work.
+
+## What comes across, and what does not
+
+**Comes across:** structure, hierarchy, spacing, type scale, colours and imagery — enough to
+build a screen out of real components that resize and theme properly.
+
+**Does not:** Figma is a drawing tool and Duddy is a compiler. A frame becomes a component
+tree, not a pixel-for-pixel copy — auto-layout becomes Rows and Columns, a text layer becomes
+a TextView, a rectangle with an image fill becomes an Image. Fine positioning is worth
+checking afterwards on the canvas.
+
+<Callout type="warning" title="If it stops working">
+  Figma can revoke access — when it does, the integration row turns amber and `/figma` cannot read
+  your files. Reconnect from the same page; your list of files is kept.
+</Callout>
+
+<NextPrev
+  prev={{ title: "UI style", href: "/ai/ui-style" }}
+  next={{ title: "Apple", href: "/integration/apple" }}
+/>
