@@ -98,19 +98,25 @@ generates one when you build.
 
 ## Deep links
 
-Let a link on the web open a screen inside your app. Each row is a screen, a type and a
+Let a link or a file open a screen inside your app. Each row is a screen, a type and a
 value:
 
-- **Host** — a web address you own, so a real link opens the app instead of a browser tab
-  (`https://pictora.app/receipt/12`).
+- **Host** — a link that opens the screen. Use your app's own scheme
+  (`pictora://receipt`) for a link that always opens the app, or a web address you own
+  (`https://pictora.app/receipt`).
 - **File** — a file type, given as a MIME type such as `image/png`, so your app is offered
   as a way to open files of that kind.
 
-Add one row per screen you want reachable.
+Add one row per screen you want reachable. Every build of your app carries these rows: the
+screen opens with the link — or the opened file's address — as its start value, so its blocks
+can read what opened it.
 
-<Callout type="warning" title="What ships today">
-  Deep links are saved with the project but are not yet written into a build, so a link will not
-  open the app until they are. Everything you configure here is kept and will apply once it lands.
+<Callout type="info" title="Web links on phones">
+  On Android 12 and later, a web link opens in the browser until the phone's owner allows
+  your app for that domain under the app's "Open by default" settings; older Android
+  versions ask which app to use. iOS opens web links in an app only through Associated Domains,
+  which need a verification file on your own domain, so web rows are left out of iOS builds —
+  use your app's scheme for a link that must open the app on both.
 </Callout>
 
 ## Integrations
