@@ -15,11 +15,11 @@ One number to watch, and every charge itemised in your account.
 |---|---|
 | **A Vibe turn** | Per turn, by what the turn actually used. A one-line edit costs a fraction of what building a whole app costs. |
 | **Generating an image** | Per image, when you use `/imagine` or generate from the asset picker. |
-| **A build** | Per build, per target. |
+| **A build past your hourly limit** | A few credits per build — builds within your plan's limit are free. See [Builds and your hourly limit](#builds-and-your-hourly-limit). |
 | **Hosting** | Per period while a web app is online, at the rate shown on the Hosting page. |
 
-Designing on the canvas, wiring blocks, collaborating, previewing, uploading assets and
-saving versions cost nothing.
+Designing on the canvas, wiring blocks, collaborating, previewing, uploading assets,
+saving versions and building within your plan's hourly limit cost nothing.
 
 ## What a plan changes
 
@@ -28,6 +28,22 @@ buys**, plus the limits around them: how many builds you can run in an hour, whe
 a daily limit on spending, whether iOS builds are available, and which AI models you can select.
 
 The plan ladder and current prices live in your dashboard under **Account → Plan**.
+
+## Builds and your hourly limit
+
+**Builds within your plan's hourly build limit are free.** Past that limit a build isn't
+refused: it costs a few credits from your balance — **7 on the free trial and Starter, 3 on Pro
+and Enterprise**.
+
+- **You're asked first.** When you start a build past your limit, the builder shows the price
+  and asks before charging anything. If you cancel, nothing is spent.
+- **It's the same balance.** Build credits come out of the balance your AI generations use, and
+  count towards your daily credit limit if your plan has one — so a build your available
+  credits can't cover isn't started.
+- **You're charged once the build is queued**, and the charge shows in your credit history as
+  **Build overage**.
+- **Live Test builds are separate.** They have their own rebuild allowance and never cost
+  overage credits.
 
 <Callout type="info" title="The trial is a trial, not a free tier">
   A new account starts on a seven-day trial with 100 credits: 40 on your first day, then 10 a
@@ -46,10 +62,11 @@ the 100, so the whole pool is reachable — just not in one sitting.
   mode tells you the time if it stops you.
 - **Nothing is added each day.** The limit decides how much of your balance you can use today;
   it never adds to it, and what you leave unspent does not carry over to raise tomorrow's limit.
-- **Top-ups count toward the same limit.** Credits you buy during the trial raise your balance,
-  not the day's limit — upgrade to a paid plan to lift the limit itself.
+- **The trial sells no top-ups.** Its 100 credits are a fixed allowance — for more, choose a
+  plan, which adds credits every month and can be topped up whenever you need.
 - **Paid plans have no daily limit** unless the plan says otherwise. Your balance is the only
-  ceiling.
+  ceiling, and where a plan does set a daily limit, top-ups raise your balance, not the day's
+  limit.
 
 ## Reading your balance
 
@@ -62,8 +79,8 @@ Two things worth knowing:
 - **A turn needs a small minimum balance to start.** A long turn makes many model calls, and
   the last one always overshoots slightly, so Duddy refuses to begin a turn it might not be
   able to finish rather than cutting one off halfway.
-- **Credits are bought against an active plan.** Top-ups are for topping up — a purchase with
-  no active plan is refused up front rather than taken and stranded.
+- **Credits are bought against an active paid plan.** Top-ups are for topping up — a purchase
+  with no active plan, or on the free trial, is refused up front rather than taken and stranded.
 
 ## Keeping a project cheap
 
