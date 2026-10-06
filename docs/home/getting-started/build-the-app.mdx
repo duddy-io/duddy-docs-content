@@ -1,6 +1,6 @@
 ---
 title: Build the app
-description: Compile your project into an Android, iOS or web app, watch the build log, and put the web build online.
+description: Compile your project into an Android or iOS app, run it live on a phone while you design, watch the build log, and see what is coming for the web.
 ---
 
 Building turns the project you have been designing into a real, installable app. Duddy
@@ -14,13 +14,52 @@ Press **Build** in the designer header and choose a target.
 | Target | You get | Notes |
 |---|---|---|
 | **Android App (`.apk`)** | An installable file you can send to a phone or a tester. | The fastest way to get the app into someone's hands. |
-| **Android App Bundle (`.aab`)** | The upload format Google Play requires. | Play generates per-device APKs from it. |
 | **iOS App (`.ipa`)** <Badge type="beta" /> | A signed iOS build. | Needs a connected [Apple Developer account](/integration/apple). |
-| **Web App (`.zip`)** <Badge type="beta" /> | A web bundle you can host anywhere, or [host on Duddy](#host-the-web-build). | Installs as a PWA. |
+| **Android App Bundle (`.aab`)** | The upload format Google Play requires. | Not available yet — the menu says so when you pick it. Sideload the `.apk` meanwhile. |
+| **Web App** | A web bundle on a live link. | [Coming soon](#web-builds-and-hosting). |
 
 Before your first build, fill in **App name**, **Package name** and **Entry screen** under
 [Project settings](/getting-started/project-settings) — a build fails while the package
-name is empty.
+name is empty — and keep the platform you are building for switched on under
+**Target platforms**.
+
+## Test it live on a device
+
+You do not need a release build to see the app on a phone. **Live test**, beside Build in the
+header, puts a *test app* on your device that runs whatever is on the canvas, live: every
+edit, every block and every AI turn appears on the phone as it lands, inside an app that
+carries your real package name, icon, splash screen, permissions and integration keys.
+
+<Steps>
+  <Step>Open **Live test** and press **Build test app** for Android or iOS. It compiles once, in the background — give it a few minutes the first time.</Step>
+  <Step>Install it: download the `.apk` onto the phone, or install the `.ipa` onto a device registered in your Apple developer account.</Step>
+  <Step>Open the app and scan the QR code the panel shows, or type the pair code into it. The code is per project and works with any test app of that project, on any platform.</Step>
+  <Step>Keep designing. The phone follows the document for as long as it stays paired.</Step>
+</Steps>
+
+A test app only needs rebuilding when its **capabilities** change: a component the project has
+not used before, a new version of one, or the app's name, package, icon, splash, version,
+permissions or integration keys. Screens, logic, assets and theme changes never need one. The
+panel says when a rebuild is due and what changed, and offers **Rebuild test app**; a phone
+still running the previous app is flagged separately, with the fix — install the current one —
+rather than a guess.
+
+- Test builds are **free**, count against none of your plan's build limits, and have their own
+  allowance of six rebuilds an hour per project.
+- The **Device log** at the bottom of the panel streams the running app's log and errors, and an
+  error links to the screen or block it came from.
+- **Disconnect every device** revokes the pairing for every phone at once.
+
+<Callout type="info" title="iOS test apps need a registered device">
+  An iOS test app is installed ad hoc, which Apple allows only onto devices registered in your
+  developer account. The preflight tells you when your account has none enabled — register the
+  phone under Certificates, Identifiers & Profiles → Devices before building.
+</Callout>
+
+<Callout type="info" title="Web test apps are coming soon">
+  The panel's Web tab opens the app in a browser instead of installing it. It is switched off
+  along with web builds; the pair code under it still works with an Android or iOS test app.
+</Callout>
 
 ## The build console
 
@@ -43,9 +82,10 @@ file to anyone.
 
 ## What a build costs
 
-Builds within your plan's hourly build limit are free. Past it, a build costs a few credits,
-and the builder shows the price and asks before charging anything — so a stuck loop cannot
-drain an account overnight. Check your balance under **Credits** in the dashboard, or read
+Builds within your plan's hourly build limit are free. Past it, a build costs a few credits
+— 7 on the trial and Starter, 3 on Pro — and the builder shows the price and asks before
+charging anything, so a stuck loop cannot drain an account overnight. Check your balance
+under **Credits** in the dashboard, or read
 [Builds and your hourly limit](/getting-started/credits-and-plans#builds-and-your-hourly-limit).
 
 ## iOS builds <Badge type="beta" />
@@ -67,32 +107,33 @@ what it found:
   in the queue rather than failing — give it a few minutes before starting another one.
 </Callout>
 
-## Host the web build
+## Web builds and hosting
 
-A web build can go online at a link you can share, straight from
-**Settings → Hosting** in the designer.
+Compiling a project to a web app — and putting it on a live link straight from
+**Settings → Hosting** — exists behind the scenes, but not every generated app runs clean end
+to end yet. Rather than hand you a build that might not work, the option is off until that
+reliability pass lands. Pick **Web App** in the Build menu and you can ask to be told when it
+ships.
 
-<Steps>
-  <Step>Build for the web at least once.</Step>
-  <Step>Open **Settings → Hosting** and put the app online. You get a live link you can copy or open.</Step>
-  <Step>Keep designing. Later builds are staged, not published — the page tells you when a newer build is ready, and **Update live app** moves it.</Step>
-</Steps>
+What it will be, so you can plan for it:
 
-Hosting is metered: the page shows the rate, the next charge, and roughly how long your
-current balance covers. Stop the app whenever you like — your files and your link are kept,
-so starting it again returns the same address.
-
-<Callout type="info" title="A build is not a publish">
-  Building the web app never changes what is live. That is deliberate: it means you can build
-  freely while a link you have already shared keeps serving the version you chose.
-</Callout>
+- **A build is not a publish.** Building the web app stages it; **Update live app** on the
+  Hosting page is what moves a newer build onto your link, so a link you have already shared
+  keeps serving the version you chose.
+- **Hosting is metered** — one credit for every two hours online, charged in advance, so an
+  app never serves time nobody paid for. It comes out of your balance alone: a daily credit
+  limit never stops a hosted app, only an empty balance does, and the page says so when it
+  happens.
+- **Stopping keeps everything.** Your files and your link are kept, so starting the app again
+  returns the same address.
 
 ## Sending a build to testers
 
 - **Android** — share the `.apk` or the install link from the console. Testers need to allow
   installs from unknown sources.
 - **iOS** — go through TestFlight; iOS builds cannot be installed by link.
-- **Web** — share the hosted link. Nothing to install at all.
+- **Anyone, right now** — pair their phone to a [live test](#test-it-live-on-a-device) app and
+  they see the project as it is, no build required.
 
 <NextPrev
   prev={{ title: "Project settings", href: "/getting-started/project-settings" }}

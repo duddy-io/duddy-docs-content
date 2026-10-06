@@ -56,6 +56,14 @@ what it found:
   two have to match character for character.
 </Callout>
 
+<Callout type="info" title="Live test apps">
+  A [live test](/getting-started/build-the-app#test-it-live-on-a-device) app for iOS is
+  signed with the same key but installed ad hoc, which Apple allows only onto devices
+  registered in your developer account. Register your phone under Certificates, Identifiers
+  & Profiles → Devices first — the preflight refuses a test build while the account has no
+  enabled device.
+</Callout>
+
 ## After the build
 
 A finished `.ipa` can go to TestFlight for testers, and from there to review. iOS builds

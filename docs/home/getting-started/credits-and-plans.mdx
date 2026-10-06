@@ -14,18 +14,21 @@ One number to watch, and every charge itemised in your account.
 | Action | Charged |
 |---|---|
 | **A Vibe turn** | Per turn, by what the turn actually used. A one-line edit costs a fraction of what building a whole app costs. |
-| **Generating an image** | Per image, when you use `/imagine` or generate from the asset picker. |
+| **Generating an image** | Per image — `/imagine` in the chat, the **Imagine** tab of the asset picker, and the illustrations a build turn draws for its own screens, which are counted inside that turn. |
+| **Generating a palette** | Per palette, when you press **Generate with AI** under Settings → Theme. |
 | **A build past your hourly limit** | A few credits per build — builds within your plan's limit are free. See [Builds and your hourly limit](#builds-and-your-hourly-limit). |
-| **Hosting** | Per period while a web app is online, at the rate shown on the Hosting page. |
+| **Hosting** | One credit for every two hours a web app is online, charged in advance. Hosting arrives with web builds, which are [coming soon](/getting-started/build-the-app#web-builds-and-hosting). |
 
-Designing on the canvas, wiring blocks, collaborating, previewing, uploading assets,
-saving versions and building within your plan's hourly limit cost nothing.
+Designing on the canvas, wiring blocks, collaborating, previewing,
+[testing live on a phone](/getting-started/build-the-app#test-it-live-on-a-device), uploading
+assets, saving versions and building within your plan's hourly limit cost nothing.
 
 ## What a plan changes
 
 A turn costs the same on every plan. What a plan changes is **how many credits your money
-buys**, plus the limits around them: how many builds you can run in an hour, whether there is
-a daily limit on spending, whether iOS builds are available, and which AI models you can select.
+buys**, plus the limits around them: how many apps and versions you can keep, how many builds
+you can run in an hour, whether there is a daily limit on spending, whether iOS builds are
+available, and which AI models you can select.
 
 The plan ladder and current prices live in your dashboard under **Account → Plan**.
 
@@ -36,14 +39,16 @@ refused: it costs a few credits from your balance — **7 on the free trial and 
 and Enterprise**.
 
 - **You're asked first.** When you start a build past your limit, the builder shows the price
-  and asks before charging anything. If you cancel, nothing is spent.
+  — "You've used this hour's builds. This build costs 7 credits." — and asks before charging
+  anything. If you cancel, nothing is spent.
 - **It's the same balance.** Build credits come out of the balance your AI generations use, and
   count towards your daily credit limit if your plan has one — so a build your available
   credits can't cover isn't started.
 - **You're charged once the build is queued**, and the charge shows in your credit history as
   **Build overage**.
-- **Live Test builds are separate.** They have their own rebuild allowance and never cost
-  overage credits.
+- **Test apps are separate.** A [Live test](/getting-started/build-the-app#test-it-live-on-a-device)
+  build counts against none of your build limits and never costs overage credits; it has its
+  own allowance of six rebuilds an hour per project.
 
 <Callout type="info" title="The trial is a trial, not a free tier">
   A new account starts on a seven-day trial with 100 credits: 40 on your first day, then 10 a
@@ -67,29 +72,41 @@ the 100, so the whole pool is reachable — just not in one sitting.
 - **Paid plans have no daily limit** unless the plan says otherwise. Your balance is the only
   ceiling, and where a plan does set a daily limit, top-ups raise your balance, not the day's
   limit.
+- **Hosting is the one thing a daily limit never stops.** A hosted web app is charged against
+  your balance alone, so it stays online as long as the balance lasts — only an empty balance
+  takes it offline.
 
 ## Reading your balance
 
-**Account → Credits** shows what you have, what you have used, and a ledger of every charge
-with the action that caused it. The Vibe chat also shows your balance in its header, and
-updates it the moment a turn settles.
+**Account → Credits** shows what you have, what you have used, a meter of today's allowance
+where your plan has one, and a ledger of every charge with the action that caused it — a build
+past the limit as **Build overage**, a generated image as **Imagine**. The Vibe chat also shows
+your balance in its header, and updates it the moment a turn settles.
 
-Two things worth knowing:
+Three things worth knowing:
 
-- **A turn needs a small minimum balance to start.** A long turn makes many model calls, and
-  the last one always overshoots slightly, so Duddy refuses to begin a turn it might not be
-  able to finish rather than cutting one off halfway.
+- **A turn reserves before it runs.** When a turn starts, Duddy sets aside a small share of
+  your balance and grows that hold step by step as the turn works, so two turns running at
+  once — an edit in one project while an AI build runs in another — can never spend the same
+  credit twice. The chat header says when requests still running hold part of your balance,
+  and a held credit comes back the moment its request finishes.
+- **A turn needs a minimum balance to start.** A paid plan must hold 10 credits to begin a
+  turn, the trial 1. A long turn makes many model calls and the last one always overshoots
+  slightly, so Duddy refuses to begin a turn it might not be able to finish rather than cutting
+  one off halfway — and a turn that has started is always finished, even if it empties the
+  balance.
 - **Credits are bought against an active paid plan.** Top-ups are for topping up — a purchase
   with no active plan, or on the free trial, is refused up front rather than taken and stranded.
+  Plan credits are spent first; top-ups never expire and survive a plan change.
 
 ## Keeping a project cheap
 
 <Steps>
   <Step>**Say more in the first prompt.** One well-described screen costs far less than five rounds of "not like that".</Step>
-  <Step>**Use the smaller settings for small work.** [Quality and detail](/ai/overview#settings) are separate knobs, and a text tweak does not need the expensive ones.</Step>
-  <Step>**Pick the model to fit the job.** See [Models](/ai/models) — the free-tier models handle edits and questions perfectly well.</Step>
+  <Step>**Use the smaller settings for small work.** [Quality and Thinking](/ai/overview#settings) are separate knobs, and a text tweak does not need the expensive ones.</Step>
+  <Step>**Spend on the design model, not the build model.** See [Models](/ai/models) — the free-tier model handles edits and questions perfectly well, and the build model only transcribes.</Step>
   <Step>**Edit by hand when it is faster.** Changing a colour on the canvas is free; asking for it is not.</Step>
-  <Step>**Stop hosting you are not using.** Your files and link are kept, so you can start it again later at the same address.</Step>
+  <Step>**Test on a phone before you build.** A live test app is free and follows every edit; a release build past your hourly limit is not.</Step>
 </Steps>
 
 <Callout type="warning">

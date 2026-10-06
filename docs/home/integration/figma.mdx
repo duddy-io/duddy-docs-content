@@ -35,25 +35,31 @@ work from by pasting each file's link.
 
 ## Build from a design
 
-In the chat, type `/figma`, pick the file and the frames you want, and add a note about what
-you actually want done with them:
+In the chat, type `/figma`, pick the file — then one frame, a section of frames, or the whole
+file — and add a note about what you actually want done with it:
 
 - "Build these three frames as screens, keep the layout, use our theme colours."
 - "This is the design language — build a settings screen that matches it."
 - "What type sizes does this use?"
 
 `/figma` attaches the design as context; it does not force a particular kind of turn, so a
-question about a design and a request to build one both work.
+question about a design and a request to build one both work. The attachment stays on every
+message you send until you remove it, and the design is only read — and only costs anything —
+on a turn that is actually about it.
 
 ## What comes across, and what does not
 
 **Comes across:** structure, hierarchy, spacing, type scale, colours and imagery — enough to
-build a screen out of real components that resize and theme properly.
+build a screen out of real components that resize and theme properly. Each frame you pick
+becomes one screen, named after itself; a whole file contributes its portrait screen frames,
+up to eight. The image fills its layers use are stored as project assets, so the screens
+arrive with their pictures.
 
 **Does not:** Figma is a drawing tool and Duddy is a compiler. A frame becomes a component
 tree, not a pixel-for-pixel copy — auto-layout becomes Rows and Columns, a text layer becomes
-a TextView, a rectangle with an image fill becomes an Image. Fine positioning is worth
-checking afterwards on the canvas.
+a TextView, a rectangle with an image fill becomes an Image. Faces are matched to Duddy's
+font catalogue by name, then by the nearest stand-in. Fine positioning is worth checking
+afterwards on the canvas.
 
 <Callout type="warning" title="If it stops working">
   Figma can revoke access — when it does, the integration row turns amber and `/figma` cannot read

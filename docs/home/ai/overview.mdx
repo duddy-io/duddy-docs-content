@@ -5,7 +5,7 @@ description: Describe a screen, an edit or a whole app in the chat, and Duddy bu
 
 Vibe mode is the AI chat in the designer. You describe what you want, it builds it — a
 section on the screen you are looking at, a set of new screens, the logic behind a button,
-or a change to the theme.
+or a new look for the whole app.
 
 What it writes is not a special AI layer. It is the same component tree and the same
 blocks you would have made by hand, so every one of them can be selected, dragged,
@@ -13,17 +13,22 @@ renamed and rewired afterwards.
 
 ## What a turn can do
 
-Duddy decides what kind of turn you asked for and runs the matching pipeline.
+Duddy reads your message, decides what kind of turn you asked for, and runs the matching
+pipeline.
 
 | Kind | Example |
 |---|---|
-| **Answer** | "What does Weight do on a Row?" |
-| **Edit** | "Make the card corners rounder and the price bold." |
-| **Design** | "Add a filter bar under the title." |
+| **Answer** | "What does a Stack do?" — a question is answered and nothing is changed. |
+| **Edit** | "Make the card corners rounder and the price bold." — one screen, its UI or its logic. |
+| **Section** | "Add a filter bar under the title." — new UI on the current screen. |
+| **Logic** | "When Sign in is tapped, validate the email and go to Home." |
+| **Restyle** | "Make the whole app dark and teal." — a new look, and every screen redrawn to it. |
 | **New screens** | "Add a checkout screen and an order confirmation screen." |
 | **Whole app** | "A recipe app with a browse screen, search, and a saved list." |
-| **Logic** | "When Sign in is tapped, validate the email and go to Home." |
-| **Project actions** | Renaming a screen, changing the theme, finding or generating an asset. |
+
+A request that has nothing to do with the app — an email, a song — is declined in one short
+step. On a bigger request the AI may ask you one question before it starts; answer it, or
+press **Just pick for me**.
 
 If you would rather choose the route yourself, type `/` in the chat and pick a command:
 
@@ -33,49 +38,57 @@ If you would rather choose the route yourself, type `/` in the chat and pick a c
 | `/section` | Design new UI on the current screen. |
 | `/screens` | Design one or more new screens. |
 | `/logic` | Wire behaviour on components that already exist. |
-| `/theme` | Change the whole app's colour scheme. |
-| `/asset` | Find, upload or manage assets. |
-| `/screen` | Rename or delete a screen. |
-| `/settings` | Project settings, or leave a note. |
-| `/figma` | Point the AI at one of your [Figma](/integration/figma) designs. |
+| `/figma` | Attach one of your [Figma](/integration/figma) designs to build screens from. |
 | `/imagine` | Generate an image straight into your assets. |
+
+There is no command for the theme, an asset or a screen rename: each is one edit in the
+designer's own panels, and a sentence about the look of the app is read as a restyle like
+any other message.
 
 ## Watching it build
 
-A build turn works screen by screen. For each one it designs the screen first and shows
-you that design, then translates it into real components, checks its own work, and wires
-the logic last. Screens appear on the canvas as they finish — you do not wait for the
-whole app before you can look at anything.
+A build turn settles the look first — palette, type, spacing, the parts every screen
+shares — then plans the screens, then builds each one: its tree, then its behaviour a few
+handlers at a time. Screens appear on the canvas as they finish — you do not wait for the
+whole app before you can look at anything. The photos a screen needs are found on Pixabay
+and its illustrations drawn by the image model, so screens arrive with their pictures.
 
-You can keep working while it runs. If you close the tab, the turn carries on.
+You can keep working while it runs. If you close the tab, the turn carries on; only the
+review described under Settings needs the designer open.
 
 ## Settings
 
-Open the settings icon in the chat header. Five choices, and they are genuinely different
-knobs rather than one quality slider:
+Open the settings icon in the chat header. The choices are genuinely different knobs
+rather than one quality slider:
 
 | Setting | What it changes |
 |---|---|
-| **Model** | Which AI writes your app. See [Models](/ai/models). |
-| **Thinking** | How much the model deliberates before answering — Off, or Low/Medium/High where the model supports it. |
-| **Detail** | *Which* stages a build runs. **Reduced** is one pass, **Normal** is a full design pass then build, **Ultra** adds states and edge cases and reviews a render of the finished screen. |
-| **Quality** | *How hard* each stage is pushed. **Fast** does the fewest passes, **Balanced** is the default, **Best** adds a design critique and reviews every screen. |
+| **Design model** | Decides what your screens look like — it runs the design direction. This is the pick worth upgrading. See [Models](/ai/models). |
+| **Build model** | Turns that design into components and logic. It transcribes; it decides nothing about the look, so the cheapest capable model is usually right. |
+| **Quality** | How much the AI thinks before each step. **Fast** halves the usual thinking, **Balanced** is the default, **Best** doubles it and adds a review of every screen. Every answer is checked the same way at every level. |
 | **UI style** | The look it defaults to. See [UI style](/ai/ui-style). |
+| **Thinking** | Under Advanced: multiplies the Quality budget — Off, or Low/Medium/High where the model grades it, On/Off where it does not. |
 
-<Callout type="info">
-  **Ultra** looks at a render of the screen it just built, so it needs a model that can see
-  images. Pick a vision model and the option becomes available.
+<Callout type="info" title="Best quality reviews what it drew">
+  On **Best**, after each screen lands your designer draws it and a vision model checks the
+  render for overlap, clipping, poor contrast and misalignment, fixing what it finds as one
+  more change of the turn. The review runs only while your designer tab is open for the
+  project — close it and the turn finishes without the review.
 </Callout>
 
-Bigger settings cost more credits and take longer. A wording tweak does not need Ultra and
-Best; a first-draft app screen usually deserves them.
+Bigger settings cost more credits and take longer. A wording tweak does not need Best and
+High; a first-draft app screen usually deserves them.
 
 ## Giving it context
 
-- **Attach an image** — a screenshot, a photo of a whiteboard, a competitor's screen. Under 1 MB.
+- **Attach an image** — a screenshot, a photo of a whiteboard, a competitor's screen. Paste
+  it into the chat or use the attachment button. Under 1 MB, on any model: if the model you
+  picked cannot see images, Duddy swaps one in that can for that turn and says so on the
+  turn's status line.
 - **Draw it** — sketch the layout you want in the built-in drawing pad. See
   [Attach drawings](/ai/attach-drawings).
-- **Point at a design** — `/figma` attaches one of your Figma files as the reference.
+- **Point at a design** — `/figma` attaches one of your Figma files, a section of it or a
+  single frame, and it stays attached to every message until you remove it.
 
 ## Sessions
 
@@ -90,16 +103,18 @@ Everything an AI turn does arrives as ordinary project history, so you have thre
 <Steps>
   <Step>Tell it. "Not that — keep the layout, just change the palette" is usually one cheap turn.</Step>
   <Step>Fix it by hand on the canvas. Nothing it wrote is locked.</Step>
-  <Step>Revert the turn from the history panel. The whole turn goes back, including screens it created.</Step>
+  <Step>Undo the turn. Every turn's card in the chat lists what it changed, and **Undo it** puts the whole turn back, including screens it created. The history panel (`Alt` + `V`) shows the same turns.</Step>
 </Steps>
 
 ## What it costs
 
 Every turn spends credits, charged by what the turn actually used — see
 [Credits and plans](/getting-started/credits-and-plans). If a turn is refused, the chat
-says which of the three reasons it was: not enough credits, a model your plan does not
-include, or Vibe being switched off for your plan.
+says which of the six reasons it was: the model you picked is not in your plan, your balance
+is empty, today's limit is used up, requests still running hold the credits it needs,
+billing could not be reached, or Vibe is switched off for your plan — and what to do about
+each.
 
 <NextPrev
-  next={{ title: "Models", href: "/ai/models", description: "Choosing the model behind a turn" }}
+  next={{ title: "Models", href: "/ai/models", description: "Choosing the models behind a turn" }}
 />

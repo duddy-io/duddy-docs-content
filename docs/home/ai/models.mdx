@@ -1,23 +1,24 @@
 ---
 title: Models
-description: Choosing which AI model writes your app — tiers, vision, thinking, and what each choice costs.
+description: Choosing which AI models write your app — the design pick and the build pick, tiers, thinking, and what each choice costs.
 ---
 
 Vibe mode runs on models from several providers — Google, OpenAI, Anthropic, DeepSeek,
-xAI, Meta, Qwen, and others — and you choose which one a turn uses. Open the settings
+xAI, Meta, Qwen, and others — and you choose which ones a turn uses. Open the settings
 icon in the chat header and pick from the **Models** section.
 
-## Chat and output are two choices
+## Design and build are two picks
 
 | Setting | Used for |
 |---|---|
-| **Chat** | Conversation, planning and reasoning — working out what to build. |
-| **Output** | Writing the UI layouts and the logic blocks themselves. |
+| **Design model** | The design direction and the look of every screen — what you will actually see. |
+| **Build model** | Planning, turning the design into components and logic, wiring the blocks, and the review. |
 
-They can be the same model, and **Match chat** sets the output model back to whatever the
-chat model is. Splitting them is useful when you want a strong model to plan and a fast one
-to type: the plan is where most of the quality lives, and the translation step is mostly
-mechanical.
+They can be the same model, but they are not interchangeable: the design model decides how
+a screen looks, and the build model copies that decision out. **Spend on the design model.**
+On the same request, a premium build model produced identical output to a cheap one for
+sixty times the price — the translation step is mechanical, and the cheapest capable model
+is usually the right answer there.
 
 ## Tiers
 
@@ -31,9 +32,9 @@ Every model carries a tier, and your plan decides which tiers you can select.
 
 The free tier is deliberately one model, and it is the one Duddy's own pipeline runs by
 default — so a plan with no model features still plans and builds whole apps, on exactly
-the model the builder would have chosen for you. What it cannot do is see: DeepSeek V4
-Flash is text-only, so attaching a screenshot in the chat and the **Ultra** detail level
-both need a plan with a vision model.
+the model the builder would have chosen for you. It is text-only, and that does not hold
+you back: attach a screenshot and Duddy swaps a vision-capable model in for that turn, on
+any plan, and says so on the turn's status line.
 
 A locked model shows a badge in the picker. Selecting one you are not entitled to is
 refused when the turn runs, not silently downgraded, so you always know which model
@@ -48,8 +49,8 @@ answered.
 
 - **Relative cost (`×`)** — how expensive a model is against the picker's baseline model.
   A `4×` model costs roughly four times as much per turn as a `1×` one for the same work.
-- **Vision** — the model can look at images. Required for attaching screenshots and sketches,
-  and for the **Ultra** detail level, which reviews a render of the screen it just built.
+- **Vision** — the model can look at images. Not a requirement: a model that cannot see is
+  swapped for one that can whenever a turn carries an image or runs the Best-quality review.
 - **Thinking** — the model can reason before answering. Some models offer graded levels
   (Low / Medium / High), others are simply on or off, and a few cannot think at all. The
   Thinking control shows only the levels the selected model actually supports.
@@ -57,14 +58,14 @@ answered.
 ## Picking one
 
 <Steps>
-  <Step>**Questions, small edits, renames** — a free-tier model is fine, and it is the fastest.</Step>
-  <Step>**A screen you care about** — a mid-tier model with Thinking on Low or Medium.</Step>
-  <Step>**A whole app, or a hard layout** — a premium model as the Chat model, Thinking Medium or High, and Detail on Normal or Ultra.</Step>
-  <Step>**Working from a screenshot or a sketch** — any vision model; without one the attachment button stays off.</Step>
+  <Step>**Questions, small edits, renames** — the free-tier model is fine, and it is the fastest.</Step>
+  <Step>**A screen you care about** — a standard design model with Quality on Balanced.</Step>
+  <Step>**A whole app, or a hard layout** — a premium model as the design model, Quality on Best with the designer open, Thinking Medium or High; keep the build model cheap.</Step>
+  <Step>**Working from a screenshot or a sketch** — whatever you have picked. A vision model is substituted for the turn if yours cannot see.</Step>
 </Steps>
 
 <Callout type="warning">
-  Thinking and Detail multiply what a turn costs. If credits matter more than the last 10% of
+  Quality and Thinking multiply what a turn costs. If credits matter more than the last 10% of
   polish, turn Thinking down before you switch to a cheaper model — deliberation is usually the
   larger share of the bill.
 </Callout>

@@ -20,7 +20,7 @@ There is no code to write, and nothing to install.
     Wire taps, requests and storage with logic blocks.
   </Card>
   <Card title="Build the app" href="/getting-started/build-the-app" badge="4">
-    Compile an `.apk`, an `.aab`, an `.ipa`, or a web bundle.
+    Run it live on your phone while you design, then compile an `.apk` or an `.ipa`.
   </Card>
 </CardGrid>
 
@@ -32,9 +32,12 @@ blocks describe what happens when someone uses it.
 
 When you build, Duddy compiles that project into native source for the target you picked
 and runs the platform's real toolchain over it. An Android build is compiled Java running
-in a real Android app; an iOS build is Swift built with Xcode; a web build is a bundle you
-can host or install as a PWA. There is no interpreter shipped in the middle, which is why
-the result behaves like an app rather than a website in a wrapper.
+in a real Android app; an iOS build is Swift built with Xcode; a web build — coming soon —
+is a bundle you can host or install as a PWA. There is no interpreter shipped in the middle,
+which is why the result behaves like an app rather than a website in a wrapper.
+
+While you design, **Live test** runs the same project on your own phone — inside an app
+carrying your package name, icon and keys — and follows every edit as it lands.
 
 ## Three ways to build the same thing
 
@@ -54,11 +57,11 @@ project, and you can move between them mid-screen.
 
 ## What you get
 
-- **Android** — an `.apk` to sideload or an `.aab` to upload to Google Play.
+- **Android** — an `.apk` to sideload. The `.aab` Google Play uploads take is on its way.
 - **iOS** <Badge type="beta" /> — an `.ipa`, built on real Xcode and signed with your own
   Apple key.
-- **Web** <Badge type="beta" /> — a bundle you can download, or host on a live link straight
-  from the builder.
+- **Web** — a bundle hosted on a live link straight from the builder.
+  [Coming soon](/getting-started/build-the-app#web-builds-and-hosting).
 
 ## Where to go next
 

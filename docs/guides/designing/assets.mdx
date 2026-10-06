@@ -36,7 +36,8 @@ version — the usual way to swap an icon set or a photo without touching any sc
 
 Nothing in the library fits? Generate one:
 
-- In the asset picker, use **Generate with AI**.
+- In the asset picker, open the **Imagine** tab, describe the image, pick a style and
+  **Import** the result.
 - Or in the [Vibe chat](/ai/overview), `/imagine a flat illustration of a delivery scooter,
   cream background`.
 
@@ -47,14 +48,16 @@ in your drawables and are used like any other asset. Generation spends
 
 ## Photography
 
-With [Unsplash](https://unsplash.com/oauth/applications) or Pixabay connected in your
-dashboard, the AI can fill generated screens with real photographs rather than grey boxes,
-and the asset picker gains a search over those libraries. Everything offered is licensed
-for commercial use.
+With Pixabay connected in your dashboard, the asset picker gains a search over its library,
+and the AI fills the screens it builds with real photographs rather than grey boxes: a
+build turn names the photos each screen needs, finds them on Pixabay and stores them as
+project assets. Everything offered is licensed for commercial use.
 
 <Callout type="info">
-  When no source has a photograph of your subject, Duddy uses a colour block built from your own
-  theme rather than an unrelated stock photo. It is a placeholder that says so.
+  When Pixabay has no photograph of your subject, the turn draws one with the image model
+  instead — the same way it draws the illustrations a screen calls for — and the credits are
+  counted inside that turn. A turn makes a handful of images at most; anything past that is
+  a colour tile built from your own theme, with an icon, that says what it stands for.
 </Callout>
 
 ## Naming

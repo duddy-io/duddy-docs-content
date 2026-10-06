@@ -1,6 +1,6 @@
 ---
 title: Project settings
-description: Every setting behind the gear icon in the designer — identity, build, theme, permissions, keys, signing, deep links, collaborators and the public listing.
+description: Every setting behind the gear icon in the designer — identity, build targets, theme, permissions, the manifest, keys, signing, deep links, collaborators and the public listing.
 ---
 
 Settings are per project, and they are what turns a design into a shippable app: the
@@ -35,6 +35,7 @@ Four tabs, one Save. Everything here is required before a store build makes sens
 | **Version name** | What people read on the store listing — `1.0.0`, `2.4`, anything you like. |
 | **Target SDK** | The Android API level the app is built against. Keep this at the newest level your app works on; stores enforce a floor. |
 | **Min SDK** | The oldest Android version the app installs on. Min SDK 21 reaches roughly 99% of active Android devices. |
+| **Target platforms** | Which of Android, iOS and Web this app is built for. Components and blocks are checked against every platform you keep on, so switch one off if you will never ship there — at least one stays on. |
 
 ### Assets
 
@@ -78,11 +79,14 @@ system UI does the asking for you.
 ## Manifest
 
 A raw editor for the Android manifest entries Duddy cannot infer — extra `<meta-data>`, an
-exported activity, a queries block. Everything else on this page is generated for you.
+exported activity, a queries block. What you write here is spliced into the `<application>`
+element of every Android build, after everything Duddy generates for you: the permissions,
+the launcher activity, and the entries your components declare for themselves.
 
-<Callout type="warning" title="What ships today">
-  Snippets saved here are stored with the project but are not yet merged into a build. Everything
-  Duddy can infer — components, permissions, the launcher activity — is generated for you either way.
+<Callout type="info" title="Android only">
+  iOS has no manifest, so this page changes nothing in an iOS build. Keep the snippet to
+  elements that belong inside `<application>` — a stray `<uses-permission>` here fails the
+  manifest merge, and the build log says so.
 </Callout>
 
 ## Keystore
@@ -107,16 +111,20 @@ value:
 - **File** — a file type, given as a MIME type such as `image/png`, so your app is offered
   as a way to open files of that kind.
 
-Add one row per screen you want reachable. Every build of your app carries these rows: the
-screen opens with the link — or the opened file's address — as its start value, so its blocks
-can read what opened it.
+Add one row per screen you want reachable. Every build of your app carries these rows, and a
+[live test](/getting-started/build-the-app#test-it-live-on-a-device) app too: the screen
+opens with the link — or the opened file's address — as its start value, so its blocks can
+read what opened it. A file row takes a family as well as a single type (`image/*`).
 
 <Callout type="info" title="Web links on phones">
   On Android 12 and later, a web link opens in the browser until the phone's owner allows
   your app for that domain under the app's "Open by default" settings; older Android
   versions ask which app to use. iOS opens web links in an app only through Associated Domains,
   which need a verification file on your own domain, so web rows are left out of iOS builds —
-  use your app's scheme for a link that must open the app on both.
+  use your app's scheme for a link that must open the app on both. iOS also names file types
+  by identifier rather than MIME type, so a file row reaches an iOS build only for the common
+  image, video, audio, text and document types; one it does not know is left out, and the
+  build log names it.
 </Callout>
 
 ## Integrations
@@ -137,7 +145,7 @@ which is why several components share one field rather than each carrying its ow
   error rather than shipping something that silently cannot connect.
 </Callout>
 
-Account-level connections — Figma, Unsplash, Pixabay, Firebase and Apple — are set once
+Account-level connections — Figma, Pixabay, Firebase and Apple Developer — are set once
 for your whole account under **Integrations** in the dashboard. See
 [Figma](/integration/figma) and [Apple](/integration/apple).
 
@@ -165,8 +173,8 @@ Apache 2.0, GPL v3, BSD 2/3-Clause, MPL and Creative Commons.
 
 The control surface for a web build that is online: the live link, what it costs per
 period, and what it has cost so far. A build is not a publish — building the web app
-stages it, and **Update live app** is what moves it. See
-[Build the app](/getting-started/build-the-app#host-the-web-build).
+stages it, and **Update live app** is what moves it. Web builds, and with them hosting, are
+[coming soon](/getting-started/build-the-app#web-builds-and-hosting).
 
 <NextPrev
   prev={{ title: "Create a project", href: "/getting-started/create-a-project" }}
