@@ -42,11 +42,26 @@ Every component's events and functions are listed in the
 | **Logic** | `if / else`, comparisons, `and` / `or` / `not`, true and false. |
 | **Control** | Loops, repeat, break, wait. |
 | **Math** | Arithmetic, rounding, random numbers, min and max. |
-| **Text** | Join, length, substring, case, replace, split, format. |
+| **Text** | Join, length, substring, case, replace, split, and **format number**. |
 | **Lists** | Create, add, length, contains, get, replace and remove by index. |
 | **Dictionaries** | Key-value structures — what a JSON response becomes. |
 | **Variables** | Named values you set and read. |
 | **Procedures** | Your own reusable blocks, with parameters and a return value. |
+
+## Showing a number
+
+A number reaches a label as its plain digits: a total of 185000 shows as `185000`. To show
+it the way people read money and counts, put it through **format number** before you join
+it to anything:
+
+| Setting | Does |
+|---|---|
+| **decimals** | Fixed places, 0 to 10. A half rounds away from zero, so 2.5 shows as `3` and -2.5 as `-3`. |
+| **grouping** | `1,234,567` (thousands), `12,34,567` (lakhs and crores: the last three digits, then twos), or none. |
+
+So `join "₹" with format number (total, decimals 0, grouping 12,34,567)` shows `₹1,85,000`,
+and an average of 33.333… with 1 decimal shows `33.3`. A negative keeps its minus before the
+digits (`-1,240`). It reads the same on Android, iOS, the web and a Live Test.
 
 ## Variables
 
