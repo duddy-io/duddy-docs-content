@@ -6,8 +6,9 @@ description: Authentication, databases, file storage, push messaging and analyti
 Authentication, databases, file storage, push messaging and analytics, backed by your own Firebase project.
 
 <Callout type="danger">
-  A project using any Firebase component needs its config files set under
-  [Settings → Integrations](/getting-started/project-settings#integrations). Without them the build
+  A project using any Firebase component needs a Firebase project set under
+  [Settings → Integrations](/getting-started/project-settings#integrations) — picked from a
+  connected Firebase account, or its two config files uploaded by hand. Without them the build
   stops with an explicit error rather than shipping an app that cannot connect.
 </Callout>
 
@@ -15,7 +16,7 @@ Authentication, databases, file storage, push messaging and analytics, backed by
 |---|---|
 | [FirebaseAuth](#firebaseauth) | Firebase Authentication for email and password accounts, covering sign up, sign in, sign out, password reset and the identity of the signed-in user. |
 | [FirebaseDB](#firebasedb) | Stores and reads JSON data in a Firebase Realtime Database, and can watch a path so the app is told the moment a value changes. |
-| [Firestore](#firestore) | Stores app data as documents inside collections in Cloud Firestore, and can watch a document or a whole collection for live updates. |
+| [Firestore](#firestore) | Stores app data as documents inside collections in Cloud Firestore, reads them back one at a time or by query, and can watch a document, a collection or a query for live updates. |
 | [FirebaseStorage](#firebasestorage) | Uploads files to Firebase Cloud Storage, downloads them back into the app, deletes them, and reports upload or download progress as a percentage. |
 | [FirebaseNotifications](#firebasenotifications) | Receives push notifications sent through Firebase Cloud Messaging, hands the app the device token to send to, and manages topic subscriptions. |
 | [FirebaseAnalytics](#firebaseanalytics) | Non-visual Firebase Analytics logging for events, screen views and user properties. |
@@ -42,13 +43,39 @@ Stores and reads JSON data in a Firebase Realtime Database, and can watch a path
 
 ## Firestore
 
-Stores app data as documents inside collections in Cloud Firestore, and can watch a document or a whole collection for live updates.
+Stores app data as documents inside collections in Cloud Firestore, reads them back one at a time or by query, and can watch a document, a collection or a query for live updates. See [Build a chat app](/guides/apps/chat-app) for a whole app on it.
 
 *Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
 
 **Events** — `Document Received`, `Collection Received`, `Document Changed`, `Operation Success`, `Operation Failed`
 
-**Functions** — `Add Document`, `Set Document`, `Update Document`, `Get Document`, `Delete Document`, `Listen To Document`, `Listen To Collection`
+**Functions** — `Add Document`, `Set Document`, `Update Document`, `Get Document`, `Delete Document`, `Query Collection`, `Listen To Document`, `Listen To Collection`, `Listen To Query`, `Stop Listening`, `Server Timestamp`
+
+### Queries
+
+**Query Collection** reads once and **Listen To Query** keeps watching. Both take the same
+values, and both answer through **Collection Received** with the collection path and the
+matching documents as a JSON array, each document carrying its id as `_id`:
+
+| Value | Is |
+|---|---|
+| collection | The path — `rooms`, or a subcollection such as `rooms/abc123/messages`. |
+| where field, operator, value | One filter: the field, one of `==`, `!=`, `<`, `<=`, `>`, `>=`, `array-contains`, `in` and `array-contains-any`, and the value as text, a number or a boolean (a JSON list for `in` and `array-contains-any`). An empty field means no filter; any other operator answers **Operation Failed** naming it. |
+| order by field, descending | The field to sort on and the direction. An empty field keeps Firestore's own order. |
+| limit | The most documents to return; `0` means no limit. |
+
+A listener replaces one already watching the same path. **Stop Listening** with a path stops
+the document, collection or query listener on it, and with `""` stops them all — call it when
+the screen closes.
+
+### Timestamps
+
+**Server Timestamp** is a value to put in a field of **Add Document**, **Set Document** or
+**Update Document**: Firestore writes its own clock there, so every phone agrees on the order
+of things regardless of what its clock says. A timestamp field read back — in `Document
+Received`, `Collection Received` or `Document Changed` — is ISO 8601 text in UTC, such as
+`2026-06-03T09:14:05.000Z`, on every platform. **Format date** turns it into `09:14` or
+`3 Jun`, and it sorts correctly as plain text.
 
 ## FirebaseStorage
 

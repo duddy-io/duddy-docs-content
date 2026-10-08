@@ -55,6 +55,18 @@
     ]
   },
   {
+    "title": "Build an app",
+    "icon": "hgi-smart-phone-01",
+    "section": "guides",
+    "children": [
+      {
+        "title": "A chat app",
+        "href": "/guides/apps/chat-app",
+        "section": "guides"
+      }
+    ]
+  },
+  {
     "title": "Team",
     "icon": "hgi-user-group",
     "section": "guides",
