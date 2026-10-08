@@ -1,6 +1,6 @@
 ---
 title: UI style
-description: Set the look Vibe mode reaches for by default — minimal, playful, professional, bold, elegant or modern.
+description: Set the look Vibe mode reaches for by default, have it follow your description exactly, or let it surprise you.
 ---
 
 **UI style** is the visual default Vibe mode designs to when your prompt does not say
@@ -12,6 +12,8 @@ afterwards.
 | Style | Reaches for |
 |---|---|
 | **Auto** | Whatever suits the brief — the AI picks per request. |
+| **Follow my description** | Exactly the UI your prompt describes — its colours, fonts, shapes and layout, part by part. |
+| **Surprise me** | An unexpected, committed look, different for every new app. |
 | **Minimal** | Whitespace, near-monochrome, saying more with less. |
 | **Playful** | Rounded, colourful, energetic and approachable. |
 | **Professional** | A structured grid, a conservative palette, calm and trustworthy. |
@@ -19,10 +21,53 @@ afterwards.
 | **Elegant** | A muted palette, refined type, understated luxury. |
 | **Modern** | Soft gradients, glassy depth, contemporary polish. |
 
+## Follow my description
+
+Pick **Follow my description** when you already know what the screen should look like.
+Instead of inventing a look, Vibe mode reads it out of your prompt:
+
+- **Colours** you name fill the matching roles — "a warm sand page" becomes the background,
+  "coral buttons" the accent, "charcoal text" the text colour. Anything you leave out is
+  derived from your accent so the set still reads well together.
+- **Fonts** you name are used as named when the font list has them; otherwise the closest
+  family of the same kind is used ("a rounded friendly sans" becomes Nunito or Quicksand).
+- **Shapes and sizes** you state — "pill chips", "16dp corners", "a hairline under the
+  header", "outlined cards" — become rules every screen shares.
+- **Layout** is drawn part by part in the order you describe it, with your words, and
+  nothing is added that you did not ask for.
+
+What you leave unsaid is filled in to match what you said.
+
+<Callout type="info">
+  Describe a screen from top to bottom and name each part's words, colours and shape:
+  "the title 'Activity' in a bold sans, filter chips All / Sent / Received with All filled
+  dark green, then rows with an initials avatar, the name over the category and the amount
+  on the right". Even on **Auto**, a prompt that spells the look out this precisely — "exactly
+  like this: …", hex colours, named fonts and sizes — can be followed the same way; picking
+  **Follow my description** makes it certain.
+</Callout>
+
+## Surprise me
+
+Pick **Surprise me** for a look you would not have thought to ask for. Every new app
+rolls a fresh combination of:
+
+- **A colour and a colour strategy** — a starting colour picked at random rather than the one the
+  app's subject usually gets, worked as two-tone, one colour with a complementary accent, a bold
+  coloured background, dark and vivid, a set of pastels, or led by a gradient.
+- **A layout** — a bento grid, a magazine page, big stacked cards, a tall hero, a split
+  header, or full-bleed photos.
+- **A font pairing** outside the usual ones, and **a shape treatment** — solid icon tiles,
+  thick outlines, pills everywhere, an oversized glyph, sharp ruled lines, or discs and dots.
+
+Text always stays readable and every screen still works; only the design choices change.
+Adding screens to an app keeps the look it already has — ask to "restyle the whole app" to
+roll a new one.
+
 ## How it interacts with everything else
 
 <Steps>
-  <Step>**Your prompt wins.** "Make this screen look like a receipt" overrides the style for that turn — the setting is a default, not a constraint.</Step>
+  <Step>**Your prompt wins.** "Make this screen look like a receipt" overrides the style for that turn — the setting is a default, not a constraint. With **Surprise me**, a colour, font or look you name still wins over the roll.</Step>
   <Step>**Your theme still rules the colours.** Style shapes shape, weight, spacing and emphasis; the palette comes from your project [theme](/guides/designing/theme).</Step>
   <Step>**It applies going forward.** Changing the style does not restyle screens that already exist. Ask for that explicitly — "restyle the whole app" redraws every screen to a new look in one turn.</Step>
 </Steps>
@@ -35,7 +80,8 @@ afterwards.
 ## Getting a specific look
 
 Style names are shorthand, not a design system. When you have something particular in
-mind, say it in the prompt — the AI follows concrete instructions far better than adjectives:
+mind, say it in the prompt — or pick **Follow my description** — because the AI follows
+concrete instructions far better than adjectives:
 
 - "Cards with a 16dp corner radius and a soft shadow, no borders."
 - "Section headers in uppercase, letter-spaced, with a hairline rule underneath."
