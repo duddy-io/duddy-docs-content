@@ -99,6 +99,15 @@ A bar pinned to the bottom of the screen holding up to five labeled icons, used 
 
 **Events** — `Item Selected`
 
+### Selected Index
+
+`Selected Index` is the tab the bar shows as selected, counted from 0 — the first tab, and
+the default. Tapping a tab moves it and fires `Item Selected`. Setting it from logic moves the
+highlight and fires nothing, which is what you want when something other than the bar changes
+the section on show: a "See all" button in one section that shows another should also set
+`Selected Index` to that section's tab, or the bar stays on the tab tapped last. An index
+outside the tabs is ignored. The get block of the same name reads it.
+
 ## TabLayout
 
 A row of tabs that pairs itself with a ViewPager on the same screen: swiping moves the tabs, tapping moves the pager. Works on its own too.
