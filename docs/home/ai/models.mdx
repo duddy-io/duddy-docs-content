@@ -4,7 +4,7 @@ description: Choosing which AI models write your app — the design pick and the
 ---
 
 Vibe mode runs on models from several providers — Google, OpenAI, Anthropic, DeepSeek,
-xAI, Meta, Qwen, and others — and you choose which ones a turn uses. Open the settings
+xAI, Zhipu, MiniMax, Mistral and NVIDIA — and you choose which ones a turn uses. Open the settings
 icon in the chat header and pick from the **Models** section.
 
 ## Design and build are two picks
@@ -26,27 +26,30 @@ Every model carries a tier, and your plan decides which tiers you can select.
 
 | Tier | Who has it |
 |---|---|
-| **Free** | Every plan, including the trial — one model: DeepSeek V4 Flash. |
+| **Free** | Every plan, including the trial — two models: DeepSeek V4 Flash and DeepSeek V4.1 Flash. |
 | **Standard** | Paid plans. |
 | **Premium** | The top plans — the largest, most capable models. |
 
-The free tier is deliberately one model, and it is the one Duddy's own pipeline runs by
-default — so a plan with no model features still plans and builds whole apps, on exactly
-the model the builder would have chosen for you. It is text-only, and that does not hold
-you back: attach a screenshot and Duddy swaps a vision-capable model in for that turn, on
-any plan, and says so on the turn's status line.
+The free tier is two models from one family. DeepSeek V4 Flash is the one Duddy's own
+pipeline runs by default — so a plan with no model features still plans and builds whole
+apps, on exactly the model the builder would have chosen for you. DeepSeek V4.1 Flash is its
+newer sibling, and it can see images. V4 Flash is text-only, and that does not hold you
+back: attach a screenshot and Duddy swaps a vision-capable model in for that turn, on any
+plan, and says so on the turn's status line.
 
 A locked model shows a badge in the picker. Selecting one you are not entitled to is
 refused when the turn runs, not silently downgraded, so you always know which model
 answered.
 
 <Callout type="info">
-  New accounts start on the free-tier model and it is the only one they can select — a paid
-  plan is what opens the rest of the picker.
+  New accounts start on DeepSeek V4 Flash and can switch to DeepSeek V4.1 Flash; those two
+  are all they can select — a paid plan is what opens the rest of the picker.
 </Callout>
 
 ## What the badges mean
 
+- **Free** — the model is on every plan, including the trial. It still spends credits like
+  any other model; what the badge says is that no plan locks it.
 - **Relative cost (`×`)** — how expensive a model is against the picker's baseline model.
   A `4×` model costs roughly four times as much per turn as a `1×` one for the same work.
 - **Vision** — the model can look at images. Not a requirement: a model that cannot see is
@@ -58,7 +61,7 @@ answered.
 ## Picking one
 
 <Steps>
-  <Step>**Questions, small edits, renames** — the free-tier model is fine, and it is the fastest.</Step>
+  <Step>**Questions, small edits, renames** — a free-tier model is fine.</Step>
   <Step>**A screen you care about** — a standard design model with Quality on Balanced.</Step>
   <Step>**A whole app, or a hard layout** — a premium model as the design model, Quality on Best with the designer open, Thinking Medium or High; keep the build model cheap.</Step>
   <Step>**Working from a screenshot or a sketch** — whatever you have picked. A vision model is substituted for the turn if yours cannot see.</Step>
