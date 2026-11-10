@@ -21,13 +21,40 @@
         "section": "home"
       },
       {
+        "title": "Credits",
+        "href": "/getting-started/credits-and-plans",
+        "section": "home"
+      }
+    ]
+  },
+  {
+    "title": "Build and share",
+    "icon": "hgi-rocket-01",
+    "section": "home",
+    "children": [
+      {
         "title": "Build the app",
         "href": "/getting-started/build-the-app",
         "section": "home"
       },
       {
-        "title": "Credits and plans",
-        "href": "/getting-started/credits-and-plans",
+        "title": "Live test",
+        "href": "/build/live-test",
+        "section": "home"
+      },
+      {
+        "title": "iOS builds",
+        "href": "/build/ios-builds",
+        "section": "home"
+      },
+      {
+        "title": "Share and publish",
+        "href": "/build/share-and-publish",
+        "section": "home"
+      },
+      {
+        "title": "Fix a failed build",
+        "href": "/build/troubleshoot-builds",
         "section": "home"
       }
     ]
@@ -62,7 +89,6 @@
   {
     "title": "Integrations",
     "icon": "hgi-connect",
-    "badgeIcon": "hgi-hot-price",
     "section": "home",
     "children": [
       {
@@ -71,8 +97,35 @@
         "section": "home"
       },
       {
+        "title": "Firebase",
+        "href": "/integration/firebase",
+        "section": "home"
+      },
+      {
         "title": "Apple",
         "href": "/integration/apple",
+        "section": "home"
+      }
+    ]
+  },
+  {
+    "title": "Account and billing",
+    "icon": "hgi-wallet-01",
+    "section": "home",
+    "children": [
+      {
+        "title": "Plans and limits",
+        "href": "/account/plans-and-limits",
+        "section": "home"
+      },
+      {
+        "title": "Billing",
+        "href": "/account/billing",
+        "section": "home"
+      },
+      {
+        "title": "Your account",
+        "href": "/account/your-account",
         "section": "home"
       }
     ]

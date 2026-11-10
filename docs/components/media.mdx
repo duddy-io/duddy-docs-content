@@ -14,6 +14,7 @@ Video, audio, the camera, animation, and turning speech into text and back.
 |---|---|
 | [VideoPlayer](#videoplayer) | A surface that plays a video from a web URL, a file on the device, or a bundled asset, with optional playback controls, looping and autoplay. |
 | [AudioPlayer](#audioplayer) | Plays an audio file from a URL or an uploaded asset with no visible view on the screen. |
+| [AudioEffects](#audioeffects) | An equalizer, bass boost and virtualizer for the sound every AudioPlayer in the app plays. Android and web only. |
 | [Lottie](#lottie) | Plays a Lottie (JSON) animation from a bundled asset or an https URL, with looping, speed and playback control. |
 | [CameraView](#cameraview) | A live camera preview embedded in the screen, used to show what the lens sees and to take pictures from inside the app. |
 | [CameraCapture](#cameracapture) | A non-visual component for capturing photos and recording videos using the device camera. |
@@ -41,6 +42,18 @@ Plays an audio file from a URL or an uploaded asset with no visible view on the 
 **Events** — `Playback Started`, `Playback Paused`, `Playback Completed`, `Error Occurred`
 
 **Functions** — `Play`, `Pause`, `Stop`, `Seek To`
+
+## AudioEffects
+
+An equalizer, bass boost and virtualizer for the music an app plays with [AudioPlayer](#audioplayer), for a music player's sound settings. It needs no wiring: while **Enabled** is on it changes the sound of every AudioPlayer in the app, on any screen, so it can sit on a settings screen of its own. Bands are numbered from 0 and set in decibels; use **Min Band Level** and **Max Band Level** as a slider's range.
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.* Built for Android and the web, not iOS: importing it into a project that targets iOS is refused.
+
+**Properties** — `Enabled`, `Bass Boost Strength` (0–1000), `Virtualizer Strength` (0–1000), `Band Count`, `Min Band Level`, `Max Band Level` (the last three read only)
+
+**Events** — `Error Occurred`
+
+**Functions** — `Set Band Level`, `Get Band Level`, `Band Frequency`, `Presets`, `Use Preset`
 
 ## Lottie
 

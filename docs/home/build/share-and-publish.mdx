@@ -1,0 +1,123 @@
+---
+title: Share your app and publish to stores
+description: Send an Android APK to testers, install ad hoc iOS builds on registered iPhones, and see what Duddy does and what you do for Google Play and the App Store.
+isNew: true
+---
+
+A release build gives you a signed app file. What happens next depends on where the app is going:
+a tester's phone, an iPhone registered to your Apple account, or a store. This page sets out what
+Duddy does for you today, what you do yourself, and what is coming soon.
+
+## Where your app can go today
+
+| Destination | What Duddy gives you | Today |
+|---|---|---|
+| Android phones, yours or your testers' | A signed `.apk` to scan, download or link | Works |
+| iPhones registered to your Apple Developer account | An ad hoc `.ipa` that installs over the air | Beta |
+| Your phone while you design | A test app that follows every edit, with [Live test](/build/live-test) | Works |
+| Google Play | Google Play needs an Android App Bundle (`.aab`) for a new app | Coming soon |
+| TestFlight and the App Store | Duddy builds ad hoc only and uploads nothing to App Store Connect | Not available |
+| The web | Web builds and hosting | Coming soon |
+
+## Send an Android build to testers
+
+<Steps>
+  <Step>Build **Android App (.apk)** and wait for the console to say **Ready**. See [Build the app](/getting-started/build-the-app).</Step>
+  <Step>Press **Download app** to save the `.apk`. The download link lasts one hour, so share the file rather than the link.</Step>
+  <Step>Send the file the way you share any file, such as by email or a shared drive.</Step>
+  <Step>Each tester opens the `.apk` on their phone and allows installs from that app when Android asks.</Step>
+</Steps>
+
+To send an update, raise the **Version code** in **Settings → Project**, build again and send the new
+file. It installs over the earlier version, keeping the tester's data, because the package name and
+the signing key stay the same.
+
+## Install an iOS build on testers' iPhones
+
+<Badge type="beta" /> An ad hoc iOS build installs only on iPhones that were registered to your Apple Developer account
+when it was built, and that run iOS 26 or later.
+
+<Steps>
+  <Step>Ask each tester for their iPhone's UDID, and register it at developer.apple.com under **Certificates, Identifiers & Profiles → Devices**.</Step>
+  <Step>Build **iOS App (.ipa)**. A build made after the registration includes the new iPhones. See [iOS builds](/build/ios-builds).</Step>
+  <Step>When the console says **Ready**, the tester scans the QR code under **Install this build** with the iPhone's camera and follows the prompt to install. The code works for one hour.</Step>
+</Steps>
+
+The QR code suits a tester who can see your screen. **Download app** saves the `.ipa` itself if
+you prefer to install it with your own tools.
+
+## Let someone try the app while you design
+
+You do not need a release build to show work in progress. Pair the other person's phone with
+[Live test](/build/live-test): they scan the QR code in the Live test panel to install the test
+app, then type the 8-character code it shows. Their phone then follows your edits as you make them.
+An iPhone has to be registered to your Apple Developer account, as for any iOS build.
+
+## Publish to Google Play
+
+Coming soon. Google Play requires a new app to be uploaded as an Android App Bundle (`.aab`).
+Duddy builds `.apk` files today; the **Android App Bundle (.aab)** option in the Build menu says
+"This part of the builder is still being built." Until it arrives, Duddy cannot produce a file that
+Google Play accepts for a new app.
+
+You can prepare now, so the first upload goes smoothly when it does:
+
+- **Settle the package name** before anyone installs the app. See
+  [Keep your app's identity stable](#keep-your-apps-identity-stable).
+- **Keep the signing key** your first Android build creates. Every update must be signed with it.
+- **Plan your version numbers**: the **Version code** must rise with every upload.
+- **Build on a paid plan** for the release, so the app carries no Duddy branding.
+
+The Google Play developer account, the store listing and Google's review happen in Google Play
+Console, outside Duddy.
+
+## Publish to the App Store
+
+Not available. Duddy's iOS builds are ad hoc builds for registered devices. TestFlight and the App
+Store need a build signed for App Store distribution and uploaded to App Store Connect. Duddy does
+not make that kind of build and does not upload anything to App Store Connect, so you cannot
+publish to TestFlight or the App Store from Duddy today.
+
+What you set up for ad hoc builds still counts: the Bundle ID you registered is the same identifier
+an App Store app uses.
+
+## Keep your app's identity stable
+
+A store recognises your app by its package name and, on Android, by the key it is signed with.
+Change either and the store sees a different app. Set these in the designer before you share the
+app widely:
+
+| Setting | Where | Why it matters |
+|---|---|---|
+| **Package name** | **Settings → Project** | The app's permanent identifier, such as `com.yourcompany.yourapp`. Apple calls it the Bundle ID. A new package name makes a new app. |
+| Signing key | **Settings → Keystore & profile** | Your first Android release build creates a signing key and keeps it with the project. Every later build is signed with it, so updates install over earlier versions. |
+| **Version code** | **Settings → Project** | A whole number that must rise with every store upload. |
+| **Version name** | **Settings → Project** | What people see on the store listing, such as `1.2.0`. |
+
+<Callout type="danger" title="Do not delete your signing key">
+  Builds signed with a different key cannot update an app already installed on phones or already
+  on Google Play. Leave the key that your first Android build created in place.
+</Callout>
+
+## Remove Duddy branding before you ship
+
+Apps built on the free trial carry Duddy branding: they open on a Duddy splash screen when they
+have no splash image of their own, and Android apps show a **Made with Duddy** badge. Builds made
+on a paid plan carry neither. Compare plans on [Plans and limits](/account/plans-and-limits).
+
+## Next steps
+
+<CardGrid>
+  <Card title="Build the app" href="/getting-started/build-the-app">
+    Targets, the build console and what builds cost.
+  </Card>
+  <Card title="iOS builds" href="/build/ios-builds">
+    Set up Apple signing and install on an iPhone.
+  </Card>
+  <Card title="Project settings" href="/getting-started/project-settings">
+    Package name, versions, icon and signing key.
+  </Card>
+  <Card title="Fix a failed build" href="/build/troubleshoot-builds">
+    Every build message and what to do about it.
+  </Card>
+</CardGrid>

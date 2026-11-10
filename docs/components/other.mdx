@@ -16,6 +16,7 @@ Device facts, sharing, calls, messages, purchases and a few tools that fit nowhe
 | [SMS](#sms) | A non-visual component that sends an SMS through the system composer or directly where permitted, and receives incoming messages on Android. |
 | [InAppPurchase](#inapppurchase) | A non-visual in-app purchase component for one-off products, on Google Play Billing and StoreKit 2. |
 | [CryptoUtils](#cryptoutils) | A non-visual toolbox for scrambling and checksumming text: SHA-256 and MD5 hashes, Base64 encoding, and AES encryption with a passphrase. |
+| [Localizer](#localizer) | A non-visual component that switches the app's language and returns each text in the current one. |
 
 ## DeviceInfo
 
@@ -102,3 +103,15 @@ A non-visual toolbox for scrambling and checksumming text: SHA-256 and MD5 hashe
 *Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
 
 **Functions** — `Sha256`, `Md5`, `Aes Encrypt`, `Aes Decrypt`, `Base64 Encode`, `Base64 Decode`
+
+## Localizer
+
+A non-visual component that switches the app's language. **Strings** holds the app's texts as a JSON object of language codes, each mapping text keys to that language's words, for example `{"en": {"greeting": "Hello"}, "es": {"greeting": "Hola"}}`. Put one on every screen that shows translated text, with the same **Strings**. See [Multilingual apps](/guides/logic/multilingual-apps).
+
+*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+
+**Properties** — `Strings`, `Default Language` (blank follows the device's language when **Strings** has it), `Fallback Language` (default `en`), `Language` (read only)
+
+**Events** — `Language Changed`
+
+**Functions** — `Translate`, `Set Language` (saved on the device, so the app opens in it next time), `Languages`

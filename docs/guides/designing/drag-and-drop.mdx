@@ -1,96 +1,134 @@
 ---
-title: Drag and drop
-description: Place components on the canvas, nest them, select them, and set their properties.
+title: Drag and drop components onto the canvas
+description: Place components on the Duddy canvas, nest them in Rows, Columns and Stacks, then select, copy, paste, rename or delete them and edit their properties.
 ---
 
-The canvas is the middle of the designer: a phone-shaped surface showing one screen. You
-build a screen by dragging components onto it and nesting them inside layout containers.
+The canvas is the phone in the middle of the designer. It shows one screen at a time, and you build that screen by dragging components onto it and nesting them inside layout containers. New to Duddy? Start with [Create a project](/getting-started/create-a-project).
 
-## The palette
+## Find a component in the palette
 
-The left rail (`1`) lists every component available to the project, grouped the same way
-the [component reference](/components/overview) is — Layout, Content, Input, Media,
-Connectivity, Storage, Firebase, Sensors, Ads and everything else. Search by name if you
-know what you want.
+Press `1`, or choose **Component Palette** on the left rail. The palette lists the components this project holds, in the groups **Layout**, **Content**, **Input**, **Media**, **Connectivity**, **Storage**, **Ads**, **Firebase**, **Sensors** and **Other**.
 
-Drag a component from the palette onto the canvas to place it.
+- Type in **Search components** to filter by name. `Shift` + `S` jumps to the search box.
+- The button beside the search box switches between a grid and a list.
+- A new project holds the everyday components: containers, text, buttons, inputs, images, icons, lists, dialogs and sheets, navigation bars and AppStorage. Press **Import component** to add any other component from the library. See [Import components](/guides/marketplace/import-components).
+- A component you imported has a **Remove from palette** button. Screens that already use it keep working.
 
-## Where it lands
+## Drop a component on the canvas
 
-Duddy shows you the drop before you commit to it:
+Drag a component from the palette onto the phone. Before you let go, the canvas shows where it will land:
 
-- **In a Row, Column or scrolling container**, an insertion line shows exactly where the
-  component will go among the existing children.
-- **In a Stack**, a crosshair shows the position it will take, because a Stack layers
-  children rather than queueing them.
-- **In an empty container**, the container highlights. An empty container has no size of
-  its own, so it can look like a thin strip until it holds something.
+- **In a Row, Column or scrolling container**, an insertion line shows its place among the children.
+- **In a Stack**, a crosshair shows the exact point it will sit, because a Stack layers its children rather than queueing them.
+- **Near the edge of a container**, the line moves outside it, so you can drop beside a container instead of into it.
 
-<Callout type="info">
-  Some components draw nothing at all — `HttpRequest`, `AppStorage`, `Clock`. Drop one anywhere on
-  the screen and it joins the screen as a logic-only component: no box on the canvas, but its
-  blocks are available in the block editor.
-</Callout>
+The component you dropped is selected, and its properties fill the panel on the right. A Row, Column or Stack dropped from the palette starts with 20 px of padding on every side, so it is easy to drop into. An Image starts 200 px tall.
 
-## Overlays
+You cannot drop a container into itself or into anything inside it.
 
-`Dialog` and `BottomSheet` live over the screen rather than in it. While one is visible on
-the canvas it is the only thing you can drop into, which is what lets you build its
-contents; hide it again and the screen underneath comes back.
+### Components that do not draw on the screen
 
-## Selecting and rearranging
+Some components do their work in the background: [HttpRequest](/components/connectivity#httprequest), [AppStorage](/components/storage#appstorage) and others. While you drag one, the canvas says "Release anywhere — HttpRequest has no on-screen position". Drop it anywhere: the toast confirms it was added, it runs in the background, and its blocks are ready in the block editor.
 
-- Click a component to select it. Its box is outlined and the properties panel fills in.
-- Drag a placed component to move it — the same insertion line rules apply.
-- `Ctrl` + `Left` / `Ctrl` + `Right` walk the selection through the tree.
-- `Shift` + `D` duplicates, `Del` deletes, `F2` renames.
+[Dialog](/components/layout#dialog) and [BottomSheet](/components/layout#bottomsheet) float over the screen. They are closed until your logic opens them, so after you drop one, the canvas shows it open for you to fill: drop components into it. When you have finished, press **Stop showing it** in the **Not shown here** list to see the screen again.
 
-The **component tree** (`2`) is the same structure as a list. It is the reliable way to
-select something small, something behind something else, or a container whose children fill
-it completely.
+## Select and move components
 
-<Callout type="warning">
-  Renaming a component changes the name your logic blocks refer to it by. Rename early — before
-  you wire behaviour to it — and the change costs nothing.
-</Callout>
+- Click a component to select it. Its outline appears and the properties panel shows its settings.
+- Click the canvas background, around the phone, to select the screen itself.
+- Drag a placed component to move it. The same insertion line and crosshair show where it will go.
 
-## Hidden layers
+For anything small, hidden behind another component, or filled edge to edge by its children, use the **Component Tree**: press `2`. It shows the screen's structure as a list you can search and drag to reorder or move components. **Show components** filters it to **All**, **Visible** or **Hidden** components.
 
-A component whose **Visible** property is off still exists: it moves to the hidden-layers
-rail rather than disappearing from the project. Peek at one from the rail to see it on the
-canvas without turning it back on — useful for the empty state of a list, or an error
-message that only shows when something fails.
+## Copy, paste, duplicate, rename and delete
 
-## The properties panel
+Right-click a component on the canvas or in the component tree for these actions, or use the shortcuts:
 
-Selecting a component fills the right-hand panel with everything that component can be
-told. Properties are grouped — Dimension, Spacing, Layout, Style, Typography, Behavior — and
-the panel shows only the rows that apply right now. A row that disappears when you change
-another one is the component telling you it no longer applies, not a bug.
+| Action | Shortcut | What it does |
+|---|---|---|
+| **Duplicate** | `Shift` + `D` | Adds a copy of the component and everything inside it. |
+| **Copy** | `Ctrl` + `C` (`⌘` + `C` on a Mac) | Copies the component and everything inside it. |
+| **Paste** | `Ctrl` + `V` (`⌘` + `V` on a Mac) | Pastes inside the selected container, or straight after the selected component. You can paste on another screen. |
+| **Delete** | `Delete` | Deletes the component, everything inside it, and every block that uses them. |
+| **Rename** | `F2` | Edits the name at the top of the properties panel. |
 
-<Steps>
-  <Step>**Dimension** — Width and Height. Each takes a number in `px` or `%`, or one of **Auto** and **Fill**.</Step>
-  <Step>**Spacing** — Padding inside the component, Margin around it.</Step>
-  <Step>**Layout** — how a container arranges its children: orientation, alignment and the gap between them.</Step>
-  <Step>**Style** — background, corner radius, border, shadow and opacity.</Step>
-  <Step>**Typography** — font, size, weight, colour, alignment and truncation for anything showing text.</Step>
-</Steps>
+Shortcuts work while the canvas has focus, not while you are typing in a field.
 
-See [Layout and sizing](/guides/designing/layout-and-sizing) for what Fill and Auto actually
-do inside each kind of container.
+Rename components whenever you like. Blocks point at the component itself, not at its name, so they follow a rename. Clear names, such as `SignInButton` instead of `Button3`, make your logic easier to read.
 
-## Checking your work
+Deleting asks you to confirm, because it also removes the component's logic. The toast says how many blocks went with it. To get both back, undo the change in the history panel. See [History and versions](/guides/collaboration/teamwork#history-and-versions).
 
-- **Device and zoom** (`5`) changes the canvas frame so you can see the screen at another
-  size. `Ctrl` + `0` fits it, `Ctrl` + scroll zooms.
-- **Preview** opens a board of every screen at once — the fastest way to check a flow
-  without a build.
-- **Live test** puts the app on your own phone and keeps it in step with the canvas — every
-  edit lands on the device as you make it. See
-  [Test it live on a device](/getting-started/build-the-app#test-it-live-on-a-device).
-- Nothing here is a release build. When you want a file to ship, see
-  [Build the app](/getting-started/build-the-app).
+## Edit properties in the properties panel
 
-<NextPrev
-  next={{ title: "Screens and navigation", href: "/guides/designing/screens" }}
-/>
+Selecting a component fills the right-hand panel with everything that component can be told, in groups. A group appears only when the component has properties in it, and a row can appear or disappear when you change another one: it is telling you the row applies only in some cases.
+
+| Group | What it holds |
+|---|---|
+| **Content** | What the component shows, such as its text or its picture. |
+| **Typography** | Font, size, weight, colour and alignment of the text. |
+| **Dimension** | **Width** and **Height**, each a number in **px** or **%**, or **Auto** or **Fill**. |
+| **Layout** | **Arrange Children**: where a container places what is inside it. **Position in Column**, **Position in Row** and so on: where this component sits in its parent. |
+| **Spacing** | **Padding** inside the component and **Margin** around it. |
+| **Style** | **Background**, **Border Radius**, **Stroke** (the border), **Shadow**, **Opacity**, and **Ripple Color** on components you can tap. |
+| **Behavior** | **Visible**, **Transition**, and settings for how the component acts. |
+
+Some components have more groups of their own, such as **Title** or **Icon**, and some groups have **Active** and **Inactive** tabs, for the look of a component in each state.
+
+See [Layout and sizing](/guides/designing/layout-and-sizing) for what **Fill**, **Auto** and the alignment controls do in each container, and [Theme colours, dark mode and styling](/guides/designing/theme) for colours.
+
+## See hidden states and dialogs
+
+A screen often holds more than the canvas shows at once: the pages of a ViewPager, the body of each tab, a closed dialog or bottom sheet, other states your logic swaps in, and components that work in the background. When a screen has any of these, a **Not shown here** list appears beside the phone.
+
+Click an entry to show it on the canvas. A banner says "Showing *name* — the app opens without it", and **Stop showing it** puts the canvas back. Showing an entry changes nothing in your design: the app still opens without it.
+
+An ordinary component with **Visible** turned off is not in this list. Find it with the component tree's **Hidden** filter.
+
+## Check your design on other devices
+
+- **Device & Zoom** (`5`) sets the phone the canvas draws: **Google Pixel 8** by default, other phones such as **Apple iPhone 15**, or **Custom** with your own **W**, **H** and **DPI**. **Screen zoom** and **Nav bar style** (**Gesture** or **Buttons**) are there too. The device is saved with the project.
+- The zoom control at the bottom right of the canvas has **Zoom out**, **Zoom in** and **Fit to screen**. With the canvas focused, `Ctrl` + `+` and `Ctrl` + `-` zoom in steps, and `Ctrl` + `0` returns to 100% and centres the phone.
+- Scroll or swipe on a trackpad to pan the canvas, and hold `Ctrl` (or `⌘`) while scrolling to zoom. To pan from on top of the phone, hold `Space` and drag.
+- **Preview** in the header opens a board of every screen at once.
+- [Live test](/build/live-test) puts the app on your own phone and keeps it in step with the canvas as you edit.
+
+## Troubleshooting
+
+<Accordion>
+  <AccordionItem value="dialog-nothing" title="I dropped a Dialog and nothing seems to have happened">
+    **Why:** a Dialog or BottomSheet is closed until your logic opens it, so the screen looks the same once you stop showing it.
+
+    **Fix:** choose it in **Not shown here** beside the phone to show it again, or select it in the component tree. Open it in your app with its **Show** function.
+  </AccordionItem>
+  <AccordionItem value="nothing-copied" title="Nothing has been copied yet.">
+    **Why:** you pasted before copying anything.
+
+    **Fix:** select a component and press `Ctrl` + `C` (`⌘` + `C`), then paste.
+  </AccordionItem>
+  <AccordionItem value="someone-editing" title="Someone else is editing this component right now.">
+    **Why:** a collaborator has that component selected, and only one person can change a component at a time.
+
+    **Fix:** wait until they move on, or work on another component. See [Collaboration](/guides/collaboration/teamwork).
+  </AccordionItem>
+  <AccordionItem value="read-only" title="You have read-only access to this project.">
+    **Why:** the project's owner gave you the **Read only** role.
+
+    **Fix:** ask the owner for **Read & write** access. See [Collaboration](/guides/collaboration/teamwork).
+  </AccordionItem>
+  <AccordionItem value="does-not-fit" title="That change does not fit this screen.">
+    **Why:** the server refused the change, so the canvas went back to the saved design.
+
+    **Fix:** check the screen still looks as you expect and make the change again. If it keeps happening, reload the designer.
+  </AccordionItem>
+  <AccordionItem value="number-keys" title="The number keys do not open panels">
+    **Why:** the rail shortcuts do not fire while you are typing in a field, or while the drawing board is open.
+
+    **Fix:** click the canvas, then press the key.
+  </AccordionItem>
+</Accordion>
+
+## Next steps
+
+- [Layout and sizing](/guides/designing/layout-and-sizing): make what you dropped fit every phone.
+- [Add screens and navigate between them](/guides/designing/screens): add more screens and connect them.
+- [Theme colours, dark mode and styling](/guides/designing/theme): colour what you have built.

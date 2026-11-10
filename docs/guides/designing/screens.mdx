@@ -1,78 +1,139 @@
 ---
-title: Screens and navigation
-description: Add screens, pick the one the app opens on, and move between them from your logic.
+title: Add screens and navigate between them
+description: Add, rename, reorder and delete screens in Duddy, set the screen your app opens on, open and close screens from logic, and hand a value to the next screen.
 ---
 
-An app is a set of screens. Each one has its own component tree, its own logic workspace,
-and its own theme, and every screen you add builds into the app.
+An app is a set of screens. Each screen has its own components and its own logic, and every screen in the project is built into the app. You manage them in the **Screens** panel: press `3`, or choose **Screens** on the left rail.
 
-Open the screens panel with `3`.
+## Add, rename and reorder screens
 
-## Adding and managing screens
+Every screen has a card in the **Screens** panel, with its name, the number of components on it, and these buttons:
+
+| Button | What it does |
+|---|---|
+| **Add Screen Below** | Adds a new, empty screen called `Screen2`, `Screen3` and so on, and opens its name so you can rename it. |
+| **Rename** | Changes the name shown in the designer. A name can be up to 200 characters, may contain spaces and emoji, and does not have to be unique. |
+| **Duplicate** | Copies the screen, with its components and its logic, as a new screen. |
+| **Screen info** | Shows the screen's name and a description you can edit, so collaborators know what the screen is for. |
+| **Arrange** | Drag it to move the card up or down the list. |
+| **Delete screen** | Deletes the screen. See [Delete a screen](#delete-a-screen). |
+
+Use the search box at the top of the panel to find a screen by name. While the search box has text in it, you cannot reorder screens.
+
+### A screen's name and its ID
+
+Every screen has an ID as well as a name. The ID is the name it was created with, such as `Screen3`, and it never changes. **Rename** changes only the name you see in the designer.
+
+Navigation blocks open a screen by its **ID**. So after you rename `Screen3` to *Checkout*, a block that opens it must still say `Screen3`. While a screen is open in the designer, your browser's address bar shows its ID after `screen=`.
+
+## Set the first screen your app opens on
+
+The *entry screen* is the first screen people see after the splash. It is a setting, not the first screen in the list: choose it under **Settings → Project → Identity → Entry screen**. Reordering the **Screens** panel does not change it. See [Project settings](/getting-started/project-settings).
+
+## Screen properties and events
+
+Every screen has a root [Screen](/components/layout#screen) component. Select it by clicking the canvas background, around the phone, and the properties panel shows what belongs to the screen as a whole.
+
+| Property | What it does |
+|---|---|
+| **Theme** | The theme collection the canvas draws this screen in. See [Theme colours, dark mode and styling](/guides/designing/theme). |
+| **Background** | What fills the screen behind its content. The default is the `sheet` colour role. |
+| **Status Bar** → **Show**, **Color**, **Light Icons** | Shows or hides the strip at the top with the clock, its colour (default `primary`), and whether its icons are light. **Light Icons** works on Android and iOS. |
+| **Navigation Bar** → **Show**, **Color**, **Light Icons** | The same for the system navigation bar at the bottom (default colour `background`). **Light Icons** here is Android only. |
+| **Layout Direction** | **Left to Right**, or **Right to Left** for Arabic, Persian, Hebrew and Urdu. See [Layout and sizing](/guides/designing/layout-and-sizing). |
+
+A screen has two events for its logic:
+
+- **Initialize** fires once, when the screen has been built and is about to show. Load data and set up components here.
+- **Resume** fires each time the screen comes back to the front: another screen closed onto it, or the app returned from the background. It does not fire the first time. Reload a list here after an edit screen closes.
+
+## Open another screen from a button
+
+Navigation is logic, so you add it in the [block editor](/guides/logic/blocks). Open the block editor with **Code** in the designer's header, or press `Ctrl` + `Shift` + `E`.
 
 <Steps>
-  <Step>Add a screen from the screens panel, and name it for what it is — `Home`, `Checkout`, `OrderConfirmed`.</Step>
-  <Step>Duplicate one when the new screen is a variation of an existing screen.</Step>
-  <Step>Delete from the same panel. A screen that other screens navigate to leaves those blocks pointing at nothing, so fix them in the same sitting.</Step>
+  <Step>Open the block editor on the screen that has the button, row or icon that should navigate.</Step>
+  <Step>Choose that component in the block editor's list and drag its **Click** event into the workspace.</Step>
+  <Step>From the **Control** blocks, put **open another screen** inside the event.</Step>
+  <Step>Attach a text block to its **screenName** socket and type the ID of the screen to open, such as `Screen2`.</Step>
+  <Step>Run the app with [Live test](/build/live-test) and tap the button. The screen opens.</Step>
 </Steps>
 
-The **entry screen** — the one the app opens on after the splash — is set under
-[Project settings → Project → Identity](/getting-started/project-settings). It is not
-"whichever screen is first".
+Opening a screen does not stop the event: the blocks after **open another screen** still run.
 
-<Callout type="info">
-  A screen's name is what your logic addresses it by. Renaming one is safe in the designer, but
-  do it before you have wired a dozen navigation blocks to it, not after.
-</Callout>
+## Go back, replace a screen or close the app
 
-## The Screen component
+Screens stack as they open. Closing one returns to the screen below it. An app that opens screens and never closes them keeps every one of them alive underneath, so close the screens people have finished with.
 
-Every screen has a root `Screen` component. Select it — from the component tree, or by
-clicking the canvas background — and the properties panel gives you the things that belong
-to the screen as a whole: its theme, its background, and how it treats the system status
-and navigation bars.
+| Block (in **Control**) | What it does |
+|---|---|
+| **open another screen** | Opens a screen on top of this one. Back returns here. |
+| **close screen** | Closes this screen and returns to the one that opened it. |
+| **replace this screen with** | Opens a screen in place of this one, so Back skips this screen. Use it for a splash, an onboarding or a sign-in screen that should not come back. |
+| **close application** | Closes the whole app. |
 
-The `Screen` component also has an **Initialize** event, which fires when the screen opens.
-It is where a screen loads its data.
+**close screen**, **replace this screen with** and **close application** end the event: nothing can follow them.
 
-## Moving between screens
+## Pass data between screens
 
-Navigation is logic, so it lives in the [block editor](/guides/logic/blocks): open a screen
-in response to an event, and close it to come back.
+Screens do not share their variables. To hand a value to the next screen, use a start value:
 
 <Steps>
-  <Step>Select the button (or row, or icon) that should navigate.</Step>
-  <Step>In the block editor, take that component's **Click** event.</Step>
-  <Step>Inside it, put the block that opens a screen and choose the destination.</Step>
+  <Step>On the first screen, use **open another screen with start value**. Give it the screen's ID in **screenName** and the value in **startValue**, such as the ID of the item that was tapped.</Step>
+  <Step>On the screen that opens, add its **Initialize** event.</Step>
+  <Step>Inside it, use **get start value** to read the value, and show it or load data with it.</Step>
 </Steps>
 
-Closing a screen returns to the one that opened it. Screens stack, so an app that opens
-without ever closing keeps every screen alive underneath — close the ones the user has
-finished with.
+**replace this screen with start value** does the same while replacing the current screen, such as a sign-in screen moving on with the user who signed in.
 
-## Bars, tabs and pages
+For a value that must survive the app being closed, save it with [AppStorage](/components/storage#appstorage) and read it back on the screen that needs it.
 
-Some navigation is a component rather than a block:
+## Tabs, bottom navigation and pagers
 
-- **TopBar** — the title bar, with a navigation icon on the left and action icons on the right.
-- **BottomNavigation** — up to five labelled icons pinned to the bottom for the app's main
-  sections. It reports the item the user chose; what happens next is your logic.
-- **TabLayout + ViewPager** — a row of tabs above a swipeable set of pages. Put both on one
-  screen and they pair themselves: swiping the pager moves the tabs and tapping a tab moves
-  the pager.
-- **Dialog** and **BottomSheet** — overlays over the current screen rather than new screens.
-  Use them for confirmations and quick actions, and keep real destinations as screens.
+Some navigation is a component, not a separate screen:
 
-## Passing data between screens
+- [TopBar](/components/layout#topbar): the title bar, with a navigation icon on the left and action icons on the right.
+- [BottomNavigation](/components/layout#bottomnavigation): up to five labelled icons pinned to the bottom for the app's main sections. Its **Item Selected** event hands over the number of the tapped item, counting from 0, and your logic decides what to show.
+- [TabLayout](/components/layout#tablayout) and [ViewPager](/components/layout#viewpager): a row of tabs over pages you swipe between. Put both on one screen and they pair themselves: swiping the pager moves the tabs, and tapping a tab moves the pager.
+- [Dialog](/components/layout#dialog) and [BottomSheet](/components/layout#bottomsheet): panels that open over the current screen. Use them for confirmations and quick actions, and keep real destinations as screens.
 
-Screens do not share their variables. Two ways to carry a value across:
+A common way to build tabs on one screen is one container per tab, with only one of them visible at a time. Name each container after its tab, and the canvas lists the hidden ones in **Not shown here**, beside the phone, so you can look at each tab while you design. See [Drag and drop](/guides/designing/drag-and-drop).
 
-- **A global value in your logic** — set it before you navigate, read it in the destination's
-  Initialize event.
-- **[AppStorage](/components/storage)** — when the value should survive the app being closed,
-  not just the trip between two screens.
+## Delete a screen
 
-<NextPrev
-  prev={{ title: "Drag and drop", href: "/guides/designing/drag-and-drop" }}
-  next={{ title: "Layout and sizing", href: "/guides/designing/layout-and-sizing" }}
-/>
+Press **Delete screen** on the screen's card and confirm. The screen goes with everything on it, including its logic, and the confirmation warns that this cannot be undone, so treat it as permanent.
+
+Nothing updates the blocks on other screens that opened it. Find them and point them at another screen, or remove them, in the same sitting.
+
+You cannot delete the entry screen. Choose another **Entry screen** in **Settings → Project** first.
+
+## Troubleshooting
+
+<Accordion>
+  <AccordionItem value="button-does-nothing" title="A button that should open a screen does nothing">
+    **Why:** the text in **open another screen** is not the ID of a screen in this project. It may be the screen's new name after a rename, a typing mistake, or a screen that was deleted. The block editor does not warn about it.
+
+    **Fix:** open the target screen and copy its ID from after `screen=` in the address bar. Put that ID in the block.
+  </AccordionItem>
+  <AccordionItem value="entry-screen" title='"Home" is the screen your app opens on. Make another screen the main one first.'>
+    **Why:** you tried to delete the entry screen.
+
+    **Fix:** choose another **Entry screen** under **Settings → Project → Identity**, then delete the screen.
+  </AccordionItem>
+  <AccordionItem value="reorder-search" title="Clear the search box to reorder screens.">
+    **Why:** screens cannot be dragged while the list is filtered.
+
+    **Fix:** clear the search box, then drag the card.
+  </AccordionItem>
+  <AccordionItem value="name-too-long" title="That screen name is too long.">
+    **Why:** a screen name can be up to 200 characters.
+
+    **Fix:** choose a shorter name. Put longer notes in **Screen info**.
+  </AccordionItem>
+</Accordion>
+
+## Next steps
+
+- [Layout and sizing](/guides/designing/layout-and-sizing): arrange the components on each screen.
+- [Logic blocks](/guides/logic/blocks): events, variables and conditions in the block editor.
+- [Live test](/build/live-test): try the navigation on your phone.

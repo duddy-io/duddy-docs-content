@@ -1,108 +1,458 @@
 ---
-title: Connectivity components
-description: "Talking to the network: HTTP requests, live sockets, maps, web pages and the state of the connection itself."
+title: "Connectivity components: HTTP, maps and web"
+description: "Reference for Duddy's connectivity components: HttpRequest, WebSocket, network and Bluetooth state, web pages, maps, notifications, alarms, biometrics and VPNs."
 ---
 
-Talking to the network: HTTP requests, live sockets, maps, web pages and the state of the connection itself.
+These components connect your app to the network and to the phone around it: web APIs, live sockets, maps, notifications, alarms, the fingerprint or face unlock, and VPN tunnels. The component palette files all of them under **Connectivity**, so this page does too.
 
-<Callout type="warning">
-  Never ship a secret inside an app. Anything compiled into a build can be read back out of it: keys
-  that must stay private belong on a server you control.
-</Callout>
+None of them is in a new project. Add one with **Import component** at the foot of the component palette (see [Import components](/guides/marketplace/import-components)), or ask Vibe mode, which adds the components a request needs. For the whole pattern of calling an API and saving what comes back, see [Data, APIs and storage](/guides/logic/data-and-apis).
 
-| Component | Does |
-|---|---|
-| [HttpRequest](#httprequest) | A non-visual component that calls a web address over HTTP and hands the status code and response body back to your blocks. |
-| [WebSocket](#websocket) | A non-visual two-way connection to a WebSocket server, for sending and receiving text messages live instead of polling an API. |
-| [NetworkTools](#networktools) | A non-visual connectivity monitor reporting whether the device is online, over what transport, and whether the connection is metered. |
-| [WifiManager](#wifimanager) | A non-visual component reporting Wi-Fi connection details. |
-| [Bluetooth](#bluetooth) | Discovers nearby Bluetooth Low Energy devices and reports the name, address and signal strength of each. |
-| [WebViewer](#webviewer) | An embedded browser panel that loads a web page inside the app, with history navigation, zoom control and JavaScript evaluation. |
-| [GoogleMaps](#googlemaps) | An interactive Google Maps surface with pins, camera control and four map types. |
-| [MapView](#mapview) | A pannable map that needs no API key, drawn from OpenStreetMap tiles on Android and MapKit on iOS. |
+| Component | What it does | Draws |
+|---|---|---|
+| [HttpRequest](#httprequest) | Calls a web API and hands back the status code and response. | Logic only |
+| [WebSocket](#websocket) | Keeps a two-way text connection open to a server. | Logic only |
+| [NetworkTools](#networktools) | Tells you whether the phone is online, and how. | Logic only |
+| [WifiManager](#wifimanager) | Reports Wi-Fi state, with signal details on Android. | Logic only |
+| [Bluetooth](#bluetooth) | Scans for nearby Bluetooth Low Energy devices. | Logic only |
+| [WebViewer](#webviewer) | Shows a web page inside a screen. | On screen |
+| [GoogleMaps](#googlemaps) | A Google map with pins, map types and taps. Needs an API key. | On screen |
+| [MapView](#mapview) | A map with pins that needs no API key. | On screen |
+| [LocalNotifications](#localnotifications) | Posts a notification now or after a delay. | Logic only |
+| [Alarm](#alarm) | Rings a real alarm at a set time, even with the phone locked. | Logic only |
+| [SystemCalendar](#systemcalendar) | Opens the calendar's add-event screen, filled in. | Logic only |
+| [Biometric](#biometric) | Asks for the fingerprint or face unlock before showing something. | Logic only |
+| [OpenVPN](#openvpn) | Connects an OpenVPN tunnel from a profile. | Logic only |
+| [WireGuardVPN](#wireguardvpn) | Connects a WireGuard tunnel from a configuration. | Logic only |
+| [StripePayment](#stripepayment) | Stripe card checkout. Not usable yet. | Logic only |
+| [RazorpayPayment](#razorpaypayment) | Razorpay checkout. Not usable yet. | Logic only |
+| [PaypalPayment](#paypalpayment) | PayPal checkout. Not usable yet. | Logic only |
 
 ## HttpRequest
 
-A non-visual component that calls a web address over HTTP and hands the status code and response body back to your blocks. Sends and accepts JSON.
+Call a REST or JSON web API from your app. HttpRequest sends a request and hands the status code and the response body back to your blocks. Use [WebSocket](#websocket) instead when the server needs to push messages to the app as they happen.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS · **Android permissions:** `INTERNET`
 
-**Events** — `Got Response`, `Error Occurred`
+| Property | Default | What it does |
+|---|---|---|
+| **URL** | empty | The address to call, such as `https://api.example.com/items`. Spaces around it are trimmed. |
+| **Method** | `GET` | `GET`, `POST`, `PUT`, `DELETE` or `PATCH`. Any other value is sent as `GET`. |
+| **Body** | empty | The data to send, usually JSON text. It is left out of a `GET` request. |
+| **Tag** | empty | A label handed back with this request's answer, to tell several requests apart. |
 
-**Functions** — `Set Header`, `Clear Headers`, `Make Request`
+**Events**
+- **Got Response** (responseCode, response, tag) — the server answered. A `404` or `500` arrives here too, so check responseCode before you use response.
+- **Error Occurred** (error, tag) — no answer came back: there is no network, the address cannot be reached, or **URL** is empty.
 
-**Android permissions** — `INTERNET`
+**Functions**
+- **Make Request** — sends the request with the current **URL**, **Method**, **Body**, headers and **Tag**. It takes no arguments. The request is fixed when you call it, so changing a property afterwards does not affect a request already on its way.
+- **Set Header** (name, value) — adds or replaces one header, sent with every request from now on.
+- **Clear Headers** — removes every header added with **Set Header**.
+
+Every request also sends `Content-Type: application/json` and `Accept: application/json`; a **Set Header** with the same name replaces either one. Use `https://` addresses: Android and iOS block plain `http://` requests by default, and Duddy builds do not change that.
+
+<Figure
+  src="/media/guides/http-request-flow.svg"
+  dark="/media/guides/http-request-flow.dark.svg"
+  alt="A sequence between your blocks, HttpRequest1 and the server. Your blocks set URL, Method and Body, then call HttpRequest1.Make Request, which takes no arguments, and the request goes to the server. If the server answers, with any status code, Got Response fires with responseCode, response and tag: for 200 to 299, parse json and use the data; for any other code, including a 404, show a message. If no answer comes back, because there is no network or the address is wrong, Error Occurred fires with error and tag: show a message and offer Retry."
+  caption="Got Response fires for every answer, 404s included, so check responseCode. Error Occurred means no answer came back."
+  width={960}
+  height={560}
+/>
+
+### Send a POST request with a JSON body
+
+<Steps>
+  <Step>Set **Method** to `POST` and **URL** to the endpoint, in the properties panel or with set blocks.</Step>
+  <Step>Set **Body** to the JSON text to send, such as `{"title": "Buy milk"}`. To send a dictionary you built in blocks, turn it into text with **to json text** (under **Control** in the toolbox).</Step>
+  <Step>If the API needs a token, call **Set Header** with its name and value, such as `Authorization` and `Bearer` followed by the token.</Step>
+  <Step>Call **Make Request**.</Step>
+  <Step>In **Got Response**, check that responseCode is from `200` to `299`, then read response. Handle **Error Occurred** too, so a lost connection does not leave the screen waiting.</Step>
+</Steps>
+
+Do not put a secret key in **Set Header**. Anything built into an app can be read back out of it, so keys that must stay private belong on a server you control ([Data, APIs and storage](/guides/logic/data-and-apis) explains the pattern).
 
 ## WebSocket
 
-A non-visual two-way connection to a WebSocket server, for sending and receiving text messages live instead of polling an API.
+Keep a two-way connection open to a WebSocket server, so the server can send text messages to the app the moment they happen instead of the app asking over and over.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS
 
-**Events** — `Connection Established`, `Message Received`, `Connection Closed`, `Error Occurred`
+| Property | Default | What it does |
+|---|---|---|
+| **URL** | empty | The `ws://` or `wss://` address of the server. |
 
-**Functions** — `Connect`, `Send Message`, `Disconnect`
+**Events**
+- **Connection Established** — the connection is open and messages can be sent.
+- **Message Received** (message) — a text message arrived. Binary messages are not delivered.
+- **Connection Closed** — the connection ended, whether the app or the server closed it.
+- **Error Occurred** (error) — connecting or sending failed.
+
+**Functions**
+- **Connect** — opens the connection to **URL**. An empty or unreadable address fires **Error Occurred** instead.
+- **Send Message** (message) — sends one text message. While the connection is not open, nothing is sent and no event fires.
+- **Disconnect** — closes the connection, which fires **Connection Closed**.
+
+After **Connection Closed**, call **Connect** again to reopen it.
 
 ## NetworkTools
 
-A non-visual connectivity monitor reporting whether the device is online, over what transport, and whether the connection is metered.
+Find out whether the phone can reach the internet, over what kind of connection, and whether data costs money, so the app can show an offline notice or hold back a large download.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS · **Android permissions:** `ACCESS_NETWORK_STATE`
 
-**Events** — `Disconnected`
+| Property | Default | What it does |
+|---|---|---|
+| **Monitoring** | off | Watches the network and fires **Connected** and **Disconnected** as the phone goes online and offline. |
 
-**Functions** — `Check Connection`
+**Read from blocks:** **Connected** (true when the internet can be reached), **Connection Type** (`WiFi`, `Cellular`, `Ethernet`, `VPN`, `Other` or `None`), **Metered** (true on mobile data or a metered hotspot).
 
-**Android permissions** — `ACCESS_NETWORK_STATE`
+**Events** (only while **Monitoring** is on)
+- **Connected** (connectionType) — the phone came online.
+- **Disconnected** — the phone lost its internet connection.
+
+**Functions**
+- **Check Connection** — returns true or false straight away, without waiting for an event.
 
 ## WifiManager
 
-A non-visual component reporting Wi-Fi connection details. Android exposes signal strength and link speed; iOS only reports whether the device is on Wi-Fi.
+Read the phone's Wi-Fi state, with signal strength, speed and band on Android.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS · **Android permissions:** `ACCESS_WIFI_STATE`
 
-**Functions** — `Open Wifi Settings`
+| Read from blocks | Platforms | What it reports |
+|---|---|---|
+| **Enabled** | Android, iOS | On Android, whether Wi-Fi is switched on. On iOS, whether the phone is connected over Wi-Fi. |
+| **Signal Level** | Android only | Signal strength in bars, `0` meaning none. |
+| **Signal Strength** | Android only | Signal strength in dBm: about `-50` is excellent, `-85` is close to unusable. `0` when not connected. |
+| **Link Speed** | Android only | The speed agreed with the access point, in Mbps. `0` when not connected. |
+| **Frequency** | Android only | The channel frequency in MHz: about `2400` on 2.4 GHz, `5000` on 5 GHz. `0` when not connected. |
 
-**Android permissions** — `ACCESS_WIFI_STATE`
+**Functions**
+- **Open Wifi Settings** (Android only) — opens the Wi-Fi settings screen. From Android 10 an app cannot switch Wi-Fi on or off itself, so this is how the person changes network.
+
+An app that targets iOS cannot use the Android-only blocks: the iOS build is refused and names each one. See [Troubleshooting connectivity](#troubleshooting-connectivity).
 
 ## Bluetooth
 
-Discovers nearby Bluetooth Low Energy devices and reports the name, address and signal strength of each. Scanning only, with no connecting or data exchange.
+Scan for nearby Bluetooth Low Energy devices and list their names and signal strength, for a "devices near me" screen. It only scans: it does not connect to a device or exchange data with it.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS · **Android permissions:** `BLUETOOTH_SCAN`, `BLUETOOTH_CONNECT`, `ACCESS_FINE_LOCATION`
 
-**Events** — `Device Found`, `Scan Started`, `Scan Stopped`, `Permission Granted`, `Permission Denied`, `Error`
+**Read from blocks:** **Available** (the phone has Bluetooth at all), **Enabled** (Bluetooth is switched on), **Scanning**, **Permission Granted**.
 
-**Functions** — `Request Permission`, `Start Scan`, `Stop Scan`
+**Events**
+- **Device Found** (name, address, rssi) — once for each new device. The address is the hardware address on Android; on iOS it is an identifier Apple gives the device, not its hardware address. rssi is the signal strength in dBm.
+- **Scan Started** — a scan has begun.
+- **Scan Stopped** (deviceCount) — **Stop Scan** ended the scan, with how many devices it found.
+- **Permission Granted** and **Permission Denied** — the answer to **Request Permission**.
+- **Error** (message) — a scan could not start or failed, for example because Bluetooth is off.
 
-**Android permissions** — `BLUETOOTH_SCAN`, `BLUETOOTH_CONNECT`, `ACCESS_FINE_LOCATION`
+**Functions**
+- **Request Permission** — asks for the Bluetooth permissions a scan needs. If they are already granted, **Permission Granted** fires at once.
+- **Start Scan** — starts scanning.
+- **Stop Scan** — stops scanning and fires **Scan Stopped**.
+
+On iOS the Bluetooth prompt appears the first time you call **Request Permission** or **Start Scan**, not when the screen opens.
 
 ## WebViewer
 
-An embedded browser panel that loads a web page inside the app, with history navigation, zoom control and JavaScript evaluation.
+Show a web page inside a screen, with back and forward history and the option to run JavaScript in the page.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **Platforms:** Android, iOS
 
-**Events** — `Page Loaded`, `Evaluate Script Result`
+| Property | Default | What it does |
+|---|---|---|
+| **URL** | empty | The page to show. Setting a new address loads it straight away. |
+| **JavaScript Enabled** | on | Whether the page may run JavaScript. Turn it off for pages you do not trust; sites that need scripts then break. |
+| **Zoom Enabled** | on | Whether the person can pinch to zoom. There are no on-screen zoom buttons. |
+| **Enabled** | on | Whether the page responds to taps and scrolling. Off dims it to half opacity. |
 
-**Functions** — `Go Back`, `Go Forward`, `Reload`, `Stop Loading`, `Evaluate Script`
+Read from blocks, **URL** is the address of the page showing now, and it is empty until a page has loaded.
+
+**Events**
+- **Page Loaded** (url) — each time a page finishes loading, including pages reached by tapping a link.
+- **Evaluate Script Result** (id, result) — a script started with **Evaluate Script** finished. result is JSON text.
+
+**Functions**
+- **Go Back** and **Go Forward** — move through the page history. Nothing happens at either end.
+- **Reload** — loads the current page again.
+- **Stop Loading** — stops the page that is loading.
+- **Evaluate Script** (id, script) — runs JavaScript in the page. The id comes back with the result, so you can tell scripts apart.
 
 ## GoogleMaps
 
-An interactive Google Maps surface with pins, camera control and four map types. Needs the project-wide Maps API Key set once in App Settings.
+Show an interactive Google map with pins, satellite and terrain views, map taps and the blue "you are here" dot. If you do not need those, [MapView](#mapview) needs no API key.
 
-*Drawn on the screen.*
+**Draws:** on the screen (300 px tall by default) · **Platforms:** Android, iOS
 
-**Events** — `Map Ready`, `Map Click`, `Marker Click`
+GoogleMaps needs a **Google Maps API Key**, set once for the project under **Settings → Integrations → Google** ([Project settings](/getting-started/project-settings#integrations)). Without one the build still succeeds, but the map shows a blank grid.
 
-**Functions** — `Move To`, `Add Marker`, `Remove Marker`, `Clear Markers`
+| Property | Default | What it does |
+|---|---|---|
+| **Latitude** | `0` | The north–south centre of the map, in degrees, such as `51.5074` for London. |
+| **Longitude** | `0` | The east–west centre, in degrees, such as `-0.1278` for London. |
+| **Zoom** | `12` | From `2` (the whole world) to `21` (one building). `12` shows a city. |
+| **Map Type** | **Normal** | **Normal**, **Satellite**, **Terrain** or **Hybrid** (satellite with street names). |
+| **Show My Location** | off | Draws a blue dot at the phone's position. It needs location permission, which [LocationSensor](/components/sensors#locationsensor)'s **Request Permission** asks for. |
+| **Zoom Controls** | on | Shows the plus and minus buttons. |
+| **Scroll Enabled** | on | Lets the person drag the map. Off keeps it where you put it. |
+
+**Read from blocks:** **Ready** (the map has loaded), and **Latitude**, **Longitude** and **Zoom**, which follow the map as the person pans and pinches.
+
+**Events**
+- **Map Ready** — the map has loaded. This is the earliest moment to add pins or move the camera.
+- **Map Click** (latitude, longitude) — the map was tapped somewhere other than a pin.
+- **Marker Click** (id, latitude, longitude) — a pin was tapped. Its title bubble still opens.
+
+**Functions**
+- **Move To** (latitude, longitude, zoom) — jumps the camera there.
+- **Add Marker** (id, latitude, longitude, title) — drops a pin. Adding the same id again replaces that pin.
+- **Remove Marker** (id) — removes one pin.
+- **Clear Markers** — removes every pin and leaves the camera where it is.
 
 ## MapView
 
-A pannable map that needs no API key, drawn from OpenStreetMap tiles on Android and MapKit on iOS. Use GoogleMaps when Google tiles are required.
+Show a map with pins that needs no API key. It draws OpenStreetMap maps on Android and Apple Maps on iOS.
 
-*Drawn on the screen.*
+**Draws:** on the screen (300 px tall by default) · **Platforms:** Android, iOS
 
-**Events** — `Marker Click`
+| Property | Default | What it does |
+|---|---|---|
+| **Latitude** | `0` | The north–south centre of the map, in degrees. |
+| **Longitude** | `0` | The east–west centre, in degrees. |
+| **Zoom** | `12` | From `2` (the whole world) to `19` (street level). |
+| **Scroll Enabled** | on | Lets the person pan and pinch the map. |
 
-**Functions** — `Move To`, `Add Marker`, `Remove Marker`, `Clear Markers`
+**Read from blocks:** **Latitude**, **Longitude** and **Zoom**, after any panning.
+
+**Events**
+- **Marker Click** (id, latitude, longitude) — a pin was tapped.
+
+**Functions**
+- **Move To** (latitude, longitude, zoom) — glides the map there.
+- **Add Marker** (id, latitude, longitude, title) — drops a pin. Adding the same id again replaces that pin.
+- **Remove Marker** (id) and **Clear Markers** — remove one pin or all of them.
+
+### Google Maps or MapView?
+
+| Feature | GoogleMaps | MapView |
+|---|---|---|
+| API key | **Google Maps API Key** in **Settings → Integrations → Google** | None |
+| Map data | Google | OpenStreetMap on Android, Apple Maps on iOS |
+| Map types | Normal, Satellite, Terrain, Hybrid | One street map |
+| Zoom range | 2 to 21 | 2 to 19 |
+| Taps on the map | **Map Click** | Not reported |
+| "You are here" dot | **Show My Location** | No |
+
+Both take the same **Move To**, **Add Marker**, **Remove Marker** and **Clear Markers** blocks, so you can switch later without rewriting your pins.
+
+## LocalNotifications
+
+Post a notification from the app itself, straight away or after a delay, even if the app is closed by then. Use it for reminders and timers. For messages sent from a server, use [FirebaseNotifications](/components/firebase#firebasenotifications); for something that must ring at an exact time, use [Alarm](#alarm). The [Notifications](/guides/logic/notifications) guide compares the three.
+
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS · **Android permissions:** `POST_NOTIFICATIONS`
+
+**Read from blocks:** **Permission Granted** (the app may post notifications, checked each time you read it).
+
+**Events**
+- **Permission Granted** — notifications are allowed, or already were.
+- **Permission Denied** — the person refused, or switched notifications off in settings. Nothing posts until they are allowed.
+- **Notification Tapped** (id) — the person tapped one of the app's notifications and it reopened the app. It is delivered when the screen holding this component is next created, so put the component on the screen that should react.
+
+**Functions**
+- **Request Permission** — asks to allow notifications. On Android 13 and later this shows the system prompt.
+- **Notify** (id, title, message) — posts a notification now. Posting again with the same id replaces it.
+- **Schedule** (id, title, message, delaySeconds) — posts it that many seconds from now. Reusing an id reschedules it.
+- **Cancel** (id) — removes that notification, or drops it if it has not fired yet.
+- **Cancel All** — clears every notification the app has shown and every schedule made since the app opened.
+
+A schedule is lost if the phone restarts before it fires, and newer Android versions may deliver it a little late. Use [Alarm](#alarm) when the exact minute matters.
+
+## Alarm
+
+Ring a real alarm at an exact time, with the phone locked or on silent: once, on chosen weekdays, or a number of seconds from now. Alarms survive a restart of the phone.
+
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS
+
+| Property | Default | What it does |
+|---|---|---|
+| **Label** | `Alarm` | The words on the ringing screen and in the alarm notification. |
+| **Snooze Minutes** | `9` | How long **Snooze** puts the alarm off. |
+| **Vibrate** | on | Whether the phone vibrates while it rings. |
+| **Sound** | empty | The name of an uploaded sound [asset](/guides/designing/assets). Empty plays the phone's own alarm sound. |
+| **Ring Screen** | empty | A screen of your app to open when the alarm rings, by its name in the designer. It gets the alarm's id as its start value and rings until your logic calls **Dismiss** or **Snooze**. Empty shows the built-in ringing screen with **Snooze** and **Dismiss**. |
+
+**Label**, **Snooze Minutes** and **Ring Screen** apply to alarms set after you change them.
+
+**Read from blocks:** **Ringing**, **Ringing Id** (`-1` when no alarm is ringing), **Ringing Label**, **Permission Granted**, **Available**.
+
+**Events**
+- **Fired** (id) — the alarm started ringing. It fires only while the app is open; the alarm rings either way.
+- **Dismissed** (id) and **Snoozed** (id) — the alarm was dismissed or snoozed, on the ringing screen, from the notification or by your blocks.
+- **Permission Granted** and **Permission Denied** — the answer to **Request Permission**. Without the permissions, alarms may ring late or not at all.
+
+**Functions**
+- **Request Permission** — asks for what ringing needs: the notification permission on Android 13 and later, and the exact alarm setting on Android 12 and 13 when it is off. Call it once before the first alarm.
+- **Set** (id, hour, minute) — rings once at the next hour:minute (24-hour clock), today or tomorrow.
+- **Set Repeating** (id, hour, minute, days) — rings every week on the given days, written as `Mon,Wed,Fri` or `Daily`.
+- **Set In** (id, seconds) — rings once that many seconds from now, like a timer.
+- **Cancel** (id) and **Cancel All** — remove one alarm or every alarm the app set.
+- **Snooze** (id) and **Dismiss** (id) — what the ringing screen's buttons do. A dismissed repeating alarm keeps its next day.
+- **Is Set** (id) — whether that alarm is waiting to ring.
+- **Next Time** (id) — when it rings next, as text such as `2026-06-03 07:30`; empty if there is no such alarm.
+
+Setting an id that is already in use replaces that alarm. On iPhone the system's own alarm alert rings, with Stop and Snooze; when **Ring Screen** is set, its second button opens your screen instead.
+
+**Android permissions:** `SCHEDULE_EXACT_ALARM`, `USE_EXACT_ALARM`, `RECEIVE_BOOT_COMPLETED`, `POST_NOTIFICATIONS`, `USE_FULL_SCREEN_INTENT`, `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_MEDIA_PLAYBACK`, `VIBRATE`, `WAKE_LOCK`. Google Play reviews apps that declare exact-alarm and full-screen permissions, so use Alarm when ringing is what your app is for, and [LocalNotifications](#localnotifications) for ordinary reminders.
+
+## SystemCalendar
+
+Open the phone's calendar on its add-event screen, already filled in with a title, place, notes and times, for the person to confirm. The calendar app does the saving, so your app needs no calendar permission.
+
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS
+
+**Read from blocks:** **Available** (a calendar app that can add an event is on the phone).
+
+**Events**
+- **Event Added** — on Android when the add-event screen opens, because Android cannot confirm that the person saved; on iOS only when they save.
+- **Error** (message) — the event could not be added, for example because no calendar app is installed.
+
+**Functions**
+- **Add Event** (title, location, details, startMs, endMs) — opens the add-event screen. The start and end are times in milliseconds since 1970, the kind [Clock](/components/other#clock)'s **Get Current Time Ms** and **Parse Date Time** give you.
+
+## Biometric
+
+Ask for the phone's fingerprint or face unlock before showing something private, such as a health record, a wallet or notes.
+
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS · **Android permissions:** `USE_BIOMETRIC` · **iOS asks:** "This app uses Face ID to unlock your private content."
+
+**Read from blocks:** **Available** (biometrics are set up on this phone, so **Authenticate** will show a prompt).
+
+**Events**
+- **Succeeded** — the check passed. Open what the prompt was guarding here.
+- **Failed** (message) — no match, a lockout after too many tries, or no biometric hardware.
+- **Cancelled** — the person closed the prompt. Nothing was unlocked.
+
+**Functions**
+- **Authenticate** (title, subtitle) — shows the prompt. The title says what is being unlocked; the subtitle may be empty.
+
+## OpenVPN
+
+Connect the phone to an OpenVPN server from a profile, and show the tunnel's status and traffic.
+
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS · **Android permissions:** `INTERNET`, `ACCESS_NETWORK_STATE`, `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_SPECIAL_USE`, `POST_NOTIFICATIONS`
+
+| Property | Default | What it does |
+|---|---|---|
+| **Config** | empty | The OpenVPN profile text (the contents of a `.ovpn` file). Set it before **Connect**. |
+| **Username** | empty | For a server that asks for one. Empty for a certificate-only profile. |
+| **Password** | empty | Goes with **Username**. |
+| **Tunnel Name** | `duddy` | The name shown in the phone's VPN settings and in the connection notification. |
+
+**Read from blocks:** **Status** (`disconnected`, `connecting`, `connected`, `disconnecting` or `error`), **Connected**, **Bytes Received**, **Bytes Sent**, **Permission Granted** (the person accepted the system's VPN prompt), **Available**.
+
+**Events**
+- **Status Changed** (status) — the tunnel moved to a new status.
+- **Connected** and **Disconnected** — the tunnel came up or went down.
+- **Error** (message) — connecting or disconnecting failed: a bad profile, a refused prompt, a server that does not answer or a wrong password.
+- **Permission Granted** and **Permission Denied** — the answer to the system's VPN prompt.
+
+**Functions**
+- **Request Permission** — shows the system's VPN prompt if the person has never accepted it. **Connect** asks too when needed.
+- **Connect** and **Disconnect** — bring the tunnel up or down.
+
+On iOS the app carries a network extension for the tunnel, and the build adds the Network Extensions capability to your app's identifier for you. Anything typed into the properties panel is built into the app, so set a person's own username and password from blocks rather than in the panel.
+
+## WireGuardVPN
+
+Connect the phone to a WireGuard server from a configuration, show the tunnel's status and traffic, and make keys for a new peer.
+
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS · **Android permissions:** `INTERNET`, `FOREGROUND_SERVICE`, `FOREGROUND_SERVICE_SPECIAL_USE`
+
+| Property | Default | What it does |
+|---|---|---|
+| **Config** | empty | The WireGuard configuration text: an `[Interface]` section with `PrivateKey`, `Address` and `DNS`, and a `[Peer]` section with `PublicKey`, `AllowedIPs` and `Endpoint`. Set it before **Connect**. |
+| **Tunnel Name** | `duddy` | The name shown in the phone's VPN settings: letters, digits, underscores and hyphens, up to 15 characters. |
+
+**Read from blocks:** **Status**, **Connected**, **Bytes Received** and **Bytes Sent** (updated every two seconds while connected), **Permission Granted**, **Available**.
+
+**Events:** the same as [OpenVPN](#openvpn): **Status Changed** (status), **Connected**, **Disconnected**, **Error** (message), **Permission Granted** and **Permission Denied**.
+
+**Functions**
+- **Request Permission**, **Connect** and **Disconnect** — as for OpenVPN.
+- **Generate Private Key** — returns a new private key (Base64) for a new peer.
+- **Public Key Of** (privateKey) — returns the matching public key, which the server needs in its `[Peer]` section. Empty if the private key is not valid.
+
+As with OpenVPN, the iOS app carries a network extension, and a private key typed into the panel is built into the app.
+
+## StripePayment
+
+Take a card payment through Stripe's payment sheet, for an order your own server creates as a Stripe PaymentIntent.
+
+**Status:** not usable yet. StripePayment reads a Stripe publishable key from the project, and no setting in the designer stores one today. In a built app **Ready** stays false and **Pay** fails with "Stripe is not ready". The [Payments](/guides/logic/payments) guide covers the ways to take payments that work today.
+
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS · **Android permissions:** `INTERNET`
+
+As designed, your server creates the PaymentIntent, the app passes its client secret to **Pay** (clientSecret), and the outcome arrives as **Succeeded** (paymentIntentId), **Cancelled** or **Failed** (message). **Amount**, **Currency** and **Description** are for display only; the charge is whatever your server's PaymentIntent says.
+
+## RazorpayPayment
+
+Take a card, UPI or wallet payment through Razorpay's checkout, for an order your own server creates with Razorpay's Orders API.
+
+**Status:** not usable yet. RazorpayPayment reads a Razorpay Key ID from the project, and no setting in the designer stores one today, although its error message points to **Integrations**. In a built app **Ready** stays false and **Pay** fails with "Razorpay is not configured for this project." See [Payments](/guides/logic/payments) for what works today.
+
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS · **Android permissions:** `INTERNET`, `ACCESS_NETWORK_STATE`
+
+As designed, the app sets **Amount** (in rupees, such as `149.50`), **Currency** (default `INR`) and **Description**, then calls **Pay** (orderId) with the order id from your server. The outcome arrives as **Succeeded** (paymentId), **Cancelled** or **Failed** (message); verify the payment on your server before you grant the order.
+
+## PaypalPayment
+
+Approve a PayPal order that your own server created.
+
+**Status:** not usable yet. PaypalPayment reads a PayPal client ID from the project, and no setting in the designer stores one today. In a built app **Ready** stays false and **Pay** fails with "PayPal is not ready". See [Payments](/guides/logic/payments) for what works today.
+
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS · **Android permissions:** `INTERNET`
+
+As designed, the app calls **Pay** (orderId) with the order id from your server, and the outcome arrives as **Succeeded** (orderId), **Cancelled** or **Failed** (message). **Amount**, **Currency** and **Description** are for your own checkout screen; PayPal charges what your server put in the order.
+
+## Troubleshooting connectivity
+
+<Accordion>
+  <AccordionItem value="blank-map" title="My Google map is a blank grid">
+    **Why:** the project has no Google Maps API key. The build does not fail without one; the map has nothing to draw.
+
+    **Fix:** create a Maps key in the Google Cloud console, enter it as **Google Maps API Key** under **Settings → Integrations → Google**, press **Save** and build again. Or switch to [MapView](#mapview), which needs no key.
+  </AccordionItem>
+  <AccordionItem value="markers" title="Pins added in Initialize do not appear on a Google map">
+    **Why:** the map was still loading, so it could not take pins yet.
+
+    **Fix:** add your pins in **Map Ready**, or check **Ready** before you call **Add Marker**.
+  </AccordionItem>
+  <AccordionItem value="http-codes" title="Got Response fires, but with responseCode 401, 403 or 404">
+    **Why:** the server answered, but refused the request or could not find the address. HttpRequest reports every answer in **Got Response**.
+
+    **Fix:** check **URL** and **Method**, and that you set the token or key the API expects with **Set Header** before **Make Request**. Show a message when responseCode is outside `200` to `299`.
+  </AccordionItem>
+  <AccordionItem value="http-plain" title="Error Occurred for an http:// address">
+    **Why:** Android and iOS refuse plain, unencrypted HTTP by default.
+
+    **Fix:** use the `https://` address. Most APIs offer one.
+  </AccordionItem>
+  <AccordionItem value="ios-blocks" title="Some blocks in this app's logic use features that iOS apps cannot do, so it could not be built.">
+    **Why:** a block uses a member that exists only on Android, such as WifiManager's **Signal Strength** or **Open Wifi Settings**. The message lists each one as screen › component.member. The build checks every block that uses the member, so wrapping it in an `if` does not help.
+
+    **Fix:** remove those blocks from the screens listed, or, if you do not need an iPhone app, switch **iOS** off under **Target platforms** in **Settings → Project**.
+  </AccordionItem>
+  <AccordionItem value="socket" title="WebSocket messages stop arriving">
+    **Why:** the connection closed, from either end, and a closed socket stays closed.
+
+    **Fix:** handle **Connection Closed** and call **Connect** again, after a short delay if the server is down.
+  </AccordionItem>
+</Accordion>
+
+## Next steps
+
+- [Data, APIs and storage](/guides/logic/data-and-apis): call an API and keep what it returns.
+- [Notifications](/guides/logic/notifications): reminders, alarms and push messages together.
+- [Sensor components](/components/sensors): LocationSensor for the phone's position on a map.

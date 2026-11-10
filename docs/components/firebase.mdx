@@ -1,55 +1,123 @@
 ---
-title: Firebase components
-description: Authentication, databases, file storage, push messaging and analytics, backed by your own Firebase project.
+title: "Firebase components: Auth, Firestore, push"
+description: "Reference for Duddy's Firebase components: email sign-in, Firestore and Realtime Database, Cloud Storage uploads, push notifications and Analytics, with setup."
 ---
 
-Authentication, databases, file storage, push messaging and analytics, backed by your own Firebase project.
+These components connect your app to your own Firebase project, so people can sign in and their data lives in the cloud, shared between phones. Your app talks to Firebase directly; Duddy runs no server in between. For a whole app built on them, see [A chat app](/guides/apps/chat-app).
 
-<Callout type="danger">
-  A project using any Firebase component needs a Firebase project set under
-  [Settings → Integrations](/getting-started/project-settings#integrations) — picked from a
-  connected Firebase account, or its two config files uploaded by hand. Without them the build
-  stops with an explicit error rather than shipping an app that cannot connect.
+None of them is in a new project. Add one with **Import component** at the foot of the component palette (see [Import components](/guides/marketplace/import-components)), or ask Vibe mode, which adds what a request needs.
+
+| Component | What it does | Draws |
+|---|---|---|
+| [FirebaseAuth](#firebaseauth) | Email and password sign-up, sign-in, sign-out and password reset. | Logic only |
+| [FirebaseDB](#firebasedb) | Reads, writes and watches JSON in a Realtime Database. | Logic only |
+| [Firestore](#firestore) | Stores documents in collections, with queries and live updates. | Logic only |
+| [FirebaseStorage](#firebasestorage) | Uploads and downloads files in Cloud Storage. | Logic only |
+| [FirebaseNotifications](#firebasenotifications) | Receives push notifications sent through Firebase Cloud Messaging. | Logic only |
+| [FirebaseAnalytics](#firebaseanalytics) | Logs events, screen views and user properties. | Logic only |
+
+## Set up Firebase
+
+Every Firebase component needs your project's Firebase config files. [Firebase](/integration/firebase) walks through the whole setup; in short:
+
+<Steps>
+  <Step>In the [Firebase console](https://console.firebase.google.com), create a project. Add an Android app whose package name is your app's package name, and an iOS app whose bundle ID is the same value. You find it under **Settings → Project**.</Step>
+  <Step>In the designer, open **Settings → Integrations → Firebase**.</Step>
+  <Step>For each platform, choose **From account** and pick the app, after connecting your Google account with **Connect Firebase account**. Or press **Upload** and attach the file you downloaded from the Firebase console: `google-services.json` for Android, `GoogleService-Info.plist` for iOS.</Step>
+  <Step>Press **Save**. Each platform's row shows **Set** (or the Firebase project's name) once its file is attached.</Step>
+  <Step>In the Firebase console, switch on what the app uses: **Authentication → Get started → Email/Password** for sign-in, and **Firestore Database → Create database** for documents. Then write security rules saying who may read and write what.</Step>
+</Steps>
+
+<Callout type="warning" title="The config is a copy">
+  A build that uses Firebase components stops if the config for that platform is missing. Picking an app copies its file into your project, so pick it again after you change anything in Firebase, such as adding an app.
 </Callout>
-
-| Component | Does |
-|---|---|
-| [FirebaseAuth](#firebaseauth) | Firebase Authentication for email and password accounts, covering sign up, sign in, sign out, password reset and the identity of the signed-in user. |
-| [FirebaseDB](#firebasedb) | Stores and reads JSON data in a Firebase Realtime Database, and can watch a path so the app is told the moment a value changes. |
-| [Firestore](#firestore) | Stores app data as documents inside collections in Cloud Firestore, reads them back one at a time or by query, and can watch a document, a collection or a query for live updates. |
-| [FirebaseStorage](#firebasestorage) | Uploads files to Firebase Cloud Storage, downloads them back into the app, deletes them, and reports upload or download progress as a percentage. |
-| [FirebaseNotifications](#firebasenotifications) | Receives push notifications sent through Firebase Cloud Messaging, hands the app the device token to send to, and manages topic subscriptions. |
-| [FirebaseAnalytics](#firebaseanalytics) | Non-visual Firebase Analytics logging for events, screen views and user properties. |
 
 ## FirebaseAuth
 
-Firebase Authentication for email and password accounts, covering sign up, sign in, sign out, password reset and the identity of the signed-in user.
+Let people create an account with an email address and password, sign in and out, and reset a forgotten password. The signed-in person's **uid** is the key to store their data under.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS
 
-**Events** — `Sign Up Success`, `Sign Up Failed`, `Sign In Success`, `Sign In Failed`, `Sign Out Success`, `Password Reset Sent`, `Password Reset Failed`, `Auth State Changed`
+| Property | Default | What it does |
+|---|---|---|
+| **Default Email** | empty | An address your sign-in form can show before the person types. It is never sent to Firebase by itself. |
+| **Persistence** | on | Recorded only: Firebase keeps people signed in after the app closes either way. |
 
-**Functions** — `Sign Up With Email`, `Sign In With Email`, `Sign Out`, `Send Password Reset Email`, `Get Current User Email`, `Get Current User Uid`, `Is Signed In`, `Send Email Verification`, `Reload User`
+**Events**
+- **Sign Up Success** (email, uid) and **Sign Up Failed** (error) — the answer to **Sign Up With Email**. error is Firebase's message, such as an address already in use or a weak password.
+- **Sign In Success** (email, uid) and **Sign In Failed** (error) — the answer to **Sign In With Email**. Open the signed-in screen on success.
+- **Sign Out Success** — the person was signed out. Clear anything you kept about them here.
+- **Password Reset Sent** (email) and **Password Reset Failed** (error) — the answer to **Send Password Reset Email**.
+- **Auth State Changed** (isSignedIn, email, uid) — when the app starts and whenever someone signs in or out.
+
+**Functions**
+- **Sign Up With Email** (email, password) — creates an account and signs it in.
+- **Sign In With Email** (email, password) — signs in an existing account.
+- **Sign Out** — signs out on this phone.
+- **Send Password Reset Email** (email) — emails a reset link.
+- **Get Current User Email** and **Get Current User Uid** — the signed-in person's address and uid, or empty text if nobody is signed in.
+- **Is Signed In** — true if someone is signed in on this phone. Check it in the first screen's **Initialize** event to skip the sign-in screen.
+- **Send Email Verification** — emails the signed-in person a verification link. It reports nothing back.
+- **Reload User** — fetches the signed-in person's details from Firebase again.
 
 ## FirebaseDB
 
-Stores and reads JSON data in a Firebase Realtime Database, and can watch a path so the app is told the moment a value changes.
+Store and read JSON in a Firebase Realtime Database, and be told the moment a value changes.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS
 
-**Events** — `Data Changed`, `Data Received`, `Operation Success`, `Operation Failed`
+| Property | Default | What it does |
+|---|---|---|
+| **Database URL** | empty | The database to use, such as `https://my-app.firebaseio.com`. Empty uses your Firebase project's own database. |
+| **Default Path** | `data` | The path used when a block leaves the path empty. |
 
-**Functions** — `Set Value`, `Get Value`, `Push Value`, `Remove Value`, `Listen To Path`, `Unlisten Path`
+**Events**
+- **Data Received** (path, valueJson) — a **Get Value** read finished. valueJson is empty when nothing is stored there.
+- **Data Changed** (path, valueJson) — a path you are watching changed.
+- **Operation Success** (operation, path) — a write, push or remove finished. After a push, path is the new key.
+- **Operation Failed** (operation, path, error) — a call failed, with Firebase's message.
+
+operation is the function's name without spaces, such as `SetValue` or `PushValue`.
+
+**Functions**
+- **Set Value** (path, jsonStringValue) — writes a value at the path, replacing what is there.
+- **Get Value** (path) — reads the value once and fires **Data Received**.
+- **Push Value** (path, jsonStringValue) — adds a value under the path with a new automatic key, so repeated calls build a list.
+- **Remove Value** (path) — deletes the value and everything under it.
+- **Listen To Path** (path) — fires **Data Changed** on every change until **Unlisten Path**. It replaces a listener already on that path.
+- **Unlisten Path** (path) — stops watching the path.
 
 ## Firestore
 
-Stores app data as documents inside collections in Cloud Firestore, reads them back one at a time or by query, and can watch a document, a collection or a query for live updates. See [Build a chat app](/guides/apps/chat-app) for a whole app on it.
+Store your app's data as documents in collections in Cloud Firestore, read them back once or by query, and watch a document, a collection or a query for live updates. See [A chat app](/guides/apps/chat-app) for a whole app on it.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS
 
-**Events** — `Document Received`, `Collection Received`, `Document Changed`, `Operation Success`, `Operation Failed`
+| Property | Default | What it does |
+|---|---|---|
+| **Default Collection** | `documents` | The collection used when a block leaves the collection path empty. |
 
-**Functions** — `Add Document`, `Set Document`, `Update Document`, `Get Document`, `Delete Document`, `Query Collection`, `Listen To Document`, `Listen To Collection`, `Listen To Query`, `Stop Listening`, `Server Timestamp`
+**Events**
+- **Document Received** (documentId, jsonStringData) — a **Get Document** read finished. The data is `{}` when no document has that id.
+- **Collection Received** (collectionPath, jsonStringArrayData) — a query or collection read finished, or a watched collection or query changed. Each document in the array carries its id as `_id`.
+- **Document Changed** (documentId, jsonStringData) — a document you are watching changed.
+- **Operation Success** (operation, documentId) — an add, set, update or delete finished. After an add, documentId is the new id.
+- **Operation Failed** (operation, documentId, error) — a call failed, with Firestore's message.
+
+operation is the function's name without spaces, such as `AddDocument` or `UpdateDocument`.
+
+**Functions**
+- **Add Document** (collectionPath, jsonStringData) — adds a document and lets Firestore choose its id.
+- **Set Document** (collectionPath, documentId, jsonStringData) — writes the document with that id, creating it or replacing every field.
+- **Update Document** (collectionPath, documentId, jsonStringData) — changes only the fields you give. It fails if no document has that id.
+- **Get Document** (collectionPath, documentId) — reads one document once.
+- **Delete Document** (collectionPath, documentId) — deletes one document for good.
+- **Query Collection** and **Listen To Query** — read or watch documents that match a filter; see [Queries](#queries).
+- **Listen To Document** (collectionPath, documentId) and **Listen To Collection** (collectionPath) — watch one document or a whole collection.
+- **Stop Listening** (path) — stops the listener on a collection, query or document path (`collection/id`). With `""` it stops them all.
+- **Server Timestamp** — a value to put in a field so Firestore writes its own clock there; see [Timestamps](#timestamps).
+
+A collection path may be nested, such as `rooms/abc123/messages`.
 
 ### Queries
 
@@ -60,7 +128,7 @@ matching documents as a JSON array, each document carrying its id as `_id`:
 | Value | Is |
 |---|---|
 | collection | The path — `rooms`, or a subcollection such as `rooms/abc123/messages`. |
-| where field, operator, value | One filter: the field, one of `==`, `!=`, `<`, `<=`, `>`, `>=`, `array-contains`, `in` and `array-contains-any`, and the value as text, a number or a boolean (a JSON list for `in` and `array-contains-any`). An empty field means no filter; any other operator answers **Operation Failed** naming it. |
+| where field, operator, value | One filter: the field, one of `==`, `!=`, `<`, `<=`, `>`, `>=`, `array-contains`, `in` and `array-contains-any`, and the value as text, a number or a boolean (a JSON list of up to 30 values for `in` and `array-contains-any`). An empty field means no filter; any other operator answers **Operation Failed** naming it. |
 | order by field, descending | The field to sort on and the direction. An empty field keeps Firestore's own order. |
 | limit | The most documents to return; `0` means no limit. |
 
@@ -72,37 +140,126 @@ the screen closes.
 
 **Server Timestamp** is a value to put in a field of **Add Document**, **Set Document** or
 **Update Document**: Firestore writes its own clock there, so every phone agrees on the order
-of things regardless of what its clock says. A timestamp field read back — in `Document
-Received`, `Collection Received` or `Document Changed` — is ISO 8601 text in UTC, such as
-`2026-06-03T09:14:05.000Z`, on every platform. **Format date** turns it into `09:14` or
-`3 Jun`, and it sorts correctly as plain text.
+of things regardless of what its clock says. A timestamp field read back — in **Document
+Received**, **Collection Received** or **Document Changed** — is ISO 8601 text in UTC, such as
+`2026-06-03T09:14:05.000Z`, on every platform, and it sorts correctly as plain text.
+
+The **format date** block turns it into `09:14` or `3 Jun`, but it shows the time as stored, in UTC: it does not convert to the phone's time zone. A message sent at 14:44 in India (UTC+5:30) shows as `09:14`, and close to midnight the day can differ from the local one.
+
+Other values read back the same way on every platform: a geo point as an object with `latitude` and `longitude`, a document reference as its path, and bytes as Base64 text.
 
 ## FirebaseStorage
 
-Uploads files to Firebase Cloud Storage, downloads them back into the app, deletes them, and reports upload or download progress as a percentage.
+Upload files such as photos to Firebase Cloud Storage, download them again, and get a link to show them in an [Image](/components/content#image).
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS
 
-**Events** — `Upload Finished`, `Download Finished`, `Download URL Ready`, `Deleted`, `Progress`, `Error`
+**Events**
+- **Progress** (percent) — how much of an upload or download is done, from `0` to `100`.
+- **Upload Finished** (remotePath, downloadUrl) — an upload completed. downloadUrl is empty if it could not be read.
+- **Download Finished** (localPath) — a download completed, with the full path of the saved file.
+- **Download URL Ready** (remotePath, downloadUrl) — the answer to **Get Download URL**.
+- **Deleted** (remotePath) — a file was removed.
+- **Error** (message) — an upload, download, delete or lookup failed, or the file on the phone was not found.
 
-**Functions** — `Upload File`, `Download File`, `Delete File`, `Get Download URL`
+**Functions**
+- **Upload File** (localPath, remotePath) — uploads the file at a path on the phone, such as the one an [ImagePicker](/components/media#imagepicker), [CameraCapture](/components/media#cameracapture) or [FilePicker](/components/storage#filepicker) hands you.
+- **Download File** (remotePath, fileName) — downloads into the app's private files folder under that name.
+- **Delete File** (remotePath) — deletes the file from Cloud Storage for good.
+- **Get Download URL** (remotePath) — finds a link to the file without downloading it.
 
 ## FirebaseNotifications
 
-Receives push notifications sent through Firebase Cloud Messaging, hands the app the device token to send to, and manages topic subscriptions.
+Receive push notifications sent through Firebase Cloud Messaging, get the phone's token to send to, and join topics for broadcast messages. For notifications the app posts itself, use [LocalNotifications](/components/connectivity#localnotifications).
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **Platforms:** Android (see the note on iOS below) · **Android permissions:** `POST_NOTIFICATIONS`
 
-**Events** — `Token Received`, `Notification Received`, `Notification Opened`, `Subscribe Success`, `Subscribe Failed`
+| Property | Default | What it does |
+|---|---|---|
+| **Auto Subscribe Topic** | empty | A topic the phone joins automatically, such as `news`, so pushes to it arrive without any blocks. |
 
-**Functions** — `Get Token`, `Subscribe To Topic`, `Unsubscribe From Topic`
+**Events**
+- **Token Received** (token) — the phone's push token is ready, or Firebase replaced it. Save it on your server, or in Firestore under the person's uid, to send to this phone.
+- **Notification Received** (title, body, dataJson) — a push arrived while the screen holding this component is open.
+- **Notification Opened** (title, body, dataJson) — the person opened the app by tapping a push. It fires once; use dataJson to open the right screen.
+- **Subscribe Success** (topic) and **Subscribe Failed** (topic, error) — the answer to **Subscribe To Topic**.
 
-**Android permissions** — `POST_NOTIFICATIONS`
+**Functions**
+- **Get Token** — asks for the push token, which arrives in **Token Received**.
+- **Subscribe To Topic** (topic) — joins a topic.
+- **Unsubscribe From Topic** (topic) — leaves a topic. It fires no event.
+
+On Android 13 and later, the app must be allowed to show notifications, and FirebaseNotifications does not ask. Add a [LocalNotifications](/components/connectivity#localnotifications) and call its **Request Permission** when the person turns notifications on in your app.
+
+<Callout type="info" title="Push on iOS is not confirmed">
+  On iPhone the component asks for notification permission as soon as a screen holding it opens, but delivery of pushes to Duddy's iOS builds has not been confirmed. Test your pushes on Android.
+</Callout>
 
 ## FirebaseAnalytics
 
-Non-visual Firebase Analytics logging for events, screen views and user properties. Numeric parameters are logged as numbers so Firebase can aggregate them.
+Log events, screen views and user properties to Firebase Analytics, to see what people actually use.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS
 
-**Functions** — `Log Event`, `Set User Property`, `Set User ID`, `Log Screen View`
+| Property | Default | What it does |
+|---|---|---|
+| **Enabled** | on | Off stops collecting and sending analytics, and the choice survives app restarts. Use it for a person who opts out. |
+
+**Functions**
+- **Log Event** (name, parameters) — sends a named event. parameters are `key=value` pairs separated by commas, such as `item=coffee,price=3.5`; a value that reads as a number is logged as a number.
+- **Set User Property** (name, value) — stores a trait such as plan or city, to break reports down by.
+- **Set User ID** (userId) — attaches an id for the signed-in person to every later event. Pass empty text when they sign out.
+- **Log Screen View** (screenName) — records a screen view.
+
+## Troubleshooting Firebase
+
+Build messages appear in the build console. For other build failures, see [Fix a failed build](/build/troubleshoot-builds).
+
+<Accordion>
+  <AccordionItem value="no-config" title="This app uses Firebase, but no Firebase config is attached for its Android build.">
+    **Why:** the project uses a Firebase component and has no `google-services.json`. The iOS message is the same with iOS and `GoogleService-Info.plist`.
+
+    **Fix:** attach the file under **Settings → Integrations → Firebase**, press **Save** and build again. See [Set up Firebase](#set-up-firebase).
+  </AccordionItem>
+  <AccordionItem value="other-app" title="The google-services.json attached to this project is for a different Android app.">
+    **Why:** the file was made for another package name, often because the package name changed after you attached it. The iOS message names `GoogleService-Info.plist` and a different iOS app.
+
+    **Fix:** in the Firebase console, add an app with your current package name to the project, then pick it again under **Settings → Integrations → Firebase**, or attach its file, and build again.
+  </AccordionItem>
+  <AccordionItem value="incomplete" title="The google-services.json attached to this project is incomplete.">
+    **Why:** the file is missing the API key or app id Firebase needs to start.
+
+    **Fix:** download the file again from the Firebase console (**Project settings → Your apps**), attach it, press **Save** and build again.
+  </AccordionItem>
+  <AccordionItem value="bad-key" title="The google-services.json attached to this project carries an API key Firebase refuses.">
+    **Why:** the key in the file is not one Firebase accepts.
+
+    **Fix:** download a fresh copy from the Firebase console, attach it, press **Save** and build again.
+  </AccordionItem>
+  <AccordionItem value="vibe-card" title="Vibe mode shows a Connect Firebase card">
+    **Why:** Vibe mode added Firebase components to a project with no Firebase config, and a build without it fails.
+
+    **Fix:** follow [Set up Firebase](#set-up-firebase) before you build.
+  </AccordionItem>
+  <AccordionItem value="denied" title="Operation Failed says permission is missing or insufficient">
+    **Why:** your Firebase security rules refused the read or write, often because nobody is signed in.
+
+    **Fix:** sign the person in with FirebaseAuth first, and check the rules for that collection or path in the Firebase console.
+  </AccordionItem>
+  <AccordionItem value="operator" title="Operation Failed: Unknown operator">
+    **Why:** the query's operator is not one Firestore supports, often because of a stray space or a word such as `equals`.
+
+    **Fix:** use exactly one of `==`, `!=`, `<`, `<=`, `>`, `>=`, `array-contains`, `in` or `array-contains-any`.
+  </AccordionItem>
+  <AccordionItem value="utc" title="Times from Firestore are hours out">
+    **Why:** timestamps come back in UTC, and **format date** shows them as stored.
+
+    **Fix:** expect UTC times, or store the time zone you want to show alongside the timestamp. See [Timestamps](#timestamps).
+  </AccordionItem>
+</Accordion>
+
+## Next steps
+
+- [Firebase](/integration/firebase): the full setup, including connecting your Google account.
+- [A chat app](/guides/apps/chat-app): sign-in, Firestore and live lists in one app.
+- [Notifications](/guides/logic/notifications): push messages beside local notifications and alarms.

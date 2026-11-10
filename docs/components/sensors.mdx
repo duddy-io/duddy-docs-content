@@ -1,89 +1,286 @@
 ---
-title: Sensor components
-description: "What the device can feel and see: motion, location, proximity, haptics and codes."
+title: "Sensor components: location, motion, scanning"
+description: "Duddy's sensor components: GPS location, motion, compass, air pressure, light, steps, proximity, vibration and QR and barcode scanning, with permissions."
 ---
 
-What the device can feel and see: motion, location, proximity, haptics and codes.
+These components read what the phone can sense: where it is, how it moves and which way it points, the air pressure and light around it, and the codes its camera sees. Vibration lets the app buzz the phone in return.
 
-<Callout type="info">
-  Ask for a permission at the moment it is needed, not on app start. Each of these components has a
-  **Request Permission** function and Granted/Denied events for exactly that.
-</Callout>
+None of them is in a new project. Add one with **Import component** at the foot of the component palette (see [Import components](/guides/marketplace/import-components)), or ask Vibe mode, which adds what a request needs.
 
-| Component | Does |
-|---|---|
-| [LocationSensor](#locationsensor) | Reports where the device is: latitude, longitude, altitude, accuracy and speed from GPS or the network, plus reverse geocoding and distance measurement. |
-| [Accelerometer](#accelerometer) | A non-visual sensor reporting device acceleration on three axes in m/s2, with a Shake event. |
-| [Gyroscope](#gyroscope) | A non-visual sensor reporting the device's rotation rate around three axes in radians per second. |
-| [Pedometer](#pedometer) | A non-visual step counter reporting steps taken since it was enabled. |
-| [ProximitySensor](#proximitysensor) | A non-visual sensor reporting whether something is near the device's screen, as used to blank a phone during a call. |
-| [Vibration](#vibration) | Non-visual haptic feedback: buzz the device once for a set number of milliseconds, or play a repeating on and off pattern. |
-| [BarcodeScanner](#barcodescanner) | Reads a barcode or QR code with the device camera and hands back the decoded text. |
+| Component | What it does | Draws |
+|---|---|---|
+| [LocationSensor](#locationsensor) | The phone's position, speed and street address. | Logic only |
+| [Accelerometer](#accelerometer) | Movement along three axes, and shakes. | Logic only |
+| [Gyroscope](#gyroscope) | How fast the phone is turning. | Logic only |
+| [Compass](#compass) | Which way the phone points, in degrees from north. | Logic only |
+| [Barometer](#barometer) | Air pressure, for weather and altitude. | Logic only |
+| [LightSensor](#lightsensor) | The light level around the phone. Android only in practice. | Logic only |
+| [Pedometer](#pedometer) | Counts steps. | Logic only |
+| [ProximitySensor](#proximitysensor) | Whether something is close to the screen. | Logic only |
+| [Vibration](#vibration) | Buzzes the phone once or in a pattern. | Logic only |
+| [BarcodeScanner](#barcodescanner) | Reads QR codes and barcodes with the camera or from a picture. | Logic only |
+
+## How sensor components work
+
+Every sensor starts switched off. Turn its **Enabled** property on when a screen needs readings, and off again when it does not, because a listening sensor uses battery. Check **Available** first: a phone without that sensor never sends a reading.
+
+Each sensor hands you readings two ways: an event that fires with each new value, and read-only properties that hold the latest one, such as LocationSensor's **Latitude**. The properties are blocks only; they do not appear in the properties panel.
+
+Only some sensors need a permission. Ask for it at the moment the person uses the feature, not when the app opens: see [Permissions](/getting-started/project-settings#permissions).
+
+| Component | Permission | How to ask |
+|---|---|---|
+| [LocationSensor](#locationsensor) | Location (Android: `ACCESS_FINE_LOCATION`, `ACCESS_COARSE_LOCATION`) | **Request Permission**, then **Permission Granted** or **Permission Denied** |
+| [Pedometer](#pedometer) | Physical activity on Android 10 and later (`ACTIVITY_RECOGNITION`); motion on iOS | **Request Permission**, then read **Permission Granted** |
+| [Barometer](#barometer) | Motion, on iOS only | iOS asks by itself at the first reading |
+| [BarcodeScanner](#barcodescanner) | The camera, on iOS only | iOS asks by itself the first time it scans |
+| Accelerometer, Gyroscope, Compass, LightSensor, ProximitySensor, Vibration | None | — |
 
 ## LocationSensor
 
-Reports where the device is: latitude, longitude, altitude, accuracy and speed from GPS or the network, plus reverse geocoding and distance measurement.
+Find out where the phone is, how fast it is moving and how far it is from somewhere, from GPS or the network, and look up the street address.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS · **Android permissions:** `ACCESS_FINE_LOCATION`, `ACCESS_COARSE_LOCATION` · **iOS asks:** "This app uses your location to show where you are."
 
-**Events** — `Location Changed`, `Permission Granted`, `Permission Denied`, `Error`
+| Property | Default | What it does |
+|---|---|---|
+| **Enabled** | off | Listens for location updates. If you turn it on before permission is granted, it starts as soon as the person allows it. |
+| **Interval** | `5000` | The shortest wait between readings, in milliseconds. |
+| **Min Distance** | `10` | How far the phone must move, in metres, before a new reading is reported. |
 
-**Functions** — `Request Permission`, `Get Address`, `Distance To`
+**Read from blocks:** **Latitude** and **Longitude** (decimal degrees; `0` until the first reading), **Altitude** (metres), **Accuracy** (metres; smaller is better), **Speed** (metres per second), **Has Location** (a reading has arrived), **Permission Granted**, **Location Enabled** (location is switched on for the phone).
 
-**Android permissions** — `ACCESS_FINE_LOCATION`, `ACCESS_COARSE_LOCATION`
+**Events**
+- **Location Changed** (latitude, longitude, accuracy) — a new reading arrived.
+- **Permission Granted** — the person allowed location, or already had. Readings start here if **Enabled** is on.
+- **Permission Denied** — the person refused. No readings arrive until you ask again and they allow it.
+- **Error** (message) — no location can be delivered: location services are unavailable or switched off, or the permission was taken away.
+
+**Functions**
+- **Request Permission** — asks for location access.
+- **Get Address** — returns a one-line street address for the latest reading, or empty text if there is none or the lookup fails.
+- **Distance To** (latitude, longitude) — returns the straight-line distance in metres from the latest reading to that point, or `-1` before the first reading.
+
+### Get the user's location
+
+<Steps>
+  <Step>Add a LocationSensor and leave **Enabled** off.</Step>
+  <Step>In the **Click** event of a button such as "Find me", call **Request Permission**.</Step>
+  <Step>In **Permission Granted**, set **Enabled** to true.</Step>
+  <Step>In **Location Changed**, use latitude and longitude, for example with **Move To** on a [MapView](/components/connectivity#mapview).</Step>
+  <Step>In **Permission Denied**, explain why the app needs the location and let the person try again.</Step>
+</Steps>
+
+Readings indoors can be slow or rough. Check **Accuracy** before you trust one, and set **Enabled** to false when the screen no longer needs updates.
 
 ## Accelerometer
 
-A non-visual sensor reporting device acceleration on three axes in m/s2, with a Shake event.
+Measure how the phone moves along three axes, and react when the person shakes it.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS
 
-**Events** — `Reading`, `Shake`
+| Property | Default | What it does |
+|---|---|---|
+| **Enabled** | off | Listens for motion. |
+| **Sampling Rate** | **UI** | **Fastest** and **Game** suit motion games, **UI** suits tilt controls, **Normal** uses the least battery. |
+| **Shake Threshold** | `12` | How hard a shake must be before **Shake** fires, in m/s² above gravity. Lower is more sensitive; the minimum is `1`. |
+
+**Read from blocks:** **X** (left to right across the screen), **Y** (bottom to top), **Z** (out of the screen), all in m/s² and including gravity, so **Z** is about `9.81` with the phone lying flat. **Available**.
+
+**Events**
+- **Reading** (x, y, z) — every new sample while **Enabled** is on.
+- **Shake** — the phone was shaken harder than **Shake Threshold**. It fires at most once every 800 milliseconds.
+
+### Detect a shake
+
+Turn **Enabled** on in the screen's **Initialize** event and put your action, such as "shuffle" or "undo", in **Shake**. If it fires when the person only walks with the phone, raise **Shake Threshold**; if it never fires, lower it.
 
 ## Gyroscope
 
-A non-visual sensor reporting the device's rotation rate around three axes in radians per second.
+Measure how fast the phone is rotating, for steering in a game or a spirit level.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS
 
-**Events** — `Reading`
+| Property | Default | What it does |
+|---|---|---|
+| **Enabled** | off | Listens for rotation. |
+| **Sampling Rate** | **UI** | **Fastest**, **Game**, **UI** or **Normal**, from most often (and most battery) to least. |
+
+**Read from blocks:** **X** (positive when the top of the phone tilts away from you), **Y** (positive when it rolls to the right), **Z** (positive for an anticlockwise turn with the screen facing up), all in radians per second. **Available**.
+
+**Events**
+- **Reading** (x, y, z) — every new sample while **Enabled** is on.
+
+## Compass
+
+Find which way the phone is pointing, for a compass or a "this way" arrow.
+
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS
+
+| Property | Default | What it does |
+|---|---|---|
+| **Enabled** | off | Listens for heading changes. |
+
+**Read from blocks:** **Heading** (degrees clockwise from magnetic north: `0` north, `90` east, `180` south, `270` west; `0` until the first reading), **Available**.
+
+**Events**
+- **Heading Changed** (heading) — the heading moved by at least one degree.
+
+## Barometer
+
+Read the air pressure, for a weather or hiking app.
+
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS · **iOS asks:** "This app reads the barometer to measure air pressure."
+
+| Property | Default | What it does |
+|---|---|---|
+| **Enabled** | off | Listens for air pressure. |
+
+**Read from blocks:** **Pressure** (hPa, the same as millibars: about `1013` at sea level; `0` until the first reading), **Available**.
+
+**Events**
+- **Reading** (pressure) — the pressure changed noticeably.
+
+## LightSensor
+
+Read the light level around the phone, to dim a reading screen in the dark or suggest a brighter spot.
+
+**Draws:** nothing (logic only) · **Platforms:** Android. On iPhone it reports nothing: iOS gives apps no access to the light sensor, so **Available** is false and **Lux** stays `0`.
+
+| Property | Default | What it does |
+|---|---|---|
+| **Enabled** | off | Listens for light changes. |
+
+**Read from blocks:** **Lux** (about `0` in the dark, a few hundred indoors, over `10000` in direct sunlight; `0` until the first reading), **Available**.
+
+**Events**
+- **Reading** (lux) — the light level changed noticeably.
+
+Check **Available** before you rely on it, so an iPhone gets a sensible default.
 
 ## Pedometer
 
-A non-visual step counter reporting steps taken since it was enabled.
+Count the person's steps with the phone's own step sensor, for a step counter or a fitness app.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS · **Android permissions:** `ACTIVITY_RECOGNITION` · **iOS asks:** "This app counts your steps to show your activity."
 
-**Events** — `Step`
+Pedometer has no web version, so it can be imported only once **Web** is off under **Target platforms** in **Settings → Project**.
 
-**Functions** — `Request Permission`, `Reset`
+| Property | Default | What it does |
+|---|---|---|
+| **Enabled** | off | Starts counting. Nothing is counted until the permission is granted. |
 
-**Android permissions** — `ACTIVITY_RECOGNITION`
+**Read from blocks:** **Steps** (steps since **Enabled** was turned on or **Reset** was called; not the phone's lifetime total), **Available** (the phone has a step sensor), **Permission Granted**.
+
+**Events**
+- **Step** (steps) — the count changed. steps is the running total since **Enabled** or **Reset**.
+
+**Functions**
+- **Request Permission** — shows the system prompt for step counting. Call it before you turn **Enabled** on. It fires no event: read **Permission Granted** afterwards.
+- **Reset** — starts the count again from zero.
+
+Because **Steps** starts from zero each time, a daily count needs a saved total: keep today's total in [AppStorage](/components/storage#appstorage) under today's date, and add the new steps each time **Step** fires.
 
 ## ProximitySensor
 
-A non-visual sensor reporting whether something is near the device's screen, as used to blank a phone during a call.
+Tell whether something, such as the person's face or hand, is close to the screen.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS
 
-**Events** — `Proximity Changed`
+ProximitySensor has no web version, so it can be imported only once **Web** is off under **Target platforms** in **Settings → Project**.
+
+| Property | Default | What it does |
+|---|---|---|
+| **Enabled** | off | Listens to the sensor. |
+
+**Read from blocks:** **Near** (something is close: the reading to trust), **Distance** (centimetres; most phones report only `0` for near and their maximum for far), **Available**.
+
+**Events**
+- **Proximity Changed** (near, distance) — fires only when the state flips between near and far.
 
 ## Vibration
 
-Non-visual haptic feedback: buzz the device once for a set number of milliseconds, or play a repeating on and off pattern.
+Buzz the phone once or in a rhythm, to confirm a tap or alert the person.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS · **Android permissions:** `VIBRATE`
 
-**Functions** — `Vibrate`, `Vibrate Pattern`, `Cancel`
+**Read from blocks:** **Available** (the phone can vibrate; false on an iPad).
 
-**Android permissions** — `VIBRATE`
+**Functions**
+- **Vibrate** (milliseconds) — buzzes once for that long.
+- **Vibrate Pattern** (pattern, repeat) — plays a comma-separated list of durations in milliseconds that alternate pause and buzz, starting with a pause, such as `0,200,100,200`. With repeat true it loops until **Cancel**.
+- **Cancel** — stops the buzz or pattern.
+
+iPhones cannot vibrate for an exact time. On iPhone the length picks a lighter or stronger tap instead, and a pattern plays as a series of taps at the same timings.
 
 ## BarcodeScanner
 
-Reads a barcode or QR code with the device camera and hands back the decoded text. Needs no camera permission on Android; iOS asks for one.
+Read a QR code or barcode with the camera, or from a picture, and find out what it holds: a link, Wi-Fi details, a contact, a phone number.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS · **Android permissions:** `VIBRATE` · **iOS asks:** "Camera access is required to scan barcodes and QR codes."
 
-**Events** — `Scanned`, `Cancelled`, `Error`
+On Android the scan opens the system scanner, so your app needs no camera permission.
 
-**Functions** — `Scan`
+| Property | Default | What it does |
+|---|---|---|
+| **Formats** | **All** | **All**, **QR Code**, **2D Codes** (QR, Data Matrix, Aztec and PDF417) or **Barcodes Only** (EAN, UPC, Code 128 and Code 39). |
+| **Sound** | on | Beeps when a code is read. |
+| **Vibrate** | on | Buzzes when a code is read. |
+
+**Read from blocks:** **Last Value** and **Last Format** (the last code read; empty until one is), **Available**.
+
+**Events**
+- **Scanned** (value, format) — a code was read. format is a name such as `QR Code` or `EAN-13`.
+- **Cancelled** — the person closed the scanner without reading a code.
+- **Error** (message) — the scanner could not start, or a picture held no code.
+
+**Functions**
+- **Scan** — opens the scanner, which has its own torch button, and reads one code.
+- **Scan Image** (path) — reads a code from a picture on the phone, such as the path an [ImagePicker](/components/media#imagepicker) or a [FilePicker](/components/storage#filepicker) hands you.
+- **Content Kind** (value) — what the text is: `url`, `wifi`, `contact`, `email`, `phone`, `sms`, `location`, `event` or `text`.
+- **Wifi Field** (value, field) — one field of a Wi-Fi code: `ssid`, `password`, `security` (`WPA`, `WEP` or `nopass`) or `hidden` (`true` or `false`). Empty if the text is not a Wi-Fi code.
+
+### Read a Wi-Fi QR code
+
+In **Scanned**, check whether **Content Kind** of value is `wifi`. If it is, show **Wifi Field** (value, `ssid`) as the network name and **Wifi Field** (value, `password`) as the password, with a [Clipboard](/components/storage#clipboard) **Copy** button beside it.
+
+## Troubleshooting sensors
+
+<Accordion>
+  <AccordionItem value="no-location" title="Location Changed never fires">
+    **Why:** **Enabled** is off, the person refused the permission, location is switched off for the whole phone, or the phone has no fix yet, which is common indoors.
+
+    **Fix:** call **Request Permission** and turn **Enabled** on in **Permission Granted**. If **Location Enabled** is false, ask the person to switch location on. Handle **Error** to show what went wrong.
+  </AccordionItem>
+  <AccordionItem value="pedometer-zero" title="Pedometer stays at 0 steps">
+    **Why:** the step permission was not granted, the phone has no step sensor, or **Enabled** is off.
+
+    **Fix:** call **Request Permission**, then check **Permission Granted** and **Available** before you turn **Enabled** on.
+  </AccordionItem>
+  <AccordionItem value="not-web" title="This component is not built for Web, which this app targets. Turn Web off under Target platforms in Project settings, or choose another component.">
+    **Why:** Pedometer and ProximitySensor have Android and iOS versions only, and the project still builds for the web. A project that never chose its targets builds for all three.
+
+    **Fix:** open **Settings → Project**, switch **Web** off under **Target platforms**, save, and import the component again.
+  </AccordionItem>
+  <AccordionItem value="shake" title="Shake fires when the phone is only carried, or never fires">
+    **Why:** **Shake Threshold** does not suit the phone or the gesture.
+
+    **Fix:** raise **Shake Threshold** for fewer, harder shakes, or lower it towards `1` for gentler ones.
+  </AccordionItem>
+  <AccordionItem value="camera-denied" title="BarcodeScanner Error: Camera permission was denied">
+    **Why:** on iPhone the person refused camera access the first time the scanner opened, and iOS does not ask twice.
+
+    **Fix:** explain why the app needs the camera and ask the person to allow it for your app in the iPhone's Settings app. Meanwhile, offer **Scan Image** with a picture they choose.
+  </AccordionItem>
+  <AccordionItem value="light-ios" title="LightSensor never reports on iPhone">
+    **Why:** iOS does not let apps read the light sensor, so **Available** is false.
+
+    **Fix:** check **Available** and fall back to a fixed brightness or a setting the person chooses.
+  </AccordionItem>
+</Accordion>
+
+## Next steps
+
+- [Connectivity components](/components/connectivity): put LocationSensor readings on a MapView or GoogleMaps.
+- [Storage components](/components/storage): keep step totals and scan history on the phone.
+- [Permissions](/getting-started/project-settings#permissions): see and switch off the permissions your app asks for.

@@ -1,141 +1,186 @@
 ---
-title: Build the app
-description: Compile your project into an Android or iOS app, run it live on a phone while you design, watch the build log, and see what is coming for the web.
+title: Build your app for Android and iOS
+description: Compile your Duddy project into an Android APK or an ad hoc iOS app. Choose a target, follow the build console, install the file and see what builds cost.
 ---
 
-Building turns the project you have been designing into a real, installable app. Duddy
-generates native source for the target you pick and runs that platform's own toolchain
-over it — Gradle for Android, Xcode for iOS.
+A *release build* turns your project into a standalone app file that you can install and share.
+Duddy writes native source for the platform you choose and compiles it with that platform's own
+toolchain: Gradle for Android, and Xcode on a Mac for iOS.
 
-Press **Build** in the designer header and choose a target.
+You do not need a release build to try your app while you design. [Live test](/build/live-test)
+runs the project on your phone and follows every edit, for free. Build when you want a file to keep,
+install or send to someone.
 
-## The targets
+## Before you build
 
-| Target | You get | Notes |
+Open **Settings → Project** in the designer and check these fields. They are explained in full
+on [Project settings](/getting-started/project-settings).
+
+- **App name**, **Version code** and **Version name**. The version code is a whole number that
+  must rise with every store upload.
+- **Package name**, such as `com.yourcompany.yourapp`. Choose it as if it is permanent, because
+  once an app is on a store, it is. An iOS build is refused without one. An Android build made
+  without one gets a placeholder, `com.duddy.` followed by your app name, which is not a name you
+  want to publish under.
+- **Target platforms**. A build for a platform that is switched off is refused with "This app is
+  not built for iOS. Turn iOS on under Target platforms in Project settings to build it." (or the
+  same sentence for Android).
+
+An iOS build also needs a plan that includes iOS builds and an Apple Developer key connected to
+your account. [iOS builds](/build/ios-builds) lists everything it needs.
+
+You need write access to the project. For a read-only collaborator the **Build** button is greyed
+out, with the tooltip "Read-only: Building disabled".
+
+## Choose a build target
+
+Press **Build** at the top right of the designer, or press `Ctrl` + `B` (`⌘` + `B` on a Mac),
+and choose a target. The shortcut only opens the menu; it never starts a build on its own.
+
+| Menu item | Group | What you get |
 |---|---|---|
-| **Android App (`.apk`)** | An installable file you can send to a phone or a tester. | The fastest way to get the app into someone's hands. |
-| **iOS App (`.ipa`)** <Badge type="beta" /> | A signed iOS build. | Needs a connected [Apple Developer account](/integration/apple). |
-| **Android App Bundle (`.aab`)** | The upload format Google Play requires. | Not available yet — the menu says so when you pick it. Sideload the `.apk` meanwhile. |
-| **Web App** | A web bundle on a live link. | [Coming soon](#web-builds-and-hosting). |
+| **Android App (.apk)** | Android | A signed `.apk` that installs on any Android phone. Install it yourself or send it to testers. |
+| **Android App Bundle (.aab)** | Android | Coming soon. Google Play needs this format for new apps. Choosing it says "This part of the builder is still being built." |
+| **iOS App (.ipa)** <Badge type="beta" /> | Others | An ad hoc `.ipa`, signed with your Apple key, that installs on iPhones registered to your Apple Developer account. |
+| **Web App (coming soon)** | Others | Coming soon. Opens a page where you can press **Notify me** to hear when web builds arrive. |
 
-Before your first build, fill in **App name**, **Package name** and **Entry screen** under
-[Project settings](/getting-started/project-settings) — a build fails while the package
-name is empty — and keep the platform you are building for switched on under
-**Target platforms**.
+An Android build starts as soon as you choose it. An iOS build checks your Apple setup first; see
+[iOS builds](/build/ios-builds).
+
+## Follow the build console
+
+The **Console** opens as soon as a build starts. It lives in the left rail of the designer, as
+the terminal icon near the bottom, and a dot on that icon shows the state of the latest build. You
+can close the console and keep designing while the build runs.
+
+<Figure
+  src="/media/home/release-build-flow.svg"
+  dark="/media/home/release-build-flow.dark.svg"
+  alt="A release build starts from the Build menu (⌘B or Ctrl+B) with Android App (.apk) or iOS App (.ipa). Before it starts, Duddy checks that your plan includes iOS and the Apple preflight passes (both for iOS only), that a build worker is online, and that you are within your hourly limit or have confirmed This build costs credits. If a check fails, the build is not started and a message says why. The console then shows Building while Duddy writes the app's source and Gradle or Xcode compiles it. It ends Ready, with a QR code, Download app and Copy link that last one hour, or Failed, with what went wrong and what to do, and logs kept for 24 hours."
+  caption="Every check a build passes, the three states the console shows, and how long the download lasts."
+  width={960}
+  height={370}
+/>
+
+The pill at the top right of the console shows one of three states:
+
+| State | Means | What to do |
+|---|---|---|
+| **Building** | Duddy is writing your app's source and compiling it. Quiet stretches are normal: after three minutes the console says "Large builds can take several minutes. Nothing is stuck." | Wait, or close the console and keep working. |
+| **Ready** | The app compiled. The console shows its version, package name, SDK levels and a preview of the entry screen. | [Install it](#install-the-app-on-a-phone) within the hour. |
+| **Failed** | The build stopped. The last line of the log says what went wrong and what to do. | Find the message in [Fix a failed build](/build/troubleshoot-builds). |
+
+The line under the console's title is the build ID. Quote it if you report a problem. The two
+buttons beside **Build log**, **Copy logs** and **Download logs**, keep a copy of the log once the
+build has finished.
+
+Amber lines in the log are notices. They tell you about something the build adjusted or left out,
+such as an entry screen that no longer exists, without stopping it.
+
+## Install the app on a phone
+
+When the console says **Ready**, its **Install this build** panel offers three ways to get the app:
+
+- Scan the QR code with the phone's camera to download the app straight onto the phone.
+- **Download app** saves the `.apk` or `.ipa` file to your computer.
+- **Copy link** copies the file's download link.
+
+<Callout type="warning" title="Download it within the hour">
+  A release build's file and its link last one hour. After that, the link answers "This download
+  link has expired. Build the app again to get a new one." Download the file if you want to keep it.
+</Callout>
+
+**On Android**, open the `.apk` on the phone. The first time you install an app from a browser or
+a file manager, Android asks you to allow installs from that app.
+
+**On iPhone**, scan the QR code with an iPhone that is registered to your Apple Developer account.
+An ad hoc build does not install on any other iPhone. See
+[iOS builds](/build/ios-builds#install-the-build-on-an-iphone).
+
+To send the app to other people, see [Share and publish](/build/share-and-publish).
 
 ## Test it live on a device
 
-You do not need a release build to see the app on a phone. **Live test**, beside Build in the
-header, puts a *test app* on your device that runs whatever is on the canvas, live: every
-edit, every block and every AI turn appears on the phone as it lands, inside an app that
-carries your real package name, icon, splash screen, permissions and integration keys.
+Live test puts a *test app* on your phone: your own app, with your name and icon, that connects to
+the designer and draws your project as you edit it. You build the test app once, and from then on
+changes to screens, logic and theme reach the phone without another build. Test builds are free.
 
-<Steps>
-  <Step>Open **Live test** and press **Build test app** for Android or iOS. It compiles once, in the background — give it a few minutes the first time.</Step>
-  <Step>Install it: download the `.apk` onto the phone, or install the `.ipa` onto a device registered in your Apple developer account.</Step>
-  <Step>Open the app and scan the QR code the panel shows, or type the pair code into it. The code is per project and works with any test app of that project, on any platform.</Step>
-  <Step>Keep designing. The phone follows the document for as long as it stays paired.</Step>
-</Steps>
+<Figure
+  src="/media/home/live-test-vs-release-build.svg"
+  dark="/media/home/live-test-vs-release-build.dark.svg"
+  alt="Two columns. Live test: build your test app once, free with up to six rebuilds an hour per project; install it and pair it with the QR code or the pairing code; then screens and logic update on the phone as you design. Rebuild it after changing the app name, package id, icon, splash screen, version, permissions or integration keys, or after adding, removing or updating components. Release build: choose Android App (.apk) or iOS App (.ipa) from Build, Duddy compiles a standalone app with Gradle or with Xcode on a Mac, and you install or share the file; the download and its link last one hour. It is free within your plan's hourly limit and costs a few credits past it."
+  caption="Use Live test while you design, and a release build when you want a file to share."
+  width={960}
+  height={480}
+/>
 
-A test app only needs rebuilding when its **capabilities** change: a component the project has
-not used before, a new version of one, or the app's name, package, icon, splash, version,
-permissions or integration keys. Screens, logic, assets and theme changes never need one. The
-panel says when a rebuild is due and what changed, and offers **Rebuild test app**; a phone
-still running the previous app is flagged separately, with the fix — install the current one —
-rather than a guess.
-
-- Test builds are **free**, count against none of your plan's build limits, and have their own
-  allowance of six rebuilds an hour per project.
-- The **Device log** at the bottom of the panel streams the running app's log and errors, and an
-  error links to the screen or block it came from.
-- **Disconnect every device** revokes the pairing for every phone at once.
-
-<Callout type="info" title="iOS test apps need a registered device">
-  An iOS test app is installed ad hoc, which Apple allows only onto devices registered in your
-  developer account. The preflight tells you when your account has none enabled — register the
-  phone under Certificates, Identifiers & Profiles → Devices before building.
-</Callout>
-
-<Callout type="info" title="Web test apps are coming soon">
-  The panel's Web tab opens the app in a browser instead of installing it. It is switched off
-  along with web builds; the pair code under it still works with an Android or iOS test app.
-</Callout>
-
-## The build console
-
-The console opens as soon as a build starts and streams every line the toolchain prints.
-
-<Steps>
-  <Step>**Queued** — your request is waiting for a free build worker.</Step>
-  <Step>**Building** — source generation, then the platform toolchain. A first Android build takes longer than later ones.</Step>
-  <Step>**Done** — download the artifact, or copy an install link to open on a phone.</Step>
-</Steps>
-
-The console also carries the build's version, target and minimum SDK, the package name it
-was built with, and a preview of the entry screen — worth a glance before you send the
-file to anyone.
-
-<Callout type="info">
-  A failed build keeps its log. Download it from the console and read from the bottom: the
-  first real error is usually a missing key or a required field left empty in project settings.
-</Callout>
+[Live test](/build/live-test) explains how to build, install and pair the test app, and when it
+needs rebuilding.
 
 ## What a build costs
 
-Builds within your plan's hourly build limit are free. Past it, a build costs a few credits
-— 7 on the trial and Starter, 3 on Pro — and the builder shows the price and asks before
-charging anything, so a stuck loop cannot drain an account overnight. Check your balance
-under **Credits** in the dashboard, or read
-[Builds and your hourly limit](/getting-started/credits-and-plans#builds-and-your-hourly-limit).
+Release builds within your plan's hourly build limit are free. The limit counts the builds of
+every project on your account, and the hour starts with your first build rather than on the
+clock.
 
-## iOS builds <Badge type="beta" />
+Past the limit, a build costs credits, and Duddy asks before charging anything. A dialog titled
+**This build costs credits** says "You've used this hour's builds." and names the price. Press
+**Build** to pay it, or **Cancel**; the console then says "Build cancelled — no credits were
+spent." The price depends on your plan: see [Plans and limits](/account/plans-and-limits), and
+[Credits](/getting-started/credits-and-plans) for how your balance works.
 
-An iOS build needs an App Store Connect API key on your account — Duddy signs the build
-with it and can send it to TestFlight. Connect one under
-[Apple Developer](/integration/apple).
+- **Live test builds are free.** They never cost credits and do not count towards your hourly
+  limit.
+- **A refused build costs nothing.** A build stopped by a check, such as the iOS checklist or a
+  missing build worker, is refused before it is priced.
+- **Trial builds carry Duddy branding.** Apps built on the free trial open on a Duddy splash
+  screen when they have no splash image of their own, and Android apps show a **Made with Duddy**
+  badge. Builds made on a paid plan carry neither.
 
-Before an iOS build starts, Duddy runs a preflight over your Apple setup and shows you
-what it found:
+## Build for iOS
 
-- A **warning** is something Duddy can create for you, such as a missing certificate or
-  provisioning profile.
-- A **failure** is something only you can fix — an expired key, or a missing app record in
-  App Store Connect — and the build is refused rather than queued.
+<Badge type="beta" /> iOS builds are in beta. An iOS build gives you an ad hoc `.ipa` that installs over the air on the
+iPhones registered to your Apple Developer account. It needs:
 
-<Callout type="warning">
-  iOS builds run on macOS machines with a full Xcode install. When none is free, a build waits
-  in the queue rather than failing — give it a few minutes before starting another one.
-</Callout>
+- a plan that includes iOS builds (the free trial and Pro do; Starter does not)
+- an App Store Connect API key, connected as described in [Apple](/integration/apple)
+- your package name registered with Apple as a Bundle ID
+- at least one registered iPhone, running iOS 26 or later
+
+The first time you choose **iOS App (.ipa)**, a **Beta Feature** notice appears. After you press
+**Proceed**, a checklist titled **Before we build for iOS** checks your Apple setup before
+anything is spent. Duddy does not upload builds to TestFlight or App Store Connect.
+[iOS builds](/build/ios-builds) covers each check, Mac build workers and installing on an
+iPhone.
 
 ## Web builds and hosting
 
-Compiling a project to a web app — and putting it on a live link straight from
-**Settings → Hosting** — exists behind the scenes, but not every generated app runs clean end
-to end yet. Rather than hand you a build that might not work, the option is off until that
-reliability pass lands. Pick **Web App** in the Build menu and you can ask to be told when it
-ships.
+Web builds are coming soon. Compiling a project to a web app, and putting it online from
+**Settings → Hosting**, exist behind the scenes but stay switched off until every generated app
+runs reliably. Choose **Web App (coming soon)** in the Build menu and press **Notify me** to get
+one email when web builds turn on. Web builds will read the same project you build for Android
+today.
 
-What it will be, so you can plan for it:
+## When a build fails
 
-- **A build is not a publish.** Building the web app stages it; **Update live app** on the
-  Hosting page is what moves a newer build onto your link, so a link you have already shared
-  keeps serving the version you chose.
-- **Hosting is metered** — one credit for every two hours online, charged in advance, so an
-  app never serves time nobody paid for. It comes out of your balance alone: a daily credit
-  limit never stops a hosted app, only an empty balance does, and the page says so when it
-  happens.
-- **Stopping keeps everything.** Your files and your link are kept, so starting the app again
-  returns the same address.
+A build that cannot start is refused with a message, and the console shows **Failed**. A build
+that fails part-way ends with a sentence that says whose problem it is (your project, the build
+server or Duddy's own code) and what to do. [Fix a failed build](/build/troubleshoot-builds)
+lists every message and its fix.
 
-## Sending a build to testers
+## Next steps
 
-- **Android** — share the `.apk` or the install link from the console. Testers need to allow
-  installs from unknown sources.
-- **iOS** — go through TestFlight; iOS builds cannot be installed by link.
-- **Anyone, right now** — pair their phone to a [live test](#test-it-live-on-a-device) app and
-  they see the project as it is, no build required.
-
-<NextPrev
-  prev={{ title: "Project settings", href: "/getting-started/project-settings" }}
-  next={{ title: "Credits and plans", href: "/getting-started/credits-and-plans" }}
-/>
+<CardGrid>
+  <Card title="Live test" href="/build/live-test">
+    Run the project on your phone while you design.
+  </Card>
+  <Card title="iOS builds" href="/build/ios-builds">
+    Set up Apple signing and install on an iPhone.
+  </Card>
+  <Card title="Share and publish" href="/build/share-and-publish">
+    Send builds to testers and prepare for the stores.
+  </Card>
+  <Card title="Fix a failed build" href="/build/troubleshoot-builds">
+    Every build message and what to do about it.
+  </Card>
+</CardGrid>

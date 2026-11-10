@@ -1,130 +1,454 @@
 ---
-title: Input components
-description: Controls the user touches — buttons, fields, toggles and pickers.
+title: "Input components: buttons, fields and pickers"
+description: "Duddy's input components: Button, Input, checkboxes, switches, chips, sliders, steppers, dropdowns, date, time and colour pickers, and a drawing pad."
 ---
 
-Controls the user touches — buttons, fields, toggles and pickers.
+Input components are the controls people touch and type into: buttons, text fields, toggles, choices, numbers, dates, colours and a drawing pad. Button and Input are in every new project; import the rest with **Import component** at the foot of the component palette.
 
-<Callout type="info">
-  Give every input a name before you wire it. Blocks address components by name, and `Input1` tells
-  you nothing three screens later.
-</Callout>
+Give each control a clear name before you wire it, because blocks address components by name. See [Logic blocks](/guides/logic/blocks).
 
-| Component | Does |
+## Choosing a control
+
+| The person needs to | Use |
 |---|---|
-| [Button](#button) | A tappable control with a text label and an optional icon, used to submit a form, move to another screen, or run any piece of logic. |
-| [Input](#input) | A single-line text field the user types into. |
-| [Checkbox](#checkbox) | A square box the user taps to tick or untick, used for yes or no answers and for picking several items from a list. |
-| [Switch](#switch) | An on/off toggle the user slides or taps, for a single yes-or-no choice such as enabling notifications or dark mode. |
-| [RadioButton](#radiobutton) | A single round selection control the user taps to choose one option; place several together to build a group where one choice is picked at a time. |
-| [Slider](#slider) | A track the user drags to pick a number between a minimum and a maximum, used for volume, brightness, price ranges and similar settings. |
-| [RatingBar](#ratingbar) | A row of tappable stars for collecting a rating, or for showing an existing score read-only when Editable is off. |
-| [DropdownMenu](#dropdownmenu) | A single-choice field that shows the current selection and opens a popup list of options when tapped. |
-| [ListPicker](#listpicker) | Opens a single-choice list dialog and reports the item the user picked. |
-| [DatePicker](#datepicker) | Opens the native calendar dialog and reports the date the user chooses. |
-| [TimePicker](#timepicker) | A non-visual component that opens the platform time dialog and reports the chosen time. |
-| [ContactPicker](#contactpicker) | Opens the device contacts app so the user can choose one person, then reports that contact name, phone number and email. |
+| Run an action | [Button](#button) |
+| Type text, a number, an email address or a password | [Input](#input) |
+| Turn a setting on or off, taking effect at once | [Switch](#switch) |
+| Tick one or more items in a form | [Checkbox](#checkbox) |
+| Pick one of a few options shown side by side | [SegmentedControl](#segmentedcontrol), or a group of [RadioButton](#radiobutton)s |
+| Pick one of many options | [DropdownMenu](#dropdownmenu), or [ListPicker](#listpicker) for a dialog |
+| Choose tags or filters | [Chip](#chip) |
+| Choose a number in a range | [Slider](#slider) |
+| Choose a quantity | [Stepper](#stepper) |
+| Give a rating | [RatingBar](#ratingbar) |
+| Pick a date or a time | [DatePicker](#datepicker) and [TimePicker](#timepicker) open a dialog; [CalendarView](#calendarview) shows a month on the screen |
+| Pick a colour | [ColorPicker](#colorpicker) |
+| Sign or sketch | [DrawingCanvas](#drawingcanvas) |
+| Choose someone from their contacts | [ContactPicker](#contactpicker) |
+
+| Component | What it does | Draws | New projects |
+|---|---|---|---|
+| [Button](#button) | A tappable control with a label and an optional icon. | Yes | Yes |
+| [Input](#input) | A text field, on one line or several. | Yes | Yes |
+| [Checkbox](#checkbox) | A box the person ticks or unticks. | Yes | Import |
+| [Switch](#switch) | An on and off toggle. | Yes | Import |
+| [RadioButton](#radiobutton) | One round option; your logic groups several. | Yes | Import |
+| [Chip](#chip) | A small pill for a filter or tag, optionally removable. | Yes | Import |
+| [SegmentedControl](#segmentedcontrol) | A row of options with one selected. | Yes | Import |
+| [Slider](#slider) | A track the person drags to pick a number. | Yes | Import |
+| [Stepper](#stepper) | Minus and plus buttons around a number. | Yes | Import |
+| [RatingBar](#ratingbar) | A row of stars for giving or showing a rating. | Yes | Import |
+| [DropdownMenu](#dropdownmenu) | A field that opens a list of options. | Yes | Import |
+| [ListPicker](#listpicker) | Opens a dialog with a list to pick from. | No | Import |
+| [DatePicker](#datepicker) | Opens the system calendar dialog. | No | Import |
+| [TimePicker](#timepicker) | Opens the system time dialog. | No | Import |
+| [CalendarView](#calendarview) | A month grid with marked and selected days. | Yes | Import |
+| [ColorPicker](#colorpicker) | A grid of colour swatches. | Yes | Import |
+| [DrawingCanvas](#drawingcanvas) | A pad the person draws or signs on. | Yes | Import |
+| [ContactPicker](#contactpicker) | Opens the contacts app to choose one person. | No | Import |
 
 ## Button
 
-A tappable control with a text label and an optional icon, used to submit a form, move to another screen, or run any piece of logic.
+A tappable control with a text label and an optional icon. Use it to submit a form, move to another screen or run any piece of logic.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** yes
 
-**Events** — `Click`, `Long Press`, `Press In`, `Press Out`
+| Property | Default | What it does |
+|---|---|---|
+| **Text** | `Button` | The words on the button. |
+| **Enabled** | on | Off fades the button and it ignores taps. |
+| **Icon** | none | An icon beside the label. Leave it empty for a text-only button. |
+| **Icon Position**, **Icon Size**, **Icon Spacing** | left, 16, 8 | Which side the icon sits on, its size, and the space between it and the label. |
+| **Background**, **Text Color** | `primary`, `onPrimary` | The button's fill and its label. |
+| **Font Size**, **Text Alignment** | 16, centred | The label's size and where it sits inside the button. |
+
+**Events**
+- **Click** — the button was tapped and released. Run the button's action here.
+- **Long Press** — a press and hold. Handling it consumes the gesture, so **Click** does not also fire.
+- **Press In** and **Press Out** — a finger touched the button, and lifted off or the touch was cancelled. Use them for a custom pressed look.
 
 ## Input
 
-A single-line text field the user types into. Used for forms, search bars, login screens and anywhere free text has to be collected.
+A text field the person types into: on one line, or on several with **Input Type** set to **Multiline**. Use it for forms, search bars and sign-in screens.
 
-*Drawn on the screen.*
+<Figure
+  src="/media/apps/notes-green-detail.png"
+  alt="A note screen with a back arrow and the title Note in a green top bar, a Title field reading Groceries, a larger Note field reading Milk, eggs, bread, and a green Save button."
+  caption="A form made of labelled Input fields and a Save button."
+  frame="phone"
+/>
 
-**Events** — `Focus`, `Blur`, `Text Changed`, `Submit`, `Left Icon Press`, `Right Icon Press`
+**Draws:** on the screen · **In new projects:** yes
+
+| Property | Default | What it does |
+|---|---|---|
+| **Text** | empty | The text the field starts with. From blocks, read it for what was typed, or set it to `""` to clear the field. |
+| **Hint**: **Text** | `Enter text` | The placeholder shown while the field is empty. Blocks call it **Hint Text**. |
+| **Input Type** | Text | What the field collects, which picks the keyboard and the autofill hint: **Text**, **Password**, **Email**, **Number**, **Decimal**, **Phone**, **URL** or **Multiline**. **Password** hides what is typed. |
+| **Show Text** | off | Reveals the characters of a **Password** field. |
+| **Error**, **Error Message** | off, empty | The error state and the message under the field. Setting a message turns the error state on; an empty message clears it. Typing clears it too. |
+| **Left Icon**, **Right Icon** | none | Icons inside the field at each end, such as a search glass or an eye. |
+| **Focus Stroke Color** | `primary` | The border colour while the person is typing. |
+| **Enabled** | on | Off stops the field taking input. |
+
+**Events**
+- **Text Changed** (value) — on every keystroke, and when your logic sets a **Text** that differs from the field's, with the full text now in the field.
+- **Focus** — the field gained focus and the keyboard opened.
+- **Blur** — the field lost focus. Check what was typed here.
+- **Submit** — the person pressed the keyboard's Done or Search key.
+- **Left Icon Press** and **Right Icon Press** — an icon inside the field was tapped.
+
+**Functions**
+- **Toggle Show Text** — flips a **Password** field between hidden and shown. Wire it to **Right Icon Press** for an eye toggle. It does nothing on other input types.
+- **Request Focus** — puts the cursor in the field, raises the keyboard and fires **Focus**. A disabled or hidden field takes no focus.
+- **Clear Focus** — takes the cursor out, lowers the keyboard and fires **Blur**.
 
 ## Checkbox
 
-A square box the user taps to tick or untick, used for yes or no answers and for picking several items from a list.
+A square box the person taps to tick or untick, for yes or no answers and for picking several items from a list.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** no, import it
 
-**Events** — `Changed`
+| Property | Default | What it does |
+|---|---|---|
+| **Checked** | off | Whether the box is ticked. |
+| **Checked Color**, **Unchecked Color** | `primary`, `neutral` | The box's colour in each state. |
+| **Enabled** | on | Off stops the person changing it. |
+
+**Events**
+- **Changed** (checked) — the box was ticked or unticked, with the new value. It also fires when your logic changes **Checked**.
 
 ## Switch
 
-An on/off toggle the user slides or taps, for a single yes-or-no choice such as enabling notifications or dark mode.
+An on and off toggle the person slides or taps, for a single setting such as notifications or dark mode.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** no, import it
 
-**Events** — `Changed`
+| Property | Default | What it does |
+|---|---|---|
+| **Checked** | off | Whether the switch is on. |
+| **Active Thumb Color**, **Active Track Color** | `primary`, `secondary` | The knob and the bar behind it while on. |
+| **Inactive Thumb Color**, **Inactive Track Color** | `background`, `neutral` | The knob and the bar while off. |
+| **Enabled** | on | Off dims the switch and it ignores taps. |
+
+**Events**
+- **Changed** (value) — the switch was turned on or off, with the new value. It also fires when your logic changes **Checked**.
 
 ## RadioButton
 
-A single round selection control the user taps to choose one option; place several together to build a group where one choice is picked at a time.
+A round option the person taps to choose it. Each RadioButton is independent: Duddy does not group them, and unticking the others is up to your logic. For one choice among a few, a [SegmentedControl](#segmentedcontrol) is often simpler.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** no, import it
 
-**Events** — `Changed`
+| Property | Default | What it does |
+|---|---|---|
+| **Checked** | off | Whether this option is selected. |
+| **Checked Color**, **Unchecked Color** | `primary`, `neutral` | The button's colour in each state. |
+| **Enabled** | on | Off dims the option and it cannot be selected. |
+
+**Events**
+- **Changed** (checked) — the option was selected or cleared, by a tap or by your logic.
+
+To make a group, handle each RadioButton's **Changed**: when checked is true, set **Checked** to false on the others in the group.
+
+## Chip
+
+A small pill for a filter, a tag or a category, with an optional icon and an optional × to remove it. A row of chips makes a filter bar.
+
+**Draws:** on the screen · **In new projects:** no, import it
+
+| Property | Default | What it does |
+|---|---|---|
+| **Text** | `Chip` | The label. |
+| **Icon** | none | An icon before the label. |
+| **Selected** | off | Whether the chip shows its selected colours. A tap does not change it: set it in **Click**. |
+| **Show Remove** | off | Shows a × that fires **Remove**. |
+| **Selected Background**, **Selected Text Color** | `primary`, `onPrimary` | The colours while selected. |
+| **Enabled** | on | Off fades the chip and it ignores taps. |
+
+**Events**
+- **Click** — the chip was tapped. Toggle **Selected** or apply its filter here.
+- **Remove** — the × was tapped. Take the chip out of your list here; **Click** does not also fire.
+
+## SegmentedControl
+
+A row of options with exactly one selected: a sort order, a view switch, a Day, Week and Month picker. It is simpler and flatter than a [TabLayout](/components/layout#tablayout).
+
+**Draws:** on the screen · **In new projects:** no, import it
+
+| Property | Default | What it does |
+|---|---|---|
+| **Options** | `One,Two,Three` | The segment labels, separated by commas, such as `Day,Week,Month`. |
+| **Selected Index** | 0 | The selected segment, counting from 0. Values outside the range snap to the nearest segment. |
+| **Selected Background**, **Selected Text Color** | `primary`, `onPrimary` | The selected segment's colours. |
+| **Enabled** | on | Off fades the control. |
+
+**Events**
+- **Changed** (index) — the person tapped a segment and the selection moved, counting from 0. Setting **Selected Index** from logic does not fire it.
 
 ## Slider
 
-A track the user drags to pick a number between a minimum and a maximum, used for volume, brightness, price ranges and similar settings.
+A track the person drags to pick a number between a minimum and a maximum, for volume, brightness, a price range and similar settings.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** no, import it
 
-**Events** — `Changed`
+| Property | Default | What it does |
+|---|---|---|
+| **Value** | 0 | The number the slider is on. |
+| **Min Value**, **Max Value** | 0, 100 | The numbers at each end of the track. |
+| **Step** | 0 | How far the handle jumps, such as 5 for multiples of five. 0 slides smoothly. |
+| **Thumb Color**, **Thumb Radius** | `primary`, 5 | The handle's colour and size. |
+| **Active Track Color**, **Inactive Track Color** | `primary`, `neutral` | The track before and after the handle. |
+| **Enabled** | on | Off dims the slider to half opacity and it cannot be dragged. |
+
+**Events**
+- **Changed** (value) — the value changed, with the new number. It fires while the person drags, and also when your logic sets **Value**.
+
+## Stepper
+
+Minus and plus buttons around a number, for choosing how many of something within a range: a cart quantity, servings, a count.
+
+**Draws:** on the screen · **In new projects:** no, import it
+
+| Property | Default | What it does |
+|---|---|---|
+| **Value** | 1 | The number shown between the buttons. |
+| **Min Value**, **Max Value** | 0, 99 | The smallest and largest numbers allowed. |
+| **Step** | 1 | How much each tap adds or removes. |
+| **Tabular Figures** | off | Gives every digit the same width, so the number holds still as it changes. |
+| **Enabled** | on | Off fades the stepper. |
+
+**Events**
+- **Changed** (value) — a button tap, **Increment** or **Decrement** changed the value. Setting **Value** from logic does not fire it.
+
+**Functions**
+- **Increment** and **Decrement** — add or subtract **Step**, within the range, and fire **Changed**, as tapping plus or minus does.
 
 ## RatingBar
 
-A row of tappable stars for collecting a rating, or for showing an existing score read-only when Editable is off.
+A row of tappable stars for collecting a rating, or for showing a score read-only.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** no, import it
 
-**Events** — `Rating Changed`
+| Property | Default | What it does |
+|---|---|---|
+| **Stars** | 5 | How many stars, from 1 to 10. |
+| **Rating** | 0 | How many stars are filled in. |
+| **Editable** | on | Off shows the rating without letting anyone change it. |
+| **Star Size** | 28 | The size of each star. Anything under 8 is raised to 8. |
+| **Filled Color**, **Empty Color** | amber, faint white | The filled and empty stars. |
+
+**Events**
+- **Rating Changed** (rating) — the person tapped a star, with the new rating as a whole number of stars. Setting **Rating** from logic does not fire it.
 
 ## DropdownMenu
 
-A single-choice field that shows the current selection and opens a popup list of options when tapped. Used for pickers such as country, category or size.
+A field that shows the current choice and opens a list of options when tapped, for a country, a category or a size.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** no, import it
 
-**Events** — `Item Selected`
+| Property | Default | What it does |
+|---|---|---|
+| **Items** | `Option 1, Option 2, Option 3` | The options, separated by commas. Spaces around each are trimmed and empty entries dropped. |
+| **Selected Item** | empty | The option chosen when the screen opens. Leave it empty to start on the placeholder. |
+| **Placeholder** | `Select an option` | The hint shown before an option is picked. |
+| **Enabled** | on | Off dims the field and it cannot be opened. |
+
+**Events**
+- **Item Selected** (item) — the person picked an option, with its text.
 
 ## ListPicker
 
-Opens a single-choice list dialog and reports the item the user picked. Options are one comma-separated string, the format DropdownMenu also uses.
+Opens a dialog with a list of options and reports the one the person picks. It draws nothing on the screen, so open it from a Button's **Click** or any other event. Its options use the same comma-separated format as DropdownMenu.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **In new projects:** no, import it
 
-**Events** — `Item Selected`, `Cancelled`
+| Property | Default | What it does |
+|---|---|---|
+| **Items** | `Option 1, Option 2, Option 3` | The options, separated by commas. |
+| **Title** | `Select an option` | The heading at the top of the dialog. |
 
-**Functions** — `Open Picker`, `Set Selected Index`, `Get Item`, `Add Item`, `Clear Items`
+**Events**
+- **Item Selected** (index, item) — the person tapped an option and the dialog closed, with its position, counting from 0, and its text.
+- **Cancelled** — the person closed the dialog without picking. It also fires when **Open Picker** is called with an empty list.
+
+**Functions**
+- **Open Picker** — shows the dialog.
+- **Set Selected Index** (index) — opens the dialog with that option ticked. An index out of range is ignored.
+- **Get Item** (index) — returns an option's text, or empty text when there is none.
+- **Add Item** (item) — adds an option to the end. A blank value is ignored.
+- **Clear Items** — removes every option.
+
+**Read from blocks** — **Selected Index** (−1 before anything is picked), **Selected Item** and **Item Count**.
 
 ## DatePicker
 
-Opens the native calendar dialog and reports the date the user chooses. It draws nothing on screen, so wire Open Picker to a button tap or any other trigger.
+Opens the system calendar dialog and reports the date the person chooses. It draws nothing on the screen, so open it from a Button's **Click** or any other event.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **In new projects:** no, import it
 
-**Events** — `Date Set`, `Cancelled`
+| Property | Default | What it does |
+|---|---|---|
+| **Initial Date** | today | The date the calendar opens on, as `yyyy-MM-dd`. |
+| **Min Date**, **Max Date** | no limit | The earliest and latest dates the person can pick, as `yyyy-MM-dd`. |
+| **Format** | `dd/MM/yyyy` | How the chosen date is written out, such as `MMM d yyyy` or `yyyy-MM-dd`. |
 
-**Functions** — `Open Picker`, `Set Date`, `Format Date`
+**Events**
+- **Date Set** (year, month, day, formatted) — the person confirmed a date. The month runs from 1 for January to 12 for December, and formatted is the date written with **Format**.
+- **Cancelled** — the person closed the calendar without confirming.
+
+**Functions**
+- **Open Picker** — shows the calendar, starting on the date it holds and limited by **Min Date** and **Max Date**.
+- **Set Date** (year, month, day) — sets the date it holds without opening the dialog or firing **Date Set**.
+- **Format Date** (pattern) — returns the held date written with a one-off pattern, such as `EEEE d MMMM`. It returns empty text when the pattern is not valid.
+
+**Read from blocks** — **Year**, **Month**, **Day** and **Selected Date** (the date written with **Format**, empty until a date is picked or set).
 
 ## TimePicker
 
-A non-visual component that opens the platform time dialog and reports the chosen time. Wire Open Picker to a button or any other trigger.
+Opens the system time dialog and reports the time the person chooses. It draws nothing on the screen, so open it from a Button's **Click** or any other event.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **In new projects:** no, import it
 
-**Events** — `Time Set`, `Cancelled`
+| Property | Default | What it does |
+|---|---|---|
+| **Initial Hour**, **Initial Minute** | 9, 0 | The time the dialog opens on, with hours from 0 to 23. |
+| **24 Hour** | off | Shows a 24-hour clock instead of AM and PM. |
+| **Format** | `hh:mm a` | How the chosen time is written out, such as `HH:mm`. |
 
-**Functions** — `Open Picker`, `Set Time`, `Format Time`
+**Events**
+- **Time Set** (hour, minute, formatted) — the person confirmed a time. Hour runs from 0 to 23.
+- **Cancelled** — the person closed the dialog without picking.
+
+**Functions**
+- **Open Picker** — shows the time dialog.
+- **Set Time** (hour, minute) — stores a time without opening the dialog. No event fires.
+- **Format Time** (pattern) — returns the stored time written with a pattern such as `h:mm a`, or empty text when the pattern is not valid.
+
+**Read from blocks** — **Hour**, **Minute** and **Selected Time** (empty until a time is chosen or set).
+
+## CalendarView
+
+A month calendar drawn on the screen, for habit trackers, bookings and event apps. It shows one month with arrows to move between months, highlights today and the selected day, and marks the days you list, each in its own colour if you like.
+
+**Draws:** on the screen · **In new projects:** no, import it
+
+| Property | Default | What it does |
+|---|---|---|
+| **Month** | the current month | The month to show, as `yyyy-MM`, such as `2026-10`. |
+| **Selected Date** | none | The day drawn as selected, as `yyyy-MM-dd`. |
+| **Marked Days** | `[]` | The days to mark, as a JSON list: `["2026-10-03", {"date": "2026-10-05", "color": "#E91E63"}]`. A day without a colour uses **Mark Color**. |
+| **Mark Style** | Dot | **Dot** draws a dot under the day's number; **Fill** fills the day's circle. |
+| **First Weekday** | Sunday | The day each week starts on. |
+| **Show Header** | on | Shows the month name with previous and next arrows. |
+
+**Events**
+- **Day Selected** (date) — the person tapped a day, with its date as `yyyy-MM-dd`. That day is already the **Selected Date**.
+- **Month Changed** (month) — the month on show changed, by the arrows or by your logic, with the new month as `yyyy-MM`. Load that month's marks here.
+
+**Functions**
+- **Next Month** and **Previous Month** — show the month after or before.
+- **Go To Date** (date) — shows the month that holds a date. It does not select the date; set **Selected Date** for that.
+- **Mark Day** (date, color) — marks one day, in a colour such as `#RRGGBB` or a theme colour name, or in **Mark Color** when the colour is empty.
+- **Unmark Day** (date) — removes one day's mark.
+
+The canvas draws a CalendarView as a box with its name. Use [Live test](/build/live-test) to see the month.
+
+## ColorPicker
+
+A grid of colour swatches the person picks from, returning the chosen colour as `#RRGGBB`. Use it for a theme customiser or a note-colour tag. It is a grid of swatches, not a colour wheel.
+
+**Draws:** on the screen · **In new projects:** no, import it
+
+| Property | Default | What it does |
+|---|---|---|
+| **Colors** | eight colours | The swatches, as `#RRGGBB` values separated by commas. |
+| **Selected** | `#3B82F6` | The colour that starts selected. It must match a swatch for the ring to show. |
+| **Columns**, **Swatch Size**, **Gap** | 6, 34, 8 | How many swatches per row, how large each one is, and the space between them. |
+| **Selection Ring** | `primary` | The ring around the selected swatch. |
+
+**Events**
+- **Changed** (hex) — the person tapped a swatch, with its colour as `#RRGGBB`. Setting **Selected** from logic does not fire it.
+
+## DrawingCanvas
+
+A box the person draws on with a finger, for signatures, sketches and handwritten notes.
+
+**Draws:** on the screen · **In new projects:** no, import it
+
+| Property | Default | What it does |
+|---|---|---|
+| **Stroke Color**, **Stroke Width** | follows the theme, 4 | The ink for new strokes. Strokes already drawn keep theirs. |
+| **Background** | follows the theme | The colour behind the drawing, also used as the background of the exported picture. |
+| **Enabled** | on | Off stops drawing, for example to lock a finished signature. |
+
+DrawingCanvas has no **Padding** row.
+
+**Events**
+- **Changed** — the drawing changed: after each stroke, and after **Undo** or **Clear** removed something.
+
+**Functions**
+- **Undo** — removes the most recent stroke.
+- **Clear** — removes every stroke.
+
+**Read from blocks** — **Is Empty** (true before anything is drawn and after **Clear**; use it to require a signature) and **PNG Data URL** (the drawing as a PNG data URL, at twice the canvas's size, to upload or store).
+
+The canvas draws a DrawingCanvas as a box with its name. Use [Live test](/build/live-test) to draw on it.
 
 ## ContactPicker
 
-Opens the device contacts app so the user can choose one person, then reports that contact name, phone number and email. Needs no contacts permission.
+Opens the device's contacts app so the person can choose one contact, then reports the name, phone number and email address. It needs no contacts permission, because the person chooses inside the contacts app. It draws nothing, so open it from a Button's **Click** or any other event.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **In new projects:** no, import it
 
-**Events** — `Contact Picked`, `Cancelled`, `Error`
+**Events**
+- **Contact Picked** (name, phone, email) — the person chose a contact. The email is empty when the contact has none.
+- **Cancelled** — the person backed out without choosing.
+- **Error** (message) — the device has no contacts app, or the chosen contact could not be read.
 
-**Functions** — `Open Picker`, `Clear`
+**Functions**
+- **Open Picker** — opens the contacts app.
+- **Clear** — forgets the last contact picked.
+
+**Read from blocks** — **Contact Name**, **Phone Number** and **Email Address** from the last pick.
+
+## Troubleshooting input
+
+<Accordion>
+  <AccordionItem value="loop" title="A Changed handler runs again and again">
+    **Why:** Checkbox, Switch, RadioButton and Slider fire **Changed**, and Input fires **Text Changed**, when your logic sets the value as well as when the person changes it. A handler that sets the value it listens to triggers itself.
+
+    **Fix:** set the value only when it differs, or keep a variable that says your logic is changing it and ignore the event while it is true.
+  </AccordionItem>
+  <AccordionItem value="radio" title="More than one RadioButton stays selected">
+    **Why:** RadioButtons do not group themselves.
+
+    **Fix:** in each one's **Changed**, when checked is true, set **Checked** to false on the others. Or use a SegmentedControl.
+  </AccordionItem>
+  <AccordionItem value="chip" title="Tapping a Chip does not select it">
+    **Why:** a tap fires **Click** but leaves **Selected** as it is.
+
+    **Fix:** in **Click**, set **Selected** to the opposite of its current value.
+  </AccordionItem>
+  <AccordionItem value="eye" title="The eye icon does not show the password">
+    **Why:** **Toggle Show Text** only works when **Input Type** is **Password**.
+
+    **Fix:** set **Input Type** to **Password**, then call **Toggle Show Text** from **Right Icon Press**.
+  </AccordionItem>
+  <AccordionItem value="listpicker" title="ListPicker opens nothing">
+    **Why:** its list is empty. **Open Picker** then fires **Cancelled** instead of opening.
+
+    **Fix:** fill **Items** in the panel, or call **Add Item** before **Open Picker**.
+  </AccordionItem>
+  <AccordionItem value="no-contacts" title="No contacts app is available on this device">
+    **Why:** ContactPicker's **Error** fires with this message when the phone has no app to choose a contact from. The message The selected contact could not be read means the choice could not be opened.
+
+    **Fix:** handle **Error** and let the person type the details into Input fields instead.
+  </AccordionItem>
+</Accordion>
+
+## Next steps
+
+- [Logic blocks](/guides/logic/blocks): handle events and check what was typed.
+- [Data, APIs and storage](/guides/logic/data-and-apis): save what was typed on the phone or send it to a server.
+- [Content components](/components/content): show the results with text, lists and charts.

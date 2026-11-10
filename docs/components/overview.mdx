@@ -1,73 +1,164 @@
 ---
-title: Components
-description: What a Duddy component is, how properties, events and functions work, and the full library grouped by category.
+title: "Components overview: how Duddy components work"
+description: "How Duddy components work: properties, events and functions, visual and logic-only components, adding more to your palette, and platform support."
 ---
 
-Components are the pieces an app is made of. Some draw something — a button, an image, a
-list. Some draw nothing and exist purely to do a job — call an API, store a value, read the
-device's location.
+Components are the pieces an app is made of. Some draw something on the screen, such as a button, a picture or a list. Others draw nothing and do a job in the background, such as calling an API, storing a value or reading the device's location. Every component is native code, Java on Android and Swift on iOS, so your app is built from real platform controls.
 
-Every component is native code on each platform, so a Duddy app is built from real platform
-widgets rather than a web page pretending to be one.
+This reference has one page per category, in the same order as the component palette in the designer. The palette writes names with spaces ("Scrollable Column"); blocks, Vibe mode and this reference write the same name as one word (ScrollableColumn).
 
-## Three surfaces
+## Properties, events and functions
 
-Every component exposes the same three kinds of thing, and they are what you work with in
-the designer and the block editor.
+Every component offers the same three kinds of thing, and each one becomes a kind of block.
 
-| | Where you use it | Example |
+| Kind | Where you use it | Examples |
 |---|---|---|
-| **Properties** | The properties panel, and get/set blocks. | A button's `Text`, a container's `Background`, a switch's `Checked`. |
-| **Events** | The block editor — a hat block you put actions inside. | `Click`, `Text Changed`, `Got Response`, `Location Changed`. |
-| **Functions** | The block editor — an action you call. | `Show`, `Play`, `Make Request`, `Store Value`. |
+| **Properties** | The properties panel while you design, and get and set blocks in your logic. | A Button's **Text**, a Column's **Background**, a Switch's **Checked**. |
+| **Events** | An event block in the block editor. The blocks you put inside it run each time the event fires. | **Click**, **Text Changed**, **Got Response**, **Location Changed**. |
+| **Functions** | A call block you run from any event. Some return a value. | **Show**, **Play**, **Make Request**, **Format Date**. |
 
-Drop a component onto a screen and its blocks appear in the block editor's toolbox under
-its name.
+<Figure
+  src="/media/components/component-anatomy.svg"
+  dark="/media/components/component-anatomy.dark.svg"
+  alt="An Input named Input1 and its three kinds of member. Properties such as Text, Hint Text and Enabled appear in the properties panel at design time and as blocks in your logic: set Input1.Text to, and Input1.Text. Events such as Text Changed, Submit and Focus become hat blocks such as when Input1.Submit do, where logic starts; the blocks inside run each time the event fires. Functions such as Request Focus and Clear Focus become call blocks such as call Input1.Request Focus, which you run from any event handler."
+  caption="Every component exposes properties, events and functions, and each one becomes a kind of block."
+  width={960}
+  height={432}
+/>
 
-## Visual and logic-only
+Many events hand values to their event block. A DatePicker's **Date Set** gives you the year, the month, the day and the date already formatted, so you can use them straight away. This reference lists those values in brackets after the event, in the order the block shows them: **Date Set** (year, month, day, formatted).
 
-A **visual** component has a box on the canvas that you size, position and style. A
-**logic-only** component has none: drag it anywhere onto the screen and it joins the screen
-as a component you can address from blocks. `HttpRequest`, `AppStorage` and `Clock` are
-logic-only; they never show up in the layout.
+Once a component is on a screen, its blocks appear in the block editor's toolbox under the name you gave it. See [Logic blocks](/guides/logic/blocks) for how events, conditions and variables fit together.
 
-<Callout type="info">
-  A property row that disappears when you change another one is the component saying it does not
-  apply right now — an ad banner does not offer padding, a slider offers no text alignment.
-</Callout>
+## Visual and logic-only components
 
-## The library
+A *visual* component has a box on the canvas that you size, position and style. A *logic-only* component has no place on the screen. You drop it anywhere on the screen and it joins that screen with its full set of blocks; while you drag one, the canvas says "Release anywhere — HttpRequest has no on-screen position".
+
+The **Not shown here** panel on the canvas lists what you cannot see in the mockup: logic-only components ("Runs in the background — no on-screen position"), closed dialogs and sheets, and hidden components. A Dialog or a BottomSheet also drops anywhere, because it floats above the screen and opens when your logic shows it.
+
+Each section of this reference starts with **Draws:** on the screen, or **Draws:** nothing (logic only).
+
+## Properties every visual component has
+
+These rows appear on almost every visual component, so the category pages do not repeat them.
+
+| Property | What it does |
+|---|---|
+| **Margin** | Space outside the component, separating it from its neighbours. |
+| **Padding** | Space inside the component, between its edge and its content. |
+| **Opacity** | How solid it looks, from 0 (invisible) to 100. |
+| **Alignment** | Where the component sits inside its parent. A container's **Content Alignment** is the other half: where its children sit inside it. |
+| **Visible** | Whether it is shown. A hidden component gives up its space. |
+| **Transition** | How it appears and disappears when **Visible** changes: **None**, **Fade**, **Slide Up** or **Scale**. Skipped when the phone asks for reduced motion. |
+| **Strokes** | Up to four outlines, each with its own thickness, colour and sides. |
+
+A few components leave a standard row out. TopBar has no **Margin** or **Alignment**, Dialog and BottomSheet have no **Transition**, and DrawingCanvas has no **Padding**. Ad banners have no **Opacity**, **Padding**, **Strokes** or **Transition**, because ad networks do not allow a served ad to be restyled.
+
+Some rows depend on another one. A Shape shows **Corner Radius** only while it is a rectangle, and **Points** only for a star or a polygon.
+
+Properties that take several values at once, such as **Margin**, **Padding**, **Border Radius** and **Font**, have no set block, so set them in the properties panel. Sizes in this reference are in px, the unit the properties panel shows. See [Layout and sizing](/guides/designing/layout-and-sizing) for how Fill, Auto, px and % work.
+
+## Values you read from blocks
+
+A few properties have no row in the properties panel, because they only make sense while the app runs. You read them, and sometimes set them, from blocks. For example:
+
+- RecyclerView's **Data**: the list of records the list shows. Setting it is the main way to fill a list.
+- DatePicker's **Selected Date**: the date the person picked, already formatted.
+- AudioPlayer's **Position** and **Duration**: where the song is and how long it is.
+
+Each section of this reference lists these under **Read from blocks**.
+
+## Change events that also fire from logic
+
+Some change events fire when the person changes a value and also when your logic sets it. Others fire only for the person's own action. The difference matters when a handler sets a value that another handler listens to, because it can start a loop.
+
+| Fires when your logic sets the value too | Fires only when the person changes it |
+|---|---|
+| Checkbox, Switch and RadioButton **Changed**; Slider **Changed**; Input **Text Changed** (when the new text differs) | RatingBar **Rating Changed**; Stepper, SegmentedControl and ColorPicker **Changed**; BottomNavigation **Item Selected** |
+
+## Components in a new project
+
+Every new project starts with 20 components:
+
+- **Layout:** Column, Row, Stack, ScrollableColumn, ScrollableRow, CardView, TopBar, BottomNavigation, TabLayout, ViewPager, Dialog and BottomSheet. Screen is one too, but it is not in the palette: each screen in your screen list is a Screen.
+- **Content:** TextView, Image, Icon and RecyclerView.
+- **Input:** Button and Input.
+- **Storage:** AppStorage.
+
+Everything else, from Checkbox and Switch to VideoPlayer and ChatView, is added to the project first. Press **Import component** at the foot of the component palette, tick what you need in the **Add components** dialog, and press **Import selected**. An imported component joins its section of the palette, and this reference marks it **In new projects:** no. Duddy's own components cost no credits to import. See [Import components](/guides/marketplace/import-components) for searching, updating and removing them.
+
+You do not always need to import by hand. When a Vibe mode build needs a component the project does not have, it adds it: the chat shows an **Adding components** step, and the turn's changes list **Added component** with its name. See [Vibe mode](/ai/overview).
+
+## Which platforms a component runs on
+
+Duddy's components are written for Android and iOS, and almost all of them also have a web version, ready for web builds, which are coming soon. A few leave a platform out:
+
+| Component | Android | iOS | Web |
+|---|---|---|---|
+| AdMobBanner, AdMobInterstitial, AdMobRewarded, FacebookBanner, FacebookInterstitial | Yes | Yes | No |
+| InAppPurchase, Pedometer, ProximitySensor | Yes | Yes | No |
+| [AudioEffects](/components/media#audioeffects) | Yes | No | Yes |
+| FloatingWindow | Yes | No | No |
+
+A single property, event or function can be limited too. Its tooltip in the properties panel or the toolbox then says so, for example "Works on Android only." The **Light Icons** switch in a Screen's **Navigation Bar** group is one.
+
+Each project has **Target platforms** (Android, iOS and Web) in **Settings → Project → Build**, and a project that has never changed them targets all three. As the page says, components and blocks are checked against every platform you keep on: an import is refused when the component lacks one of them, and a build stops when the app uses something the platform being built cannot run. See [Project settings](/getting-started/project-settings).
+
+## The component library
 
 <CardGrid>
-  <Card title="Layout" href="/components/layout">Screen, Row, Column, Stack, cards, bars, tabs, sheets and dialogs.</Card>
-  <Card title="Content" href="/components/content">Text, images, icons, shapes, lists, chat, charts and progress.</Card>
-  <Card title="Input" href="/components/input">Buttons, fields, switches, sliders and pickers.</Card>
-  <Card title="Media" href="/components/media">Video, audio, camera, animation, speech.</Card>
-  <Card title="Connectivity" href="/components/connectivity">HTTP, WebSocket, maps, web views, network state.</Card>
-  <Card title="Storage" href="/components/storage">Key-value, SQLite, files, downloads, clipboard.</Card>
-  <Card title="Firebase" href="/components/firebase">Auth, databases, storage, messaging, analytics.</Card>
-  <Card title="Sensors" href="/components/sensors">Location, motion, proximity, haptics, scanning.</Card>
+  <Card title="Layout" href="/components/layout">Screen, Column, Row, Stack, scrolling containers, cards, dividers, bars, tabs, dialogs and sheets.</Card>
+  <Card title="Content" href="/components/content">Text, images, icons, shapes, lists, chat, charts, figures, progress and placeholders.</Card>
+  <Card title="Input" href="/components/input">Buttons, text fields, toggles, chips, sliders, steppers, and date, time and colour pickers.</Card>
+  <Card title="Media" href="/components/media">Video, audio, animation, the camera and photos, recording, speech and the screen itself.</Card>
+  <Card title="Connectivity" href="/components/connectivity">HTTP requests, WebSocket, maps, web views and the state of the connection.</Card>
+  <Card title="Storage" href="/components/storage">Key-value storage, SQLite, files, downloads and the clipboard.</Card>
   <Card title="Ads" href="/components/ads">AdMob and Meta Audience Network placements.</Card>
-  <Card title="Device and utilities" href="/components/other">Device info, sharing, calls, messages, purchases.</Card>
+  <Card title="Firebase" href="/components/firebase">Authentication, databases, file storage, messaging and analytics.</Card>
+  <Card title="Sensors" href="/components/sensors">Location, motion, proximity, haptics and scanning.</Card>
+  <Card title="Device and utilities" href="/components/other">Device information, sharing, calls, messages and other tools. Shown as Other in the palette.</Card>
 </CardGrid>
 
-## Imported components
+## How each reference section is laid out
 
-Alongside the components Duddy ships, a project can import components published by other
-developers. An imported component behaves exactly like a built-in one: it has properties,
-events and functions, and it appears in the palette and the block toolbox in its own
-category.
+Each component has its own section, headed with its exact name, and every section follows the same order:
 
-<Callout type="info">
-  A component's identity is its full name — `io.duddy.components.Button`. That is what a project
-  stores, so a component keeps working the same way in every project that imports it.
-</Callout>
+- A sentence or two on what the component is for, and when to use another one instead.
+- **Draws**, **In new projects**, and any permission it asks for on Android or iOS.
+- A table of the properties that change what it does. Colour and font rows are left out where their names say it all.
+- **Events**, with the values each one hands over, and **Functions**, with what each one takes.
+- **Read from blocks**, when the component has values that only blocks can reach.
 
-## Reading these pages
+To jump to a section from the designer, hover a card in the component palette and choose **View documentation**.
 
-Each category page lists its components with what the component does, whether it draws
-anything, its events and functions, and any Android permission it needs. Properties are not
-listed page by page: the properties panel in the designer always shows exactly what the
-component you have selected supports, which is the one list that can never be out of date.
-The exception is a property that takes a structured value the panel cannot explain — a
-ChatView's list of messages — where the page spells out the shape.
+## Troubleshooting
+
+<Accordion>
+  <AccordionItem value="not-in-palette" title="I cannot find a component in the palette">
+    **Why:** new projects hold 20 components, and everything else is imported first. If you have read-only access to the project, the **Import component** button is not shown.
+
+    **Fix:** press **Import component** at the foot of the palette and search for it, or ask the project's owner for write access. See [Import components](/guides/marketplace/import-components).
+  </AccordionItem>
+  <AccordionItem value="import-platform" title="This component is not built for iOS, which this app targets.">
+    **Why:** the component has no version for one of the project's **Target platforms**. The message names the missing platform, such as iOS or Web.
+
+    **Fix:** if you do not need that platform, turn it off under **Target platforms** in **Settings → Project → Build**. Otherwise choose another component.
+  </AccordionItem>
+  <AccordionItem value="build-components" title="This app uses components that iOS apps cannot run, so it could not be built.">
+    **Why:** a screen holds a component with no version for the platform you are building. The message lists each one after **Affected:**.
+
+    **Fix:** remove those components from the screens listed, or build for the platforms they support.
+  </AccordionItem>
+  <AccordionItem value="build-members" title="Some blocks in this app's logic use features that iOS apps cannot do, so it could not be built.">
+    **Why:** a block uses a property, event or function that the platform does not have, such as a Screen's navigation bar **Light Icons** on iOS.
+
+    **Fix:** open the block editor on the screens listed and remove those blocks, or guard them so they only run where they are supported, then build again.
+  </AccordionItem>
+</Accordion>
+
+## Next steps
+
+- [Drag and drop](/guides/designing/drag-and-drop): place components on the canvas and set their properties.
+- [Logic blocks](/guides/logic/blocks): wire events and functions together.
+- [Import components](/guides/marketplace/import-components): add more components to your palette.
+- [Publish a component](/guides/marketplace/publish-a-component): write your own for Android, iOS and the web.

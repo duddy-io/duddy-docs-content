@@ -1,72 +1,146 @@
 ---
-title: Images, fonts and files
-description: Upload images, fonts and raw files into a project, generate images with AI, and reference them from components.
+title: Add images, fonts and files to your app
+description: Upload images, fonts and media to a Duddy project, find photos on Pixabay, generate images with AI, and learn the size limits and naming rules builds follow.
 ---
 
-Assets are the files your app ships with. They live with the project, are available on
-every screen, and are compiled into the app when you build.
+Assets are the files your app ships with: pictures, fonts, animations, sounds and data files. They belong to the project, every screen can use them, and they are packed into the app when you build it. Press `6`, or choose **Assets** on the left rail, to open **Media Assets**.
 
-Open the assets area with `6`.
+## Where assets live
 
-## The three kinds
+**Media Assets** has three folders:
 
-| Kind | Holds | Used by |
+| Folder | Holds | Used by |
 |---|---|---|
-| **Drawables** | Images — PNG, JPG, SVG, WebP. | `Image`, backgrounds, icons, the launcher icon and splash. |
-| **Fonts** | Font families you upload. | Every Typography row in the properties panel. |
-| **Raw** | Anything else — JSON, Lottie animations, audio, small data files. | `Lottie`, `AudioPlayer`, and your logic. |
+| **Drawables** | Images. | The **Image** property of an [Image](/components/content#image), and backgrounds set to **Image**. |
+| **Fonts** | `.ttf` and `.otf` font files. | The font in a component's **Typography** group. |
+| **Raw** | Every other file: animations, audio, video, data, and GIFs. | The **Source** of [Lottie](/components/media#lottie), [AudioPlayer](/components/media#audioplayer) and [VideoPlayer](/components/media#videoplayer), and your logic. |
 
-<Callout type="warning">
-  Each file has to be **under 1 MB**. That is a real constraint on app size, not an arbitrary one:
-  every asset ships inside the app on every device that installs it.
-</Callout>
+Each folder has a search box, a **Grid View** and **List View** switch, **Select all**, and **Upload Media**. Select files to delete them with **Delete Media**.
 
-## Adding an asset
+Icons and shapes are not assets. The [Icon](/components/content#icon) component draws from a built-in set of 7,237 icons, and the [Shape](/components/content#shape) component draws vector shapes. The launcher icon and splash image are set in project settings, not here: see [Use an asset in a component](#use-an-asset-in-a-component).
+
+## Upload an image, font or file
 
 <Steps>
-  <Step>Open the assets area and choose the kind of asset you are adding.</Step>
-  <Step>Upload from your machine, or pull one in from a connected source such as Pixabay.</Step>
-  <Step>Use it: pick it in an `Image` component's property, or in a background, or by name from your logic.</Step>
+  <Step>In **Media Assets**, press **Upload Media**.</Step>
+  <Step>On the **Local** tab, drop files onto the box, or choose **browse** to pick them from your computer. You can add several at once.</Step>
+  <Step>Press **Upload media**. Each file is filed by its extension, and you land on the folder it went to.</Step>
 </Steps>
 
-Replacing a file keeps its name, so every component already pointing at it picks up the new
-version — the usual way to swap an icon set or a photo without touching any screens.
+The extension decides the folder, whichever folder you started from:
 
-## Generating an image
+| Extension | Folder |
+|---|---|
+| `.png`, `.jpg`, `.jpeg`, `.webp`, `.bmp`, `.tiff`, `.svg`, `.ico` | **Drawables** |
+| `.ttf`, `.otf` | **Fonts** |
+| Anything else, such as `.gif`, `.json`, `.mp3` or `.mp4` | **Raw** |
 
-Nothing in the library fits? Generate one:
+A file from your computer must be 1 MB or smaller. Larger files are left out of the upload, with a message naming each one. Every asset ships inside the app on every phone that installs it, so small files keep your app small.
 
-- In the asset picker, open the **Imagine** tab, describe the image, pick a style and
-  **Import** the result.
-- Or in the [Vibe chat](/ai/overview), `/imagine a flat illustration of a delivery scooter,
-  cream background`.
+You can also upload while you design: an **Image** property's picker has **Upload New**, which opens the same dialog.
 
-Styles on offer include realistic, 2D vector illustration, 3D illustration, cartoonish,
-anime, realistic portrait, fantasy, cyberpunk and pixel art. Generated images land straight
-in your drawables and are used like any other asset. Generation spends
-[credits](/getting-started/credits-and-plans).
+### Which image formats work in builds
 
-## Photography
+| Format | Android build | iOS build |
+|---|---|---|
+| PNG, JPG, WebP | Included | Included |
+| SVG | Left out | Included, kept as a vector |
 
-With Pixabay connected in your dashboard, the asset picker gains a search over its library,
-and the AI fills the screens it builds with real photographs rather than grey boxes: a
-build turn names the photos each screen needs, finds them on Pixabay and stores them as
-project assets. Everything offered is licensed for commercial use.
+TIFF and ICO images are also left out of Android builds. Use PNG, JPG or WebP for any picture your app needs on every platform. For vector art on Android, use an Icon or a Shape, or turn the picture into a Shape with [Trace to shape](#trace-an-image-into-a-shape).
 
-<Callout type="info">
-  When Pixabay has no photograph of your subject, the turn draws one with the image model
-  instead — the same way it draws the illustrations a screen calls for — and the credits are
-  counted inside that turn. A turn makes a handful of images at most; anything past that is
-  a colour tile built from your own theme, with an icon, that says what it stands for.
-</Callout>
+## Find photos on Pixabay
 
-## Naming
+On the **Drawables** folder, the upload dialog has a **Pixabay** tab that searches Pixabay's free photo library. Search, then press **Import** on a photo to add it to **Drawables**. The tab needs a free Pixabay API key, which you can connect from the tab itself. Pixabay's own licence covers what you may do with each picture.
 
-Asset names become resource names in the built app. Stick to lowercase letters, numbers and
-underscores — `hero_banner.png`, not `Hero Banner (final) v2.png` — and you will never have
-to think about it again.
+## Generate an image with AI
 
-<NextPrev
-  prev={{ title: "Themes and styling", href: "/guides/designing/theme" }}
-  next={{ title: "Logic blocks", href: "/guides/logic/blocks" }}
-/>
+The upload dialog's **Imagine** tab makes a new image from a description:
+
+<Steps>
+  <Step>Describe the image in the prompt box, such as "a flat illustration of a delivery scooter, cream background".</Step>
+  <Step>Choose a model and a style. Models your plan does not include are shown but cannot be chosen.</Step>
+  <Step>Press **Generate**, and check the preview.</Step>
+  <Step>Press **Import** to save it to **Drawables**. Import it within 30 minutes, or generate it again.</Step>
+</Steps>
+
+You can also type `/imagine` and a description in the [Vibe mode](/ai/overview) chat. Generating an image spends [credits](/getting-started/credits-and-plans).
+
+## Let Vibe mode add photos and illustrations
+
+When Vibe mode builds screens, it searches Pixabay for the photos they need, with your Pixabay key if you have connected one, and stores each photo it finds as an asset. It makes illustrations, and photos the search could not find, with an image model only if **AI images** is turned on under **Settings → Project → Build**. It is off by default, and each image spends credits. With it off, those places show a coloured tile instead.
+
+## Use an asset in a component
+
+- **A picture:** select an [Image](/components/content#image), open its **Image** property, and pick the file. **Image Size** sets how it fits: **Auto**, **Center**, **Cover** or **Fill**.
+- **A background:** in a **Background** picker, choose **Image** and pick the file. See [Theme colours, dark mode and styling](/guides/designing/theme).
+- **An animation, sound or video:** type the file's name, such as `confetti.json`, in the **Source** of a Lottie, AudioPlayer or VideoPlayer. These also accept an https link, which suits large media.
+- **A font:** choose it in **Select Font Family** from a component's **Typography** group. A font you upload draws on the canvas, but Android and iOS builds include the built-in families only, so use a built-in family for text that must keep its typeface in the installed app.
+- **The launcher icon and splash image:** upload them under **Settings → Project → Assets**, as **Launcher icon** (a square PNG with no rounded corners, which Duddy masks for each platform) and **Splash image**. They accept JPG and PNG. See [Project settings](/getting-started/project-settings).
+
+### Trace an image into a shape
+
+On the **Drawables** folder, **Trace to shape** turns an SVG, PNG, JPG or WebP into an editable Shape component. Adjust **Detail Threshold** and **Curve Smoothing** until the outline looks right, then press **Insert Shape Component** to add it to the open screen.
+
+## Replace or delete an asset
+
+To replace a file, upload a new one with exactly the same name. It overwrites the old file, and every component that uses it shows the new one, without you touching any screen.
+
+To delete files, select them and press **Delete Media**, or use the delete button on one file. Deleting is permanent. On the canvas, a component whose picture was deleted draws nothing where the picture was, so pick another file for it.
+
+## Size and storage limits
+
+- A file uploaded from your computer must be 1 MB or smaller.
+- Each project also has a total asset storage limit set by your plan. See [Plans and limits](/account/plans-and-limits).
+- For audio or video larger than these limits, host the file yourself and put its https link in the component's **Source**.
+
+## Name files so builds keep them
+
+Builds turn each file name into a resource name: lowercase, every character other than a letter or a digit becomes `_`, repeated underscores become one, and a name that starts with a digit or is a Java keyword, such as `new` or `class`, gets `img_` in front. `Hero Banner (final).png` becomes `hero_banner_final`.
+
+Two files in one folder whose names turn into the same resource name clash, and the Android build leaves one of them out. `Hero Banner.png` and `hero_banner.jpg` both become `hero_banner`. Name files in lowercase with underscores from the start, such as `hero_banner.png`, and give every file a different name.
+
+## Troubleshooting
+
+<Accordion>
+  <AccordionItem value="over-1mb" title='"hero.png" is over the 1 MB limit, so it was left out.'>
+    **Why:** files uploaded from your computer must be 1 MB or smaller.
+
+    **Fix:** export the image smaller, for example as WebP or at a lower resolution, and upload it again. For large audio or video, use an https link in the component's **Source**.
+  </AccordionItem>
+  <AccordionItem value="storage-limit" title="Asset storage limit reached for your plan">
+    **Why:** the project's assets have reached your plan's storage total. The message ends with how much is used out of the limit.
+
+    **Fix:** delete files you no longer use, upload smaller versions, or see [Plans and limits](/account/plans-and-limits) for a plan with more storage.
+  </AccordionItem>
+  <AccordionItem value="missing-on-android" title="An image shows on the canvas but not in the Android app">
+    **Why:** the file is an SVG, TIFF or ICO, which Android builds leave out, or its name clashes with another file's.
+
+    **Fix:** upload it as PNG, JPG or WebP, or rename it so no two files turn into the same name. The build log lists each skipped file.
+  </AccordionItem>
+  <AccordionItem value="font-missing" title="A font I uploaded does not appear in the built app">
+    **Why:** builds include the built-in font families only.
+
+    **Fix:** choose a built-in family in **Select Font Family** for that text.
+  </AccordionItem>
+  <AccordionItem value="image-expired" title="This image is no longer available. Generate it again to add it.">
+    **Why:** a generated image waits 30 minutes for you to import it.
+
+    **Fix:** press **Generate** again, then **Import**.
+  </AccordionItem>
+  <AccordionItem value="pixabay-key" title="Pixabay did not accept that key. Check it and try again.">
+    **Why:** the Pixabay API key was mistyped or is not valid.
+
+    **Fix:** copy the key again from your Pixabay account.
+  </AccordionItem>
+  <AccordionItem value="coloured-tiles" title="Screens from Vibe mode show coloured tiles instead of pictures">
+    **Why:** **AI images** is off, so Vibe mode does not make the illustrations and photos it could not find.
+
+    **Fix:** turn on **Generate images with AI** under **Settings → Project → Build**, or add pictures yourself.
+  </AccordionItem>
+</Accordion>
+
+## Next steps
+
+- [Vibe mode](/ai/overview): ask for a screen, a picture or a change in plain words.
+- [Theme colours, dark mode and styling](/guides/designing/theme): colours, glass and fonts.
+- [Layout and sizing](/guides/designing/layout-and-sizing): size and place the pictures on each screen.

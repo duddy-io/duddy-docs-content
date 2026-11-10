@@ -1,93 +1,136 @@
 ---
-title: Layout and sizing
-description: Rows, Columns and Stacks, what Fill and Auto mean, and how to build a screen that holds together on every device.
+title: "Layout and sizing: Rows, Columns, Fill and Auto"
+description: Make Duddy screens fit every phone. Choose a Row, Column or Stack, size with Fill, Auto, px and %, space with padding and margin, then align and scroll.
 ---
 
-Duddy screens are built out of nested containers, the same way native layouts are. Get the
-containers right and the screen works on a small phone and a tablet without you touching it
-again.
+Duddy screens are built from containers nested inside each other, the same way native Android and iOS layouts are. Get the containers and their sizes right once, and the screen holds together on a small phone and a large one without further work.
 
-## The four containers
+## Choose a container: Row, Column or Stack
 
-| Container | Arranges children |
+| Container | Places its children | Use it for |
+|---|---|---|
+| [Column](/components/layout#column) | Top to bottom. | Forms, lists of cards, most screens. |
+| [Row](/components/layout#row) | Side by side, left to right. | Toolbars, an icon beside a label, a price beside a title. |
+| [Stack](/components/layout#stack) | On top of each other, each at its own position. | Badges, overlays, text over an image. |
+| [ScrollableColumn](/components/layout#scrollablecolumn) and [ScrollableRow](/components/layout#scrollablerow) | Like Column and Row, inside an area that scrolls. | Anything taller or wider than the space it has. |
+| [CardView](/components/layout#cardview) | Top to bottom, inside a raised card with rounded corners, a border and a shadow. | A ready-made card. |
+
+The screen itself is a vertical container, so anything you drop straight onto it stacks downwards. A screen does not scroll by itself: content taller than the phone is cut off. Put it in a ScrollableColumn, as in [Make a screen scroll](#make-a-screen-scroll).
+
+Containers can be tapped. Row, Column, Stack and CardView have click events, and Row, Column and Stack have a **Ripple Color** for the touch feedback, so a whole row of a list can respond to a tap.
+
+<Figure
+  src="/media/guides/layout-containers.svg"
+  dark="/media/guides/layout-containers.dark.svg"
+  alt="Four containers. Column places children top to bottom: Arrange Children sets Top, Middle or Bottom, and each child's Position in Column sets Left, Center or Right. Row places them side by side: Arrange Children sets Left, Center or Right, and each child's Position in Row sets Top, Middle or Bottom. Stack layers them: each child takes one of nine Positions in Stack, and a Fill child covers the whole box. ScrollableColumn scrolls when its children are taller than it; a screen does not scroll by itself."
+  caption="How each container places its children, and the control that moves them."
+  width={960}
+  height={408}
+/>
+
+## Fill vs Auto vs a fixed size
+
+**Width** and **Height**, in the **Dimension** group, each take one of four answers:
+
+| Setting | What it does |
 |---|---|
-| **Column** | Top to bottom. Forms, lists of cards, most screens. |
-| **Row** | Left to right. Toolbars, an icon beside a label, a price beside a title. |
-| **Stack** | On top of each other, positioned by alignment. Badges, overlays, an image with text over it. |
-| **ScrollableColumn** / **ScrollableRow** | The same as Column and Row, inside a scrolling area. |
+| **px** | Exactly this size. |
+| **%** | A share of the parent's inside, after the parent's padding. |
+| **Auto** | As big as the content needs, and no bigger. |
+| **Fill** | Takes the space the parent has left. |
 
-A screen is itself a vertical container, so anything you drop straight onto it stacks
-downwards.
+A px in the properties panel is a density-independent pixel: 1 dp on Android and 1 pt on iOS, so a size looks the same on screens with different pixel densities.
 
-## Sizing: a number, Auto, or Fill
+**Fill** does most of the work. In a Row, children set to Fill share the width left over by the others; in a Column, they share the height. That is how a header gives its title all the room the icons do not need. Across the other direction, Fill takes the parent's full size, less the component's own margin: a child with **Height** set to Fill in a Row is as tall as the Row.
 
-Width and Height each take one of three answers.
+A Column, Row or Stack starts with **Width** set to **Fill** and **Height** set to **Auto**. That is why a new Row stretches across the screen but is only as tall as its contents.
 
-| Setting | Means |
-|---|---|
-| A number (`px` or `%`) | Exactly this size. |
-| **Auto** | As big as the content inside needs, and no bigger. |
-| **Fill** | Take the space the parent has left. |
+<Figure
+  src="/media/guides/layout-fill-and-auto.svg"
+  dark="/media/guides/layout-fill-and-auto.dark.svg"
+  alt="Two Rows. In the first, an Icon and a Button set to Auto take only what their content needs, and a Title set to Fill takes the rest. In the second, an Auto icon is followed by two Fill children, which split the rest equally. A key below explains each size: Auto is as big as its content; Fill shares what is left along the Row and takes the full size across it; px is a fixed size; % is a share of the parent's inside, after its padding."
+  caption="Auto takes what its content needs; Fill shares whatever is left along the Row."
+  width={960}
+  height={406}
+/>
 
-Fill is the one that does the work. In a Row, several children set to Fill share the
-remaining width between them; in a Column, they share the height. That is how you build a
-header where the title takes all the space and the icon takes only what it needs.
-
-<Callout type="warning">
-  **Inside a scrolling container, Fill means "as tall as the content" on the scrolling axis** —
-  there is no fixed height to divide up. A child set to Fill inside a `ScrollableColumn` therefore
-  wraps its content rather than filling the screen. Set an explicit height when you need one.
+<Callout type="warning" title="Fill wraps inside a scroller">
+  A scrolling container has no fixed length to share along the way it scrolls. A child set to Fill inside a ScrollableColumn is therefore as tall as its content, not as tall as the screen. Set a px height when you need one.
 </Callout>
 
-## Spacing
+## Padding vs margin
 
-- **Padding** is inside the component — the gap between its edge and its children.
-- **Margin** is outside it — the gap between it and its siblings.
-- A container's **gap** spaces its children evenly, which is almost always better than
-  putting a margin on each child.
+- **Padding** is inside a component: the space between its edge and its children.
+- **Margin** is outside it: the space between it and its neighbours. A margin can be negative, which lets a component reach past its parent's edge.
 
-Pick one spacing step and stick to it (4, 8, 12, 16, 24). Screens read as designed when the
-spacing repeats and as improvised when it does not.
+Rows, Columns and Stacks have no gap setting. Space their children with each child's **Margin**, and inset everything from the container's edge with the container's **Padding**. A [RecyclerView](/components/content#recyclerview) list has its own **Gap** between rows.
 
-## Alignment
+Choose one spacing step and keep to it, such as 4, 8, 12, 16 and 24 px. A screen reads as designed when the spacing repeats, and as improvised when it does not.
 
-A container aligns its children along two axes: the direction it lays them out in, and the
-one across it. In a Row, that is horizontal distribution and vertical alignment; in a
-Column, the reverse. A Stack positions each child independently — top-left, centre,
-bottom-right — which is what makes it the right container for badges and floating buttons.
+## Align and centre components
 
-## Recipes
+Alignment lives in the **Layout** group, as two controls:
+
+- **Arrange Children**, on a container, packs its children at the start, centre or end of the direction it lays them out in. In a Column that is **Top**, **Middle** or **Bottom**; in a Row, **Left**, **Center** or **Right**.
+- **Position in Column**, **Position in Row** and so on, on each child, place that child across the other direction. In a Column a child chooses **Left**, **Center** or **Right**; in a Row, **Top**, **Middle** or **Bottom**.
+
+The panel shows only the direction that can change something, so you never see the same choice twice. There is no "space between" setting: to push items apart, put an empty container with **Fill** between them, as in the recipes below.
+
+In a Stack, each child has a **Position in Stack** of its own: one of nine positions, from top left to bottom right. A child set to **Fill** in both directions covers the whole Stack, which is how a background picture sits behind other content.
+
+## Make a screen scroll
+
+<Steps>
+  <Step>Drop a ScrollableColumn straight onto the screen.</Step>
+  <Step>Set its **Height** to **Fill**, so it takes the screen's height.</Step>
+  <Step>Move the screen's content inside it. Keep bars such as a TopBar or BottomNavigation outside it, so they stay put while the content scrolls.</Step>
+</Steps>
+
+## Show and hide parts of a screen
+
+A component with **Visible** turned off is hidden and takes up no space, so the components around it close up. This is how a screen swaps an empty state for a list, or shows an error only when something fails.
+
+**Transition**, in the **Behavior** group, animates the change: **None**, **Fade**, **Slide Up** or **Scale**. The animation is skipped when the phone asks for reduced motion.
+
+To look at hidden states while you design, see [Drag and drop](/guides/designing/drag-and-drop).
+
+## Right-to-left layouts
+
+For Arabic, Persian, Hebrew and Urdu, set the screen's **Layout Direction** to **Right to Left**. The screen draws as a mirror image, with every dialog and sheet it shows: a Row's first child sits on the right, and a left alignment, margin, padding or text alignment sits on the right edge. Each piece of text keeps its own letters. See [Multilingual apps](/guides/logic/multilingual-apps).
+
+## Layout recipes
 
 <Accordion>
   <AccordionItem value="header" title="A header: title on the left, actions on the right">
-    A **Row**, vertically centred. The title has Width **Fill**; each icon has Width **Auto**.
-    The title takes everything the icons do not.
+    A **Row** with each child's **Position in Row** set to **Middle**. The title has **Width** **Fill**; each icon has **Width** **Auto**. The title takes everything the icons do not.
   </AccordionItem>
-  <AccordionItem value="scroll" title="A screen that scrolls">
-    Put a **ScrollableColumn** at the root with Height **Fill**, and everything else inside it.
-    Keep bars (TopBar, BottomNavigation) outside the scroller so they stay put.
+  <AccordionItem value="spread" title="Items spread across a row">
+    A **Row** holding the items, with an empty container set to **Width** **Fill** between each pair. The spacers share the space left over, so the items spread evenly from edge to edge.
   </AccordionItem>
   <AccordionItem value="card" title="A card with an image and text below it">
-    A **Column** with a background, corner radius and padding. The image has Width **Fill** and a
-    fixed height; the text is **Auto** in both directions.
+    A **CardView**, or a **Column** with a **Background**, a **Border Radius** and **Padding**. The image has **Width** **Fill** and a px height; the text is **Auto** in both directions.
   </AccordionItem>
   <AccordionItem value="badge" title="A badge on an avatar">
-    A **Stack**. The avatar is the first child; the badge is the second, aligned to the top-right,
-    with a small margin to pull it over the edge.
+    A **Stack**. The avatar is the first child; the badge is the second, with **Position in Stack** set to the top right and a small negative **Margin** to pull it over the edge.
   </AccordionItem>
   <AccordionItem value="footer" title="Content at the top, a button pinned to the bottom">
-    A **Column** with Height **Fill**. Between the content and the button, an empty container with
-    Height **Fill** — the spacer takes everything left over and pushes the button down.
+    A **Column** with **Height** **Fill**. Between the content and the button, an empty container with **Height** **Fill**: the spacer takes everything left over and pushes the button down.
+  </AccordionItem>
+  <AccordionItem value="background-image" title="A full-screen picture with content on top">
+    A **Stack** with **Width** and **Height** **Fill**. Its first child is an **Image** set to **Fill** in both directions with **Image Size** **Cover**; the content goes in a **Column** after it.
   </AccordionItem>
 </Accordion>
 
 ## Long lists
 
-A Column with fifty children builds fifty components. Use a
-[RecyclerView](/components/content) instead: it builds a handful of rows and reuses them as
-they scroll, and fills each one in from its **Bind Item** event.
+A Column with fifty children builds fifty sets of components. Use a [RecyclerView](/components/content#recyclerview) instead: it builds a handful of rows and reuses them as they scroll, filling each one in from its **Bind Item** event. Its **Reached End** event fires when the last row comes into view, which is the place to load the next page of items.
 
-<NextPrev
-  prev={{ title: "Screens and navigation", href: "/guides/designing/screens" }}
-  next={{ title: "Themes and styling", href: "/guides/designing/theme" }}
-/>
+## Check other screen sizes
+
+Press `5` for **Device & Zoom** and choose another phone, or choose **Custom** and enter a **W**, **H** and **DPI** to try a small phone or a tablet-sized screen. Then check the screen on your own phone with [Live test](/build/live-test).
+
+## Next steps
+
+- [Theme colours, dark mode and styling](/guides/designing/theme): colour the containers you have laid out.
+- [Layout components](/components/layout): every property of every container.
+- [Add screens and navigate between them](/guides/designing/screens): build the rest of the app.

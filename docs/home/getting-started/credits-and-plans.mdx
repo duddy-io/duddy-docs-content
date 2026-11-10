@@ -1,123 +1,182 @@
 ---
-title: Credits and plans
-description: One balance covers AI, builds and hosting — how credits are spent, what a plan changes, and how to keep a project cheap.
+title: "Credits: what uses them and what is free"
+description: "How Duddy credits work: what Vibe mode, AI images, palettes and extra builds cost, what stays free, the trial's daily pace and how to spend fewer credits."
 ---
 
-Duddy meters the things that cost real money to run — AI generation, compiling an app, and
-keeping a web app online — against a single **credit balance**. Everything else in the
-builder is included in your plan.
+Duddy meters the work that costs real money to run, such as AI generation and builds past your hourly limit, against
+one **credit balance**. Designing on the canvas, wiring logic and testing on your own phone are part of every plan and
+cost nothing.
 
-One number to watch, and every charge itemised in your account.
+How many credits you start with, and the limits around them, depend on your plan: see
+[Plans and limits](/account/plans-and-limits). To buy a plan or top up, see [Billing](/account/billing).
 
-## What spends credits
+## What uses credits
 
-| Action | Charged |
-|---|---|
-| **A Vibe turn** | Per turn, by what the turn actually used. A one-line edit costs a fraction of what building a whole app costs. |
-| **Generating an image** | Per image — `/imagine` in the chat, the **Imagine** tab of the asset picker, and the illustrations a build turn draws for its own screens, which are counted inside that turn. |
-| **Generating a palette** | Per palette, when you press **Generate with AI** under Settings → Theme. |
-| **A build past your hourly limit** | A few credits per build — builds within your plan's limit are free. See [Builds and your hourly limit](#builds-and-your-hourly-limit). |
-| **Hosting** | One credit for every two hours a web app is online, charged in advance. Hosting arrives with web builds, which are [coming soon](/getting-started/build-the-app#web-builds-and-hosting). |
+Every charge comes out of the same balance, and your credit history names the feature that caused it.
 
-Designing on the canvas, wiring blocks, collaborating, previewing,
-[testing live on a phone](/getting-started/build-the-app#test-it-live-on-a-device), uploading
-assets, saving versions and building within your plan's hourly limit cost nothing.
+<Figure
+  src="/media/home/credits-what-uses-them.svg"
+  dark="/media/home/credits-what-uses-them.dark.svg"
+  alt="One credit balance pays for Vibe turns, charged by what each turn used; generated images from /imagine, the Imagine tab and AI images; AI palettes; builds past your hourly limit, at 7 credits on the trial and Starter and 3 on Pro; and, once web builds arrive, hosting at one credit per two hours online. Designing on the canvas, wiring logic blocks, collaborating, previewing, Live test, uploading assets, saving versions and builds within your hourly limit are free."
+  caption="One balance covers every metered action. Everything in the Free column costs nothing."
+  width={960}
+  height={404}
+/>
 
-## What a plan changes
-
-A turn costs the same on every plan. What a plan changes is **how many credits your money
-buys**, plus the limits around them: how many apps and versions you can keep, how many builds
-you can run in an hour, whether there is a daily limit on spending, whether iOS builds are
-available, and which AI models you can select.
-
-The plan ladder and current prices live in your dashboard under **Account → Plan**.
-
-| | Free trial | Paid plans |
+| Action | Cost | In your credit history |
 |---|---|---|
-| **Credits** | 100, once, for seven days | Added every month, plus any top-ups |
-| **Daily limit** | 40 on your first day, then 10 a day | None, unless the plan sets one |
-| **Top-ups** | Not sold | Any time; they never expire |
-| **A build past the hourly limit** | 7 credits | 7 on Starter, 3 on Pro and Enterprise |
-| **Balance needed to start a Vibe turn** | 1 credit | 10 credits |
+| **A Vibe mode turn** | Charged per turn, for what the turn actually used. A one-line edit costs a small fraction of building a whole app. | **Vibe** |
+| **Pictures a build turn makes** | Counted inside that turn. A turn makes them only when **Generate images with AI** is on in **Settings → Project → Build**; it is off by default, and a turn makes at most 6. | **Vibe** |
+| **Generating an image yourself** | Charged per image, from `/imagine` in the chat or the **Imagine** tab of the asset picker. | **Imagine** |
+| **Generating a palette** | Charged per palette, when you press **Generate with AI** in **Settings → Theme**. | **Imagine-theme** |
+| **A build past your hourly limit** | A fixed price set by your plan. Builds within the limit are free. | **Build overage** |
+| **Hosting a web app** | 1 credit for every 2 hours online. Hosting arrives with web builds, which are coming soon. | **Web hosting** |
+
+Everything else is free: designing on the canvas, logic blocks, collaborating, previewing,
+[Live test](/build/live-test), uploading assets, saving versions and every build within your hourly limit.
 
 ## Builds and your hourly limit
 
-**Builds within your plan's hourly build limit are free.** Past that limit a build isn't
-refused: it costs a few credits from your balance — **7 on the free trial and Starter, 3 on Pro
-and Enterprise**.
+Each plan includes a number of free builds an hour. A build past that number is not refused: it costs a fixed number
+of credits, listed for each plan in [Plans and limits](/account/plans-and-limits).
 
-- **You're asked first.** When you start a build past your limit, the builder shows the price
-  — "You've used this hour's builds. This build costs 7 credits." — and asks before charging
-  anything. If you cancel, nothing is spent.
-- **It's the same balance.** Build credits come out of the balance your AI generations use, and
-  count towards your daily credit limit if your plan has one — so a build your available
-  credits can't cover isn't started.
-- **You're charged once the build is queued**, and the charge shows in your credit history as
-  **Build overage**.
-- **Test apps are separate.** A [Live test](/getting-started/build-the-app#test-it-live-on-a-device)
-  build counts against none of your build limits and never costs overage credits; it has its
-  own allowance of six rebuilds an hour per project.
+- **The limit is per account, not per project.** Every release build you start counts, whichever project it is for.
+- **The hour starts with your first build.** It runs from the first build after your last hour ended, not from the
+  start of a clock hour.
+- **You are asked first.** A build past the limit opens **This build costs credits** with the price, for example
+  "You've used this hour's builds. This build costs 7 credits." Press **Build** to spend the credits, or cancel and
+  nothing is charged.
+- **It is the same balance.** A build that your balance cannot cover is not started. The credits are taken when the
+  build is queued and show in your history as **Build overage**.
+- **Live test builds are separate.** Building or rebuilding a test app never counts towards this limit and never costs
+  credits. It has its own allowance, explained on [Live test](/build/live-test).
 
-<Callout type="info" title="The trial is a trial, not a free tier">
-  A new account starts on a seven-day trial with 100 credits: 40 on your first day, then 10 a
-  day. It is enough to design a real app and build it a few times — it is not a permanent free plan.
-</Callout>
+## The free trial's daily limit
 
-## The trial's daily limit
+The free trial's 100 credits are yours from the start, but you spend them at a steady pace: **up to 40 on your first
+day, then up to 10 on each day after**. Seven days of that is exactly 100, so you can use every credit, though not in one
+sitting.
 
-The trial's 100 credits are yours from the start, but you spend them at a steady pace:
-**up to 40 on your first day, then up to 10 on each day after**. Seven days of that is exactly
-the 100, so the whole pool is reachable — just not in one sitting.
+- **A day is 24 hours from when your trial started**, not a calendar date. Start at 11 pm and your first day runs until
+  11 pm the next evening.
+- **Nothing is added each day.** The limit decides how much of your balance you can use today. It never adds to the
+  balance, and credits you leave unspent do not raise tomorrow's limit.
+- **You can see where you stand.** **Account → Overview** shows **AI credits today** and when more arrive, and Vibe
+  mode tells you when your next credits arrive if it stops you.
+- **Paid plans have no daily limit.** Your balance is the only ceiling.
 
-- **A day is 24 hours from when your trial started**, not a calendar date. Start at 11 pm and
-  your first day runs until 11 pm the next evening. Your dashboard shows how much of today's
-  limit is left and when the next day begins, or on your last day when the trial ends. Vibe
-  mode tells you the time if it stops you.
-- **Nothing is added each day.** The limit decides how much of your balance you can use today;
-  it never adds to it, and what you leave unspent does not carry over to raise tomorrow's limit.
-- **The trial sells no top-ups.** Its 100 credits are a fixed allowance — for more, choose a
-  plan, which adds credits every month and can be topped up whenever you need.
-- **Paid plans have no daily limit** unless the plan says otherwise. Your balance is the only
-  ceiling, and where a plan does set a daily limit, top-ups raise your balance, not the day's
-  limit.
-- **Hosting is the one thing a daily limit never stops.** A hosted web app is charged against
-  your balance alone, so it stays online as long as the balance lasts — only an empty balance
-  takes it offline.
+The trial sells no top-ups. For more credits, choose a plan: see [Plans and limits](/account/plans-and-limits).
 
-## Reading your balance
+## Check your balance and history
 
-**Account → Credits** shows what you have, what you have used, a meter of today's allowance
-where your plan has one, and a ledger of every charge with the action that caused it — a build
-past the limit as **Build overage**, a generated image as **Imagine**. The Vibe chat also shows
-your balance in its header, and updates it the moment a turn settles.
+Your balance lives in the dashboard's Account area:
 
-Three things worth knowing:
+- **Account → Overview** shows how many credits you have used, how many are left and when your plan or trial ends.
+- **Account → Credits** ends with **Credit history**, every credit in and out of your balance. **See everything** opens
+  **Account → Usage**, where you can also export your activity as a CSV file.
 
-- **A turn reserves before it runs.** When a turn starts, Duddy sets aside a small share of
-  your balance and grows that hold step by step as the turn works, so two turns running at
-  once — an edit in one project while an AI build runs in another — can never spend the same
-  credit twice. The chat header says when requests still running hold part of your balance,
-  and a held credit comes back the moment its request finishes.
-- **A turn needs a minimum balance to start.** A paid plan must hold 10 credits to begin a
-  turn, the trial 1. A long turn makes many model calls and the last one always overshoots
-  slightly, so Duddy refuses to begin a turn it might not be able to finish rather than cutting
-  one off halfway — and a turn that has started is always finished, even if it empties the
-  balance.
-- **Credits are bought against an active paid plan.** Top-ups are for topping up — a purchase
-  with no active plan, or on the free trial, is refused up front rather than taken and stranded.
-  Plan credits are spent first; top-ups never expire and survive a plan change.
+The Vibe mode chat does not show your balance, but its header shows a badge when credits are about to stop a turn.
+Hover over a badge to read the details.
 
-## Keeping a project cheap
+| Badge | Means |
+|---|---|
+| **Credits low** | Your balance is under 50 credits. |
+| **Credits too low** | Your balance is below what a new turn needs to start. |
+| **Today's credits used** | The free trial's daily limit is reached. The details say when more arrive. |
+| **Credits in use** | Turns still running on your account are holding the credits a new turn needs. |
 
-<Steps>
-  <Step>**Say more in the first prompt.** One well-described screen costs far less than five rounds of "not like that".</Step>
-  <Step>**Use the smaller settings for small work.** [Quality and Thinking](/ai/overview#settings) are separate knobs, and a text tweak does not need the expensive ones.</Step>
-  <Step>**Spend on the design model, not the build model.** See [Models](/ai/models) — a free-tier model handles edits and questions perfectly well, and the build model only transcribes.</Step>
-  <Step>**Edit by hand when it is faster.** Changing a colour on the canvas is free; asking for it is not.</Step>
-  <Step>**Test on a phone before you build.** A live test app is free and follows every edit; a release build past your hourly limit is not.</Step>
-</Steps>
+A turn holds credits while it runs, so two turns running at once, such as an edit in one project while an AI build
+runs in another, can never spend the same credit.
 
-<Callout type="warning">
-  If Vibe mode says it is unavailable rather than offering an upgrade, that is a plan-level
-  switch and buying credits will not lift it — check **Account → Plan**.
-</Callout>
+<Figure
+  src="/media/home/credits-turn-hold.svg"
+  dark="/media/home/credits-turn-hold.dark.svg"
+  alt="Three stages of a Vibe turn's credits. Before it starts, it needs at least 10 credits, or 1 on the free trial, within today's allowance if your plan has one, and credits already held don't count; otherwise it doesn't start. While it runs, a hold is set aside and grows with each step. When it ends, you are charged for what the turn used and the rest of the hold returns to your balance. A started turn always finishes."
+  caption="A turn holds credits while it works and charges only what it used, so two turns running at once never spend the same credit."
+  width={960}
+  height={346}
+/>
+
+- **A turn needs a minimum balance to start:** 10 credits on a paid plan, 1 on the free trial. Credits held by other
+  running turns do not count towards it.
+- **A turn that has started always finishes**, even if it empties your balance. The last model call can go past what
+  was left, so your balance can drop below zero. The next credits you add clear that first.
+
+## Buy more credits
+
+On a paid plan you can top up whenever you need more, from **Account → Credits**. The steps are in
+[Billing](/account/billing). The free trial sells no top-ups; choose a plan instead.
+
+## When you run out: messages and fixes
+
+These are the messages Vibe mode and the designer show when credits stop a request.
+
+<Accordion>
+  <AccordionItem value="out-of-credits" title="You're out of AI credits">
+    **Why:** your balance is below the minimum a turn needs to start: 10 credits, or 1 on the trial.
+
+    **Fix:** press **Top up** on the card, or move to a bigger plan. On the trial the card offers **See plans** instead.
+  </AccordionItem>
+  <AccordionItem value="overdrawn" title="Your AI credits are overdrawn">
+    **Why:** the last turn finished after your balance ran out, so the balance is below zero.
+
+    **Fix:** top up to clear it and keep building. On the trial, choose a plan.
+  </AccordionItem>
+  <AccordionItem value="daily-limit" title="You've used today's AI credits">
+    **Why:** the free trial's daily limit is reached. The message says when the next credits arrive.
+
+    **Fix:** wait for your next day, or press **See plans** and choose a plan, which has no daily limit.
+  </AccordionItem>
+  <AccordionItem value="held" title="Another request is using your AI credits">
+    **Why:** turns still running on your account, perhaps in another project or a collaborator's chat, hold the credits
+    this one needs.
+
+    **Fix:** wait for them to finish, then send your message again. The held credits come back as soon as they do.
+  </AccordionItem>
+  <AccordionItem value="model-tier" title="(model name) isn't in your plan">
+    **Why:** the turn uses a Standard or Premium model and your plan does not include that tier. The card says, for
+    example, "It's a standard model. Switch to a free model to keep going, or upgrade to unlock it."
+
+    **Fix:** press **Switch model** and pick a model your plan includes, or press **See plans** to upgrade. See
+    [Models](/ai/models).
+  </AccordionItem>
+  <AccordionItem value="build-overage" title="This build costs credits">
+    **Why:** you have used your plan's free builds for this hour.
+
+    **Fix:** press **Build** to pay the price shown, or wait until the hour is up. Keep testing with
+    [Live test](/build/live-test) meanwhile; it is free.
+  </AccordionItem>
+  <AccordionItem value="vibe-unavailable" title="Vibe Mode is unavailable">
+    **Why:** Vibe mode is paused for your plan for now. It is not a plan limit, so buying credits or upgrading does not
+    change it.
+
+    **Fix:** try again later, and check [status.duddy.io](https://status.duddy.io) for an incident.
+  </AccordionItem>
+  <AccordionItem value="billing-down" title="Billing is temporarily unreachable">
+    **Why:** Duddy could not read your balance, and it does not start a turn it cannot charge for.
+
+    **Fix:** try again in a moment. Nothing was charged.
+  </AccordionItem>
+</Accordion>
+
+## Keep a project cheap
+
+- **Say more in the first prompt.** One well-described screen costs far less than five rounds of "not like that".
+- **Turn Quality down for small work.** **Quality** is the one dial that trades time and credits for care, and a text
+  tweak does not need **Best**. See [Vibe mode](/ai/overview).
+- **Choose the model for the job.** Models are charged by what they use, so a cheaper model for edits and questions
+  saves credits. See [Models](/ai/models).
+- **Edit by hand when it is faster.** Changing a colour on the canvas is free; asking for it is not.
+- **Leave AI images off unless you want them.** With **Generate images with AI** off, a build turn draws a coloured
+  tile instead of making a picture.
+- **Test on your phone before you build.** [Live test](/build/live-test) is free and follows every edit; a release
+  build past your hourly limit is not.
+
+## Next steps
+
+<CardGrid>
+  <Card title="Plans and limits" href="/account/plans-and-limits">Compare the trial, Starter and Pro, and see what happens at each limit.</Card>
+  <Card title="Billing" href="/account/billing">Buy a plan, top up credits, read your payment history or cancel.</Card>
+  <Card title="Models" href="/ai/models">Choose the AI models behind each Vibe mode turn.</Card>
+  <Card title="Live test" href="/build/live-test">Run your app on your phone while you design, for free.</Card>
+</CardGrid>

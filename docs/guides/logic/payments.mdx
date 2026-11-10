@@ -1,0 +1,122 @@
+---
+title: "Payments: sell in-app purchases"
+description: "Sell digital products and consumables in your app with the InAppPurchase component, on Google Play Billing and StoreKit: load prices, buy, grant and restore."
+isNew: true
+---
+
+Duddy apps take payments through the stores' own in-app purchase systems, Google Play Billing on
+Android and StoreKit on iPhone, with the [InAppPurchase](/components/other#inapppurchase)
+component. The store shows the checkout and takes the payment; your app loads the products, starts
+a purchase and unlocks what was bought.
+
+## What you can sell
+
+| You want to sell | Supported |
+|---|---|
+| A permanent unlock, such as removing ads or a pro feature | Yes, with InAppPurchase and **Consumable** off. |
+| Something used up and bought again, such as coins or extra lives | Yes, with InAppPurchase and **Consumable** on. |
+| An auto-renewing subscription | No. InAppPurchase sells one-off products only. |
+| Physical goods or services paid by card, UPI or PayPal | Not yet. The Stripe, Razorpay and PayPal components in the component library cannot be given their keys yet, so they cannot take a payment. |
+
+<Callout type="warning" title="Selling needs a store build">
+  In-app purchases are paid through Google Play or the App Store, so customers can only buy in a
+  copy of your app installed from that store. Google Play takes new apps as App Bundles (`.aab`),
+  which Duddy does not build yet (coming soon), and Duddy's iOS builds are beta ad hoc builds that
+  install by link on registered devices, with no App Store upload. See
+  [Share and publish](/build/share-and-publish).
+</Callout>
+
+You can design and wire the whole purchase flow now. How you test purchases before release is set
+by each store; see Google Play's and Apple's guides to testing in-app purchases.
+
+## Before you start
+
+- **Turn Web off.** InAppPurchase is built for Android and iOS only, and a project that has never
+  chosen its platforms targets all three. Open **Settings → Project** and turn **Web** off under
+  **Target platforms**, or the import is refused.
+- **Create the products in each store** you sell in: in Play Console for Android and in App Store
+  Connect for iPhone, as one-time (non-subscription) products. Give each a product ID, such as
+  `remove_ads` or `coins_100`, and use the same IDs in both stores.
+- **Check your plan includes iOS builds** if you sell on iPhone; see
+  [Plans and limits](/account/plans-and-limits).
+
+## Sell a product
+
+<Steps>
+  <Step>Import **InAppPurchase** and drag it onto your shop screen. It adds the Android billing permission itself.</Step>
+  <Step>In `when InAppPurchase1.Ready`, call **Load Products** with every product ID in one text, separated by commas: `remove_ads,coins_100`. Each call replaces the products loaded before, so load them all at once.</Step>
+  <Step>In **Products Loaded**, which gives `count`, show each product with **Get Price** and **Get Title**, such as `set PriceLabel.Text to call InAppPurchase1.Get Price "remove_ads"`. The price comes from the store, in the buyer's currency.</Step>
+  <Step>In the buy button's **Click**, call **Buy** with the product ID. The store's checkout opens.</Step>
+  <Step>In **Purchased**, which gives `productId`, grant what was bought and save it, for example with AppStorage **Store Value**. Confirming the purchase with the store is done for you.</Step>
+  <Step>Handle **Purchase Cancelled**, when the buyer backs out and nothing is charged, and **Error**, which gives the store's `message`.</Step>
+</Steps>
+
+Grant items only in **Purchased** and **Purchase Restored**, never when the buy button is tapped.
+On iPhone, **Purchased** can also fire when the screen opens, for a purchase the store completed
+outside the checkout, such as one approved later. Make granting safe to repeat: check `productId`,
+then set "owned" to true rather than adding to a count twice.
+
+### Permanent unlocks and consumables together
+
+**Consumable** applies to every purchase made through that InAppPurchase. With it on, a purchase is
+used up straight away so it can be bought again; with it off, the buyer owns the product for good.
+To sell both kinds, use two InAppPurchase components: one with **Consumable** off for unlocks and
+one with it on for coins, each loading its own product IDs. Keep a consumable's balance yourself,
+in AppStorage or on your own server.
+
+## Restore purchases
+
+People who reinstall your app, or move to a new phone, expect what they bought to come back. Add a
+**Restore purchases** button.
+
+<Steps>
+  <Step>In its **Click**, call **Restore Purchases**.</Step>
+  <Step>Handle **Purchase Restored**, which gives `productId` once for each product the account owns, and grant it again.</Step>
+  <Step>Handle **Restore Finished**, which gives `count`. A count of 0 means the account owns nothing, so say so.</Step>
+</Steps>
+
+Restore brings back products the account owns, which are permanent unlocks. Consumables are used up
+when bought, so they do not come back this way.
+
+<Callout type="info" title="Product IDs go to Load Products">
+  **Settings → Integrations → In-App Purchases** has fields for your product and subscription IDs.
+  They keep the list with your project, but InAppPurchase uses the IDs you pass to **Load Products**.
+</Callout>
+
+## Troubleshooting
+
+<Accordion>
+  <AccordionItem value="import-web" title="This component is not built for Web, which this app targets. Turn Web off under Target platforms in Project settings, or choose another component.">
+    **Why:** InAppPurchase works on Android and iOS only, and the project still targets the web.
+    **Fix:** open **Settings → Project**, turn **Web** off under **Target platforms**, and import it again.
+  </AccordionItem>
+  <AccordionItem value="zero" title="Products Loaded gives 0">
+    **Why:** the store found none of the IDs: they differ from the store's, the products are not active yet, or the store does not know this app's package name.
+    **Fix:** compare the IDs letter for letter with Play Console and App Store Connect, check each product is active, and check the app's package name matches the store listing.
+  </AccordionItem>
+  <AccordionItem value="unknown" title="Unknown product: remove_ads. Call Load Products first.">
+    **Why:** **Buy** ran for a product that was not loaded, or before **Products Loaded**.
+    **Fix:** call **Buy** only after **Products Loaded**, with an ID that was in the **Load Products** list.
+  </AccordionItem>
+  <AccordionItem value="not-connected" title="The billing service is not connected yet">
+    **Why:** on Android, **Load Products** or **Restore Purchases** ran before the store connection opened.
+    **Fix:** call them from **Ready**, not from the screen's **Initialize**.
+  </AccordionItem>
+  <AccordionItem value="no-ids" title="No product IDs given">
+    **Why:** **Load Products** was given empty text.
+    **Fix:** pass your product IDs, separated by commas.
+  </AccordionItem>
+  <AccordionItem value="stripe" title="Stripe publishable key is not configured for this project">
+    **Why:** StripePayment, RazorpayPayment and PaypalPayment need keys that no setting in the designer can store yet. Razorpay reports "Razorpay is not configured for this project." and PayPal "PayPal is not configured for this project".
+    **Fix:** remove the component. For digital goods, use InAppPurchase as this page shows.
+  </AccordionItem>
+</Accordion>
+
+## Next steps
+
+<CardGrid>
+  <Card title="Share and publish" href="/build/share-and-publish">What Duddy builds for each store today, and what you do yourself.</Card>
+  <Card title="Data, APIs and storage" href="/guides/logic/data-and-apis">Save what a person owns on the device or on your server.</Card>
+  <Card title="Device and utilities" href="/components/other#inapppurchase">Every InAppPurchase block, with its inputs and events.</Card>
+  <Card title="Plans and limits" href="/account/plans-and-limits">Which plans include iOS builds.</Card>
+</CardGrid>

@@ -1,159 +1,369 @@
 ---
-title: Layout components
-description: Containers that decide where everything else goes — plus the bars, tabs and overlays a screen is framed by.
+title: "Layout components: Row, Column, Stack and tabs"
+description: "Reference for Duddy's layout components: Screen, Column, Row, Stack, scrolling containers, CardView, Divider, TopBar, tabs, pagers, Dialog and BottomSheet."
 ---
 
-Containers that decide where everything else goes — plus the bars, tabs and overlays a screen is framed by.
+Layout components hold other components and decide where they sit. They also frame a screen: the bars across the top and bottom, the tabs and pages a screen switches between, and the dialogs and sheets that open over it. For how Fill, Auto, padding and margin behave, read [Layout and sizing](/guides/designing/layout-and-sizing) alongside this page.
 
-<Callout type="info">
-  Sizing behaves differently inside a scrolling container: on the scrolling axis, **Fill** means
-  "as tall as the content". See [Layout and sizing](/guides/designing/layout-and-sizing).
-</Callout>
+## Choosing a container
 
-| Component | Does |
+| You want | Use |
 |---|---|
-| [Screen](#screen) | The root of every screen in an app: it holds the components placed on it and owns the theme, the background and the system status and navigation bars. |
-| [Column](#column) | A layout container that stacks its children top to bottom. |
-| [Row](#row) | A layout container that lays its children out side by side, left to right. |
-| [Stack](#stack) | A layout container that layers child components on top of each other along the z-axis. |
-| [ScrollableColumn](#scrollablecolumn) | A vertical stack of children inside a scrolling area, so content taller than the space available can be scrolled through. |
-| [ScrollableRow](#scrollablerow) | A horizontal strip of children that scrolls sideways, for carousels and chip rails whose children are wider than the screen. |
-| [CardView](#cardview) | A tappable container with rounded corners, a border and a drop shadow, used to group related content into a raised card. |
-| [TopBar](#topbar) | The bar across the top of a screen, holding a title, an optional subtitle, a navigation icon on the left, and tappable action icons on the right. |
-| [BottomNavigation](#bottomnavigation) | A bar pinned to the bottom of the screen holding up to five labeled icons, used to switch between the main sections of an app. |
-| [TabLayout](#tablayout) | A row of tabs that pairs itself with a ViewPager on the same screen: swiping moves the tabs, tapping moves the pager. |
-| [ViewPager](#viewpager) | A container whose children each become one full-size page the user swipes between, and which pairs automatically with a TabLayout on the same screen. |
-| [Dialog](#dialog) | A modal container the user fills with any components, shown in its own window over the screen. |
-| [BottomSheet](#bottomsheet) | A panel that slides up from the bottom of the screen over the current content and holds child widgets. |
-| [DynamicLoader](#dynamicloader) | A container that renders a Duddy document your server sends at run time — server-driven UI inside a shipped app. |
+| Children one under another: a form, the inside of a card | [Column](#column) |
+| Children side by side: an icon beside a label, a row of buttons | [Row](#row) |
+| Children layered on top of each other: a badge over an icon, text over a picture | [Stack](#stack) |
+| A screen whose content is taller than the phone | [ScrollableColumn](#scrollablecolumn) |
+| A sideways carousel or a rail of chips | [ScrollableRow](#scrollablerow) |
+| A raised, tappable card | [CardView](#cardview) |
+| A thin line between sections | [Divider](#divider) |
+| A long list built from data | [RecyclerView](/components/content#recyclerview), not a Column with one child per item |
+| A drawn shape, such as a circle or a star, that clips what is inside it | [Shape](/components/content#shape). The palette lists it under Layout. |
+
+A Column places its children top to bottom: its **Content Alignment** moves them up or down, and each child's own **Alignment** moves it left or right. A Row is the same turned on its side. In a Stack, each child's **Alignment** places it at one of nine positions, from top-left to bottom-right.
+
+| Component | What it does | Draws | New projects |
+|---|---|---|---|
+| [Screen](#screen) | The root of every screen: its theme, background and the system bars. | Yes | Yes |
+| [Column](#column) | Stacks its children top to bottom. | Yes | Yes |
+| [Row](#row) | Lays its children out side by side. | Yes | Yes |
+| [Stack](#stack) | Layers its children on top of each other. | Yes | Yes |
+| [ScrollableColumn](#scrollablecolumn) | A Column that scrolls when its children are taller than it. | Yes | Yes |
+| [ScrollableRow](#scrollablerow) | A Row that scrolls sideways. | Yes | Yes |
+| [CardView](#cardview) | A tappable container with rounded corners and a shadow. | Yes | Yes |
+| [Divider](#divider) | A thin horizontal or vertical rule. | Yes | Import |
+| [TopBar](#topbar) | The bar across the top of a screen. | Yes | Yes |
+| [BottomNavigation](#bottomnavigation) | A bar of up to five tabs at the bottom of a screen. | Yes | Yes |
+| [TabLayout](#tablayout) | A row of tabs that pairs with a ViewPager. | Yes | Yes |
+| [ViewPager](#viewpager) | Full-size pages the person swipes between. | Yes | Yes |
+| [Dialog](#dialog) | A modal window over the screen, filled with any components. | Yes | Yes |
+| [BottomSheet](#bottomsheet) | A panel that slides up from the bottom of the screen. | Yes | Yes |
+| [DynamicLoader](#dynamicloader) | Renders a Duddy document your server sends while the app runs. | Yes | Import |
 
 ## Screen
 
-The root of every screen in an app: it holds the components placed on it and owns the theme, the background and the system status and navigation bars.
+The root of every screen in an app. It holds the components placed on it and owns the screen's theme, its background and the system status and navigation bars. You never drag a Screen from the palette: each screen in your screen list is one. See [Screens and navigation](/guides/designing/screens) to add, open and close screens.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** yes, as every screen
 
-**Events** — `Initialize`
+| Property | Default | What it does |
+|---|---|---|
+| **Theme** | Default | The theme collection the screen and everything on it draws with. See [Themes and styling](/guides/designing/theme). |
+| **Background** | `sheet` | What fills the screen behind its content: a colour, a theme colour, a gradient or an image. |
+| **Status Bar**: **Show**, **Color**, **Light Icons** | on, `primary`, on | The system bar at the top. Turn **Light Icons** off over a light colour so the clock stays readable. |
+| **Navigation Bar**: **Show**, **Color**, **Light Icons** | on, `background`, off | The system bar at the bottom. **Light Icons** here works on Android only. |
+| **Layout Direction** | Left to Right | **Right to Left** mirrors the screen for Arabic, Persian, Hebrew and Urdu: a Row's first child sits at the right, while each text keeps its own letters. |
+
+**Events**
+- **Initialize** — once, when the screen has been built and is about to show. Load data and set up components here.
+- **Resume** — each time the screen comes back to the front after being covered: another screen closed onto it, or the app returned from the background. It does not fire on the first show. Reload a list here after an edit screen closes.
 
 ## Column
 
-A layout container that stacks its children top to bottom. Use it for lists, forms and cards, and style it with a background, border, corners and shadow.
+Stacks its children top to bottom. Use it for forms, the inside of a card and any vertical group, and style it as a panel with a background, a border, rounded corners and a shadow.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** yes
 
-**Events** — `Click`, `Long Click`
+| Property | Default | What it does |
+|---|---|---|
+| **Content Alignment** | top-left | Where the children sit inside the column when there is room to spare. |
+| **Width**, **Height** | Fill, Auto | Fill takes the space available; Auto grows with the children. |
+| **Background**, **Border Radius**, **Stroke**, **Shadow** | none | Turn the column into a panel. |
+| **Ripple Color** | transparent | The ripple that spreads from a tap. Transparent shows none. |
+
+**Events**
+- **Click** — a tap on the column, including on empty space between its children, so a whole group can act as one button.
+- **Long Click** — a press and hold. It consumes the press, so **Click** does not follow.
 
 ## Row
 
-A layout container that lays its children out side by side, left to right. Use it for toolbars, button strips and icon-and-text rows.
+Lays its children out side by side, left to right. Use it for toolbars, strips of buttons and an icon beside its label.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** yes
 
-**Events** — `Click`, `Long Click`
+| Property | Default | What it does |
+|---|---|---|
+| **Content Alignment** | top-left | Where the children sit inside the row when there is room to spare. |
+| **Width**, **Height** | Fill, Auto | Auto height fits the tallest child. |
+| **Background**, **Border Radius**, **Stroke**, **Shadow**, **Ripple Color** | none | Style the row as a strip or a pill. |
+
+**Events**
+- **Click** — a tap on the row, including on empty space between its children.
+- **Long Click** — a press and hold. It consumes the press, so **Click** does not follow.
 
 ## Stack
 
-A layout container that layers child components on top of each other along the z-axis. Supports alignment positioning and z-indexing.
+Layers its children on top of each other, the first child at the back. Use it for a badge over an icon, a caption over a picture, or a button floating over a list. Place each child with its own **Alignment**; a child set to Fill covers the whole stack.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** yes
 
-**Events** — `Click`, `Long Click`
+| Property | Default | What it does |
+|---|---|---|
+| **Width**, **Height** | Fill, Auto | The stack's own size. |
+| **Background**, **Border Radius**, **Stroke**, **Shadow**, **Ripple Color** | none | Style the area behind the layers. |
+
+**Events**
+- **Click** — a tap on the stack, including on empty space no child covers.
+- **Long Click** — a press and hold.
 
 ## ScrollableColumn
 
-A vertical stack of children inside a scrolling area, so content taller than the space available can be scrolled through. No scrollbar is drawn.
+A Column inside a scrolling area, so content taller than the space available can be scrolled through. It is the usual body of a long screen. No scrollbar is drawn.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** yes
 
-**Events** — `Click`, `Long Click`
+| Property | Default | What it does |
+|---|---|---|
+| **Height** | Auto | How tall the visible area is. Give it Fill or a fixed height so the content has room to scroll; with Auto it grows with its children and nothing scrolls. |
+| **Padding** | 0 | Space inside the edges. It scrolls with the content. |
+| **Enabled** | on | Off ignores touch and dims the column to half opacity. |
+
+Inside a scrolling container, Fill on the scrolling axis means "as long as the content"; see [Layout and sizing](/guides/designing/layout-and-sizing).
+
+**Events**
+- **Click** — a tap on the scrolling area itself rather than on one of its children.
+- **Long Click** — a press and hold. It consumes the press, so **Click** does not follow.
 
 ## ScrollableRow
 
-A horizontal strip of children that scrolls sideways, for carousels and chip rails whose children are wider than the screen. No scrollbar is drawn.
+A Row that scrolls sideways, for carousels and rails of chips that are wider than the screen. No scrollbar is drawn.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** yes
 
-**Events** — `Click`, `Long Click`
+| Property | Default | What it does |
+|---|---|---|
+| **Width** | Fill | How wide the visible area is. With Auto it shrinks to fit its children and nothing scrolls. |
+| **Height** | Auto | Fits the tallest child. |
+| **Enabled** | on | Off ignores touch and dims the row to half opacity. |
+
+**Events**
+- **Click** — a tap on the strip itself rather than on one of its children.
+- **Long Click** — a press and hold. It consumes the press, so **Click** does not follow.
 
 ## CardView
 
-A tappable container with rounded corners, a border and a drop shadow, used to group related content into a raised card.
+A tappable container with rounded corners, a border and a drop shadow, used to group related content into a raised card. Its children stack top to bottom, as in a Column.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** yes
 
-**Events** — `Click`, `Long Press`, `Focus`, `Blur`
+| Property | Default | What it does |
+|---|---|---|
+| **Padding** | 20 on every side | Space between the card's edge and its content. |
+| **Border Radius** | 8 on every corner | How rounded the corners are. |
+| **Background** | `background` | The card's fill. |
+| **Content Alignment** | top-left | Where the children sit inside the card. |
+| **Enabled** | on | Whether the card responds to taps. |
+
+**Events**
+- **Click** — a tap on the card. Open a detail screen here.
+- **Long Press** — a press and hold, often used for a delete or share menu.
+- **Focus** and **Blur** — the card gains or loses focus, for example under keyboard navigation.
+
+## Divider
+
+A thin rule that separates content into sections. Drop it between rows to divide a list or a form, or set it vertical to split two columns. By default it spans the full width of its parent.
+
+**Draws:** on the screen · **In new projects:** no, import it
+
+| Property | Default | What it does |
+|---|---|---|
+| **Orientation** | horizontal | **horizontal** divides rows stacked one above another; **vertical** divides columns side by side. |
+| **Thickness** | 1 | How thick the line is. |
+| **Length** | Fill | How long the line runs: Fill spans the parent, or set a fixed length. |
+| **Color** | follows the theme | The colour of the line. |
+
+A Divider has no events or functions.
 
 ## TopBar
 
-The bar across the top of a screen, holding a title, an optional subtitle, a navigation icon on the left, and tappable action icons on the right.
+The bar across the top of a screen, with a title, an optional subtitle, a navigation icon on the left and tappable action icons on the right.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** yes
 
-**Events** — `Navigation Click`
+| Property | Default | What it does |
+|---|---|---|
+| **Title**: **Text**, **Center** | `Screen`, off | The heading, usually the screen's name. **Center** puts the title and subtitle in the middle of the bar. |
+| **Title Size** | 20 | How large the title is drawn. The subtitle stays at 14. |
+| **Subtitle**: **Text** | empty | A smaller line under the title, such as a section name or a count. |
+| **Navigation**: **Icon** | none | The icon at the left end, usually a back arrow or a menu glyph. Empty shows no icon. |
+| **Menu**: **Items** | none | The action icons at the right end, each with a name and an icon. An item whose icon is missing still appears. |
+| **Background** | `primary` | The bar's fill. |
+
+TopBar has no **Margin** or **Alignment** rows.
+
+**Events**
+- **Navigation Click** — the navigation icon was tapped. Go back or open a drawer here.
+- **Menu Item Click** (id, name) — an action item was tapped. `id` is its position in **Items**, counting from 0.
 
 ## BottomNavigation
 
-A bar pinned to the bottom of the screen holding up to five labeled icons, used to switch between the main sections of an app.
+A bar pinned to the bottom of the screen with up to five labelled icons, used to switch between the main sections of an app. The usual pattern is one Column per section on the same screen, with **Item Selected** showing one and hiding the others. See [Screens and navigation](/guides/designing/screens).
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** yes
 
-**Events** — `Item Selected`
+| Property | Default | What it does |
+|---|---|---|
+| **Items** | one item | The tabs, each with a label and an icon. Only the first five are shown. |
+| **Selected Index** | 0 | The tab shown as selected, counting from 0. |
+| **Active Icon Color**, **Active Text Color** | `primary` | The selected tab's icon and label. |
+| **Inactive Icon Color**, **Inactive Text Color** | `icon` | The other tabs. |
+| **Icon Size** | 22 | The size of the tab icons. |
+| **Separator**, **Top Shadow** | 1, 0 | The line above the bar and the shadow lifting it off the content. Set either to 0 to hide it. |
+
+**Events**
+- **Item Selected** (id) — a tab was tapped. `id` is its position, counting from 0. Setting **Selected Index** from logic does not fire it.
 
 ### Selected Index
 
-`Selected Index` is the tab the bar shows as selected, counted from 0 — the first tab, and
-the default. Tapping a tab moves it and fires `Item Selected`. Setting it from logic moves the
-highlight and fires nothing, which is what you want when something other than the bar changes
-the section on show: a "See all" button in one section that shows another should also set
-`Selected Index` to that section's tab, or the bar stays on the tab tapped last. An index
-outside the tabs is ignored. The get block of the same name reads it.
+**Selected Index** is the tab the bar shows as selected, counted from 0: the first tab, and the default. Tapping a tab moves it and fires **Item Selected**. Setting it from logic moves the highlight and fires nothing, which is what you want when something other than the bar changes the section on show. A "See all" button in one section that shows another should also set **Selected Index** to that section's tab, or the bar stays on the tab tapped last. An index outside the tabs is ignored. The get block of the same name reads it.
 
 ## TabLayout
 
-A row of tabs that pairs itself with a ViewPager on the same screen: swiping moves the tabs, tapping moves the pager. Works on its own too.
+A row of tabs that pairs itself with a ViewPager on the same screen: swiping the pager moves the tabs, and tapping a tab moves the pager. It also works on its own, as a plain row of tabs.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** yes
 
-**Events** — `Tab Selected`
+| Property | Default | What it does |
+|---|---|---|
+| **Titles** | `Tab 1,Tab 2,Tab 3` | The tab labels, separated by commas, in order. Blank entries are skipped. |
+| **Mode** | Fixed | **Fixed** spreads the tabs evenly across the width; **Scrollable** lets a long row of tabs scroll sideways. |
+| **Selected Index** | 0 | The tab selected when the screen opens, counting from 0. |
+| **Tab Color** | `primary` | The underline that marks the selected tab. |
 
-**Functions** — `Select Tab`, `Tab Count`
+**Events**
+- **Tab Selected** (index, title) — a tab became selected, by a tap or by swiping the paired ViewPager.
+
+**Functions**
+- **Select Tab** (index) — selects a tab and moves a paired ViewPager with it. Does nothing if there is no tab at that position.
+- **Tab Count** — returns how many tabs there are: the non-blank entries in **Titles**.
 
 ## ViewPager
 
-A container whose children each become one full-size page the user swipes between, and which pairs automatically with a TabLayout on the same screen.
+A container whose children each become one full-size page the person swipes between. Put one Column per page inside it. It pairs automatically with a TabLayout on the same screen.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** yes
 
-**Events** — `Page Changed`
+| Property | Default | What it does |
+|---|---|---|
+| **Direction** | Horizontal | Which way the pages are swiped: **Horizontal** or **Vertical**. |
+| **Active Page** | the first page | Which child page shows first, and which one the canvas shows while you design. |
+| **Width**, **Height** | Fill, Fill | The pager's size. |
+| **Enabled** | on | Off stops swiping and dims the pager. |
 
-**Functions** — `Next Page`, `Previous Page`, `Go To Page`
+**Events**
+- **Page Changed** (position) — a different page became the current one, counting from 0.
+
+**Functions**
+- **Next Page** and **Previous Page** — move one page. They do nothing at the last or first page.
+- **Go To Page** (index) — moves to a page, counting from 0. A position outside the pager's pages does nothing.
+
+**Read from blocks** — **Page Count** (how many pages it holds) and **Page Index** (the page showing now).
 
 ## Dialog
 
-A modal container the user fills with any components, shown in its own window over the screen. Used for confirmations, alerts and short forms.
+A modal window that you fill with any components, shown over the screen. Use it for confirmations, alerts and short forms. For a quick alert or a yes or no question with no layout of your own, a [Notifier](/components/content#notifier) is simpler.
 
-*Drawn on the screen.*
+**Draws:** on the screen, while open · **In new projects:** yes
 
-**Events** — `Shown`, `Dismissed`
+| Property | Default | What it does |
+|---|---|---|
+| **Visible** | off | On opens the dialog as soon as the screen loads. Most dialogs leave it off and are opened by a block. |
+| **Position** | Center | Where the dialog sits: **Center**, **Top** or **Bottom**. |
+| **Min Width**, **Min Height** | 280, 120 | The smallest the dialog can get, so an empty one is still visible. |
+| **Hide On Backdrop Tap** | on | Lets a tap outside the dialog close it. Turn it off for a choice that must be answered. |
+| **Cancelable** | on | Lets the back button or gesture close the dialog. |
+| **Backdrop Opacity** | 50 | How much the screen behind is dimmed, from 0 to 100. |
 
-**Functions** — `is Showing`, `Show`, `Dismiss`
+**Events**
+- **Shown** — the dialog has just appeared. Load or reset its content here.
+- **Dismissed** — the dialog has closed, however it closed: **Dismiss**, a backdrop tap or the back gesture.
+
+**Functions**
+- **Show** — opens the dialog and fires **Shown**. Does nothing if it is already open.
+- **Dismiss** — closes it and fires **Dismissed**. Does nothing if it is already closed.
+- **is Showing** — returns true while the dialog is open.
+
+Setting **Visible** from a block opens or closes the dialog too.
 
 ## BottomSheet
 
-A panel that slides up from the bottom of the screen over the current content and holds child widgets. Used for menus, filters and quick actions.
+A panel that slides up from the bottom of the screen over the current content. Use it for menus, filters and quick actions.
 
-*Drawn on the screen.*
+**Draws:** on the screen, while open · **In new projects:** yes
 
-**Events** — `Shown`, `Dismissed`
+| Property | Default | What it does |
+|---|---|---|
+| **Visible** | off | Whether the sheet is open. Turning it on slides the sheet up; turning it off dismisses it. |
+| **Height** | 200 | How tall the sheet stands when it is open. |
+| **Show Handle** | on | Draws the small grab bar at the top. |
+| **Hide On Backdrop Tap** | on | Closes the sheet when the dimmed area outside it is tapped. |
+| **Backdrop Opacity** | 50 | How dark the screen behind goes, from 0 to 100. |
 
-**Functions** — `is Showing`, `Show`, `Dismiss`
+**Events**
+- **Shown** — the sheet has opened, however it was opened.
+- **Dismissed** — the sheet has closed, however it closed: **Dismiss**, a backdrop tap, a swipe down or the back gesture.
+
+**Functions**
+- **Show** — slides the sheet up and fires **Shown**.
+- **Dismiss** — slides it away and fires **Dismissed**. Does nothing when the sheet is not open.
+- **is Showing** — returns true while the sheet is open.
 
 ## DynamicLoader
 
-A container that renders a Duddy document your server sends at run time — server-driven UI inside a shipped app. Load a document into it, patch it a commit at a time, and call the logic it declares by name.
+A container that renders a Duddy document your server sends while the app runs: server-driven screens inside an app you have already shipped. Load a document into it, patch it one change at a time, and call the procedures it declares by name. The document is the same JSON a Duddy build reads.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** no, import it
 
-**Events** — `Loaded`, `Error Occurred`
+| Property | Default | What it does |
+|---|---|---|
+| **Source** | empty | A document to render. Setting it loads it; blank clears the loader. |
 
-**Functions** — `Load`, `Apply`, `Reset`, `Call Block`
+**Events**
+- **Loaded** — a document has been read and its first screen is showing.
+- **Error Occurred** (error) — a document or a change could not be read or applied, or the logic inside the document reported an error.
+
+**Functions**
+- **Load** (source) — renders a document, replacing whatever was showing.
+- **Apply** (patch) — applies one change to the loaded document: an object with an `ops` list, or a single op.
+- **Call Block** (request) — runs a procedure the loaded document declares and returns its result as text. The request is `{"procedure": "Name", "args": [...]}`, or just the procedure's name.
+- **Reset** — empties the loader and releases what was rendering the document. The next **Load** starts from nothing.
+
+## Troubleshooting layout
+
+<Accordion>
+  <AccordionItem value="dialog-never-shows" title="My Dialog or BottomSheet never appears">
+    **Why:** both start with **Visible** off, so nothing opens them until your logic does.
+
+    **Fix:** call **Show** from an event, such as a Button's **Click**. Turn **Visible** on in the panel only if it should open as the screen loads.
+  </AccordionItem>
+  <AccordionItem value="no-scroll" title="The content is cut off and will not scroll">
+    **Why:** the content is not inside a scrolling container, or the ScrollableColumn's **Height** is Auto, so it grows with its children and never needs to scroll.
+
+    **Fix:** put the content in a ScrollableColumn and set its **Height** to Fill or a fixed size.
+  </AccordionItem>
+  <AccordionItem value="bottom-nav-stuck" title="The bottom bar highlights the wrong tab">
+    **Why:** your logic showed a section without telling the bar. Setting **Selected Index** is the only way the highlight moves without a tap.
+
+    **Fix:** whenever logic changes the section on show, set the BottomNavigation's **Selected Index** to that section's tab as well.
+  </AccordionItem>
+  <AccordionItem value="tabs-not-paired" title="Tapping a tab does not move the pages">
+    **Why:** a TabLayout pairs with a ViewPager only when both are on the same screen.
+
+    **Fix:** put the TabLayout and the ViewPager on one screen, with one child page in the pager for each title in **Titles**.
+  </AccordionItem>
+  <AccordionItem value="loader-not-loaded" title="nothing is loaded; call Load before Apply">
+    **Why:** DynamicLoader's **Apply** or **Call Block** ran before any document was loaded, or after **Reset**. The same message ends in Call Block when **Call Block** was the cause.
+
+    **Fix:** call **Load**, or set **Source**, first, and run **Apply** or **Call Block** after **Loaded** fires.
+  </AccordionItem>
+  <AccordionItem value="loader-bad-json" title="the document is not valid JSON">
+    **Why:** the text given to **Load** or **Source** could not be read as JSON. The rest of the message is the reason the reader gave.
+
+    **Fix:** check what your server sends, for example by showing it in a TextView, and send the document as one JSON object.
+  </AccordionItem>
+</Accordion>
+
+## Next steps
+
+- [Layout and sizing](/guides/designing/layout-and-sizing): Fill, Auto, padding, margin and recipes for common layouts.
+- [Screens and navigation](/guides/designing/screens): open screens, pass data and build tabbed screens.
+- [Content components](/components/content): text, images, lists and the rest of what goes inside a layout.

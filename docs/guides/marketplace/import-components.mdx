@@ -1,0 +1,91 @@
+---
+title: Import components from the Duddy marketplace
+description: Add components other developers published to your Duddy project, check platforms and price, update to new versions and remove ones you no longer use.
+isNew: true
+---
+
+Beyond the built-in components, the marketplace holds components other developers have built and
+published, such as charts, pickers, sensors and service connections. Once you import one, it sits in
+your palette and behaves like any built-in component: drag it onto a screen, set its properties and
+use its blocks in your logic.
+
+## Before you start
+
+- **You need edit access** to the project. People with view access do not see the import button.
+- **Check your target platforms.** A component must be built for every platform your project
+  targets. Choose them under **Target platforms** in [Project settings](/getting-started/project-settings).
+- **Paid components** need a plan that includes premium components, and enough credits to buy them.
+  See [Plans and limits](/account/plans-and-limits).
+
+## Import a component
+
+<Steps>
+  <Step>Open the components palette and press **Import component** at the bottom.</Step>
+  <Step>The **Add components** dialog opens. Search by name, tag or author, or browse by category.</Step>
+  <Step>Press **Import** on a component. To import several at once, select them and press **Import selected**.</Step>
+  <Step>The component is **added to your palette**, under its category.</Step>
+</Steps>
+
+The dialog groups what it finds into **Updates available**, **Not installed** and **Already added**,
+so you can see at a glance what your project already has.
+
+<Callout type="info">
+  Type `@` and an author's name in the search to see only that author's components.
+</Callout>
+
+## What importing costs
+
+Free components cost nothing. A paid component is charged once, from your credit balance, the first
+time your account imports it. Importing it again in another project, or updating it, is free.
+
+## Use an imported component
+
+Drag it from the palette onto a screen like any other component. A component that draws nothing,
+such as a sensor or a service connection, goes into the screen's hidden components instead.
+
+On the canvas, an imported component may show as a labelled placeholder with its icon. Its real look
+appears in [Live test](/build/live-test) and in your builds. Rebuild the test app after you import a
+component, so the test app includes it.
+
+Its events, functions and properties appear in the block editor once it is on a screen. See
+[Logic blocks](/guides/logic/blocks).
+
+## Update to a new version
+
+Imported components never update on their own. When an author publishes a new version, the
+component appears under **Updates available** in the **Add components** dialog with the version change.
+Press **Update** on one, or **Update all**.
+
+## Remove a component
+
+Hover over the component in the palette and press the remove button, then confirm. You cannot remove
+a component that is still on a screen: delete it from every screen first. Built-in components cannot
+be removed.
+
+## When Vibe mode imports for you
+
+When you ask Vibe mode for something a built-in component cannot do, it can import a free component
+from the marketplace, and only one your target platforms can build. If you never chose target
+platforms and the component is built for fewer of them, the import narrows your targets to match,
+and the reply tells you.
+
+## Troubleshooting
+
+| Message | What it means |
+|---|---|
+| **That component is no longer available in the marketplace.** | Its author or Duddy withdrew it. Choose another component. |
+| **You don't have enough credits to buy this component.** | Top up or wait for your credits, then import again. |
+| **Paid marketplace components aren't included in your plan. Upgrade to import premium components.** | Your plan does not include premium components. See [Plans and limits](/account/plans-and-limits). |
+| **This component is not built for Web, which this app targets.** | Turn that platform off under **Target platforms** in Project settings, or choose another component. |
+| **This component is still used on Home.** | Delete it from the screens named, then remove it from your palette. |
+
+<Callout type="warning">
+  A marketplace component runs inside your app like your own logic does. Test it in Live test before
+  you ship, especially one that handles payments, accounts or personal data.
+</Callout>
+
+## Next steps
+
+- [Components overview](/components/overview): everything built in, by category.
+- [Live test](/build/live-test): see an imported component working on a real phone.
+- [Publish a component](/guides/marketplace/publish-a-component): build and share your own.

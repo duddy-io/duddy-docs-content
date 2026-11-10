@@ -1,65 +1,231 @@
 ---
-title: Content components
-description: "Everything that shows something: text, pictures, icons, shapes, lists and progress."
+title: "Content components: text, images, lists, charts"
+description: "Duddy's content components: TextView, Image, Icon, RecyclerView lists, ChatView, GraphView charts, QR codes, Markdown, badges, timers and progress."
 ---
 
-Everything that shows something: text, pictures, icons, shapes, lists and progress.
+Content components show things: words, pictures and icons, lists and conversations, figures and charts, and the state of the app while it works. Most of them draw on the screen; Notifier draws nothing and opens toasts and alert dialogs from your logic.
 
-<Callout type="info">
-  Building a long list out of a Column creates one component per item. Use **RecyclerView** instead —
-  it builds a handful of rows and reuses them as they scroll.
-</Callout>
+For a long list, use a [RecyclerView](#recyclerview) rather than a Column with one child per item. [Layout and sizing](/guides/designing/layout-and-sizing) explains why.
 
-| Component | Does |
-|---|---|
-| [TextView](#textview) | Displays a piece of read-only text, from a one-word label to a paragraph, with control over font, size, color, alignment and truncation. |
-| [Image](#image) | A picture drawn from an uploaded asset, with control over how it fills its frame plus rounded corners, a border and a shadow. |
-| [Icon](#icon) | A single square icon picked from the built-in icon set, tinted and sized from the properties panel. |
-| [Shape](#shape) | A vector shape — a rectangle, a circle, one of the expressive shapes such as a cookie, a clover or an arch, or a custom outline — drawn with a fill and an outline. |
-| [RecyclerView](#recyclerview) | A scrollable list or grid whose row views are built once and reused as they scroll, each row filled in by the Bind Item event. |
-| [ChatView](#chatview) | A whole conversation in one component: message bubbles with times, ticks, avatars, names and date separators, a typing line, and a composer with a send button. |
-| [GraphView](#graphview) | Draws a line, bar or pie chart from a list of labelled values, and reports the point, bar or slice the user tapped. |
-| [ProgressBar](#progressbar) | A horizontal bar that fills to show how far along a task is, either at a set percentage or as an endless animation while the length is unknown. |
-| [CircularProgress](#circularprogress) | A round progress ring that either spins to show the app is busy or fills up to show how far a task has got. |
-| [Notifier](#notifier) | A non-visual helper that shows brief toast messages and alert, confirm and popup dialogs on top of the current screen. |
+| Component | What it does | Draws | New projects |
+|---|---|---|---|
+| [TextView](#textview) | Read-only text, from a one-word label to a paragraph. | Yes | Yes |
+| [MarkdownView](#markdownview) | Text written in Markdown: headings, bold, lists, code and links. | Yes | Import |
+| [Marquee](#marquee) | One line of text that scrolls sideways on a loop. | Yes | Import |
+| [Image](#image) | A picture from an asset, a web address or a file on the device. | Yes | Yes |
+| [Icon](#icon) | One icon from the built-in icon set. | Yes | Yes |
+| [Avatar](#avatar) | A round marker with a person's initials or an icon. | Yes | Import |
+| [QRCode](#qrcode) | Draws a QR code from any text, and saves it as a picture. | Yes | Import |
+| [Shape](#shape) | A vector shape that can hold and clip other components. | Yes | Import |
+| [RecyclerView](#recyclerview) | A scrolling list or grid filled from data, one row template reused. | Yes | Yes |
+| [ChatView](#chatview) | A whole conversation: bubbles, ticks, a typing line and a composer. | Yes | Import |
+| [StatTile](#stattile) | A dashboard tile: a big value, a label and an icon. | Yes | Import |
+| [GraphView](#graphview) | A line, bar or pie chart from labelled values. | Yes | Import |
+| [Badge](#badge) | A small pill with a count or a short word. | Yes | Import |
+| [Timeline](#timeline) | Numbered steps that show how far along a flow the person is. | Yes | Import |
+| [Countdown](#countdown) | A timer that counts down and shows the time left. | Yes | Import |
+| [ProgressBar](#progressbar) | A horizontal bar that fills, or animates while the length is unknown. | Yes | Import |
+| [CircularProgress](#circularprogress) | A spinning or filling ring. | Yes | Import |
+| [Skeleton](#skeleton) | A shimmering placeholder shown while content loads. | Yes | Import |
+| [EmptyState](#emptystate) | An icon, a title, a message and an optional button for an empty list. | Yes | Import |
+| [Callout](#callout) | A banner with an icon, a bold title and a message. | Yes | Import |
+| [Notifier](#notifier) | Toasts and alert, confirm and popup dialogs. | No | Import |
 
 ## TextView
 
-Displays a piece of read-only text, from a one-word label to a paragraph, with control over font, size, color, alignment and truncation.
+Displays read-only text, from a one-word label to a paragraph. For text the person types, use an [Input](/components/input#input).
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** yes
+
+| Property | Default | What it does |
+|---|---|---|
+| **Text** | `TextView` | The words shown. |
+| **Font Size** | 16 | The text size. 16 is body text; headings are usually 20 or more. |
+| **Font**, **Font Style** | not set | The typeface and weight, and bold, italic, strikethrough or underline. |
+| **Text Alignment** | top-left | Where the text sits inside the label. |
+| **Max Lines** | 0 | How many lines to show before the text is cut short. 0 means no limit. |
+| **Ellipsize Mode** | End | Which part of text that does not fit becomes dots: **End**, **Start**, **Middle** or **No Truncation**. |
+| **Line Height**, **Letter Spacing** | 1, 0 | Line spacing as a multiple of the font size, and extra space between characters. |
+| **Tabular Figures** | off | Gives every digit the same width, so changing numbers hold still. Use it for prices, times and scores. |
+| **Selectable** | off | Lets the person press and hold the text to select and copy it. |
+
+**Events**
+- **Click** — the text was tapped, so a label can act as a link or a "see more" control.
+- **Long Press** — a press and hold. Handling it consumes the gesture, so **Click** does not also fire.
+
+## MarkdownView
+
+Shows text written in Markdown: `#` headings, `**bold**`, `*italic*`, `` `inline code` ``, fenced code blocks, `-` bullet and `1.` numbered lists (nested by indenting), `>` quotes, `---` rules and links. Use it for AI chat replies, notes and help pages. It grows to fit its text, so put it inside a ScrollableColumn for long text.
+
+**Draws:** on the screen · **In new projects:** no, import it
+
+| Property | Default | What it does |
+|---|---|---|
+| **Text** | empty | The Markdown to show. |
+| **Font Size** | 16 | The body text size. Headings and spacing scale with it. |
+| **Text Color**, **Link Color**, **Code Background** | follow the theme | The text, links, and the fill behind code. |
+
+**Events**
+- **Link Clicked** (url) — a link was tapped. Nothing opens by itself: open the address from your logic, for example with a [WebViewer](/components/connectivity#webviewer) or a new screen.
+
+The canvas draws a MarkdownView as a box with its name. Use [Live test](/build/live-test) to see the text rendered.
+
+## Marquee
+
+A single line of text that scrolls sideways on a loop, for a news ticker, a strip of deals or an announcement bar. The text repeats seamlessly and never wraps.
+
+**Draws:** on the screen · **In new projects:** no, import it
+
+| Property | Default | What it does |
+|---|---|---|
+| **Text** | `Breaking news — ` | The words that scroll. End it with a separator, such as a dash or a bullet, so the loop reads cleanly where it repeats. |
+| **Speed** | 60 | How fast the text moves, in pixels per second. |
+| **Direction** | left | **left** moves the text right to left, as a ticker usually does; **right** moves it the other way. |
+| **Paused** | off | Holds the text still. |
+| **Font Size** | 14 | The size of the text. |
+
+A Marquee has no events or functions.
 
 ## Image
 
-A picture drawn from an uploaded asset, with control over how it fills its frame plus rounded corners, a border and a shadow. It also reports taps.
+A picture with control over how it fills its frame, plus rounded corners, a border and a shadow. It also reports taps.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** yes
 
-**Events** — `Click`, `Long Press`, `Load`, `Error`
+| Property | Default | What it does |
+|---|---|---|
+| **Image** | empty | The picture: an uploaded asset, chosen in the panel, or from blocks a web address (`https://…`) or a file on the device, such as the path [ImagePicker](/components/media#imagepicker) or [CameraCapture](/components/media#cameracapture) hands over. |
+| **Image Size** | Center | How the picture fits the frame: **Cover** crops it to fill, **Center** fits the whole picture in, **Fill** stretches it, **Auto** keeps its own size. |
+| **Width**, **Height** | Fill, 200 | The frame's size. |
+
+**Events**
+- **Click** and **Long Press** — the picture was tapped, or pressed and held.
+- **Load** — the picture was found and drawn. Hide a placeholder here.
+- **Error** — the asset could not be found, or the web address or file failed to load, and the frame was left empty. Show a fallback here.
+
+See [Images, fonts and files](/guides/designing/assets) to add pictures to a project.
 
 ## Icon
 
-A single square icon picked from the built-in icon set, tinted and sized from the properties panel. Used beside labels, inside buttons and in navigation rows.
+A single square icon picked from the built-in icon set, tinted and sized from the properties panel. Use it beside labels, inside rows and as a small tappable control.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** yes
+
+| Property | Default | What it does |
+|---|---|---|
+| **Icon** | star | The icon, chosen in the icon picker. An icon that is not available leaves an empty space. |
+| **Color** | `icon` | The icon's colour. A theme colour such as `icon` or `primary` follows the theme. |
+| **Size** | 30 | The icon's width and height. |
+
+**Events**
+- **Click** — the icon was tapped, so it can act as a control (a close cross, a favourite toggle) without a button around it.
+- **Long Press** — a press and hold. Handling it consumes the gesture, so **Click** does not also fire.
+
+## Avatar
+
+A small round marker that stands in for a person, showing their initials or one icon. Use it in profile headers, chat lists and comment threads. For a real photo, use an [Image](#image) inside a rounded [CardView](/components/layout#cardview) instead.
+
+**Draws:** on the screen · **In new projects:** no, import it
+
+| Property | Default | What it does |
+|---|---|---|
+| **Initials** | `AB` | The letters shown when no icon is set. Only the first two are drawn, always in capitals. |
+| **Icon** | none | An icon to show instead of the initials. |
+| **Size** | 40 | The avatar's width and height. |
+| **Background**, **Text Color** | `primary`, `onPrimary` | The fill, and the colour of the initials or icon. |
+| **Font Size** | 16 | The size of the initials. |
+
+An Avatar has no events or functions.
+
+## QRCode
+
+Draws a QR code from any text, such as a link, a Wi-Fi network, a contact or a payment reference, with square, rounded or dotted modules and an optional logo in the centre. It can save the code as a picture or hand it to your logic.
+
+**Draws:** on the screen · **In new projects:** no, import it · **iOS asks for:** permission to add to Photos, when you save the code
+
+| Property | Default | What it does |
+|---|---|---|
+| **Content** | empty | The text the code carries: a web address, plain text, or one of the payloads the helper functions build. Empty draws nothing. |
+| **Error Correction** | Medium | How much of the code can be covered and still read: **Low** (7%), **Medium** (15%), **Quartile** (25%) or **High** (30%). Use **High** with a logo. |
+| **Module Style** | Square | **Square**, **Rounded** or **Dots**. |
+| **Logo**, **Logo Size** | none, 20 | An uploaded image drawn in the centre, and its share of the code's width as a percentage, up to 40. Above about 25 needs **High** error correction. |
+| **Quiet Zone** | 2 | The empty border around the code, in modules. The standard asks for 4; 2 reads fine on a screen. |
+| **Color**, **Background** | `#000000`, `#FFFFFF` | The modules and the space behind them. Keep dark modules on a light background. |
+
+**Events**
+- **Saved** (path) — **Save To Gallery** finished. The value says where the picture went.
+- **Error** (message) — the content does not fit in a QR code, or saving failed.
+
+**Functions**
+- **Wifi Content** (ssid, password, security) — the text that joins a phone to a Wi-Fi network when scanned. Security is `WPA` (also for WPA2 and WPA3), `WEP` or `nopass`.
+- **Contact Content** (name, phone, email), **Email Content** (to, subject, body), **Sms Content** (number, message), **Phone Content** (number) and **Location Content** (latitude, longitude) — the text for a contact card, a new email, a text message, a phone call or a map location.
+- **Save To Gallery** — saves the code as a 1024-pixel PNG in the device's pictures, then fires **Saved** or **Error**.
+- **Image Data Url** — returns the code as a 512-pixel PNG data URL, to show in an Image or upload.
+
+Put a helper's result into **Content**. **Read from blocks** — **Valid** (whether the content fits and a code is drawn) and **Module Count** (how many modules across).
 
 ## Shape
 
-A vector shape — a rectangle, a circle, one of the expressive shapes such as a cookie, a clover or an arch, or a custom outline — drawn with a fill and an outline. Children placed inside are clipped to it.
+A vector shape: a rectangle, a circle, one of the expressive shapes such as a cookie, a clover or an arch, or an outline you draw yourself, with a fill and an outline. Components placed inside it are clipped to the shape. The component palette lists Shape under Layout.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** no, import it
 
-**Events** — `Click`, `Long Press`
+| Property | Default | What it does |
+|---|---|---|
+| **Shape** | Rectangle | Which shape to draw: a basic, expressive or adjustable shape, or **Custom**. |
+| **Corner Radius** | 16 | How rounded the corners are. Shown only for a rectangle. |
+| **Points**, **Inner Radius** | 6, 45 | A star's points or a polygon's sides, and how deep a star's notches cut. Shown only for those shapes. |
+| **Point Rounding** | 20 | How rounded the points are, from 0 (sharp) to 100. Shown for a star, a polygon or an arrow. |
+| **Rotation** | 0 | How far the shape is turned, in degrees clockwise. Anything inside turns with it. |
+| **Custom Shape** | empty | Your own outline, drawn in a 0 to 100 box that stretches to fit. Shown for **Custom**. |
+| **Fill** | `primary` | What fills the shape: a colour, a gradient, an image or a glass material. |
+| **Stroke Style** | round | The outline's cap, its corner join and its dash pattern. |
+
+**Events**
+- **Click** — the shape was tapped. The whole bounding box responds, not only the painted area.
+- **Long Press** — a press and hold. It consumes the press, so **Click** does not follow.
 
 ## RecyclerView
 
-A scrollable list or grid whose row views are built once and reused as they scroll, each row filled in by the Bind Item event.
+A scrolling list or grid. You design one row, the *row template*, from the components you place inside the RecyclerView, and the list draws a copy of it for each item as it scrolls into view. It builds only the rows on screen and reuses them as the person scrolls, so a long list stays fast.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** yes
 
-**Events** — `Bind Item`, `Refresh`, `Scroll`
+| Property | Default | What it does |
+|---|---|---|
+| **Direction** | Vertical | Which way the list scrolls. |
+| **Columns** | 1 | How many items fit across before wrapping. 2 or more makes a grid. |
+| **Gap** | 0, 0 | Space between rows, and between columns in a grid. |
+| **Item Count** | 1 | How many rows to draw. The default of 1 shows the row template; setting **Data** sets it for you. |
+| **Loading** | off | Shows a loading spinner over the list. Turn it off once the data has arrived. |
+| **Empty Text** | empty | A message shown in the middle while the list is empty, such as `No results`. |
+| **Refreshing** | off | Whether the pull-to-refresh spinner is spinning. |
+| **Enabled** | on | Off ignores touch, dims the list and turns pull-to-refresh off. |
 
-**Functions** — `Refresh Data`, `Scroll To Position`, `Get Row Component`
+**Events**
+- **Bind Item** (position) — a row is scrolling into view, counting from 0. Fill the row in here.
+- **Refresh** — the person pulled the list down. Pull-to-refresh is offered only while this event has a handler.
+- **Reached End** — the last row came into view. It fires again only after the list has grown, so it is the place to load the next page.
+- **Scroll** — the list moved, in either direction.
+
+**Functions**
+- **Get Item** (position) — returns the record from **Data** for a row.
+- **Get Row Component** (id) — inside **Bind Item**, returns this row's copy of a component from the row template, given that component's id. It returns nothing outside **Bind Item**.
+- **Refresh Data** — redraws every visible row, firing **Bind Item** again. Call it after the data behind the list changes.
+- **Scroll To Position** (position) — jumps to an item, counting from 0.
+
+**Read from blocks** — **Data**, which you also set from blocks.
+
+### Fill a list from data
+
+There are two ways to drive a RecyclerView:
+
+- **Set Data to a list of records**, such as the list a database query or an API hands you. **Item Count** follows automatically. In **Bind Item**, call **Get Item** with the position to read that row's record.
+- **Set Item Count yourself** and look each row's values up in your own list, by position.
+
+Either way, fill the row in **Bind Item**: use **Get Row Component** to get this row's copy of a template component, then set its properties, such as a TextView's **Text** or an Image's **Image**.
+
+For pull-to-refresh, handle **Refresh**: reload the data, then set **Refreshing** to false, or the spinner never stops. For infinite scroll, handle **Reached End**: fetch the next page and add it to **Data**. After an edit screen closes, reload the list in the Screen's **Resume** event.
 
 ## ChatView
 
@@ -69,20 +235,15 @@ a typing line, and a composer at the bottom with a send button and an optional a
 button. The list keeps its place when the keyboard opens, and stays pinned to the newest
 message when the reader was already there. See [Build a chat app](/guides/apps/chat-app).
 
-*Drawn on the screen.*
-
-**Events** — `Send`, `Attach`, `Message Click`, `Message Long Press`, `Reached Top`, `Typing`
-
-**Functions** — `Scroll To Bottom`, `Add Message`, `Update Message`, `Clear`
+**Draws:** on the screen · **In new projects:** no, import it
 
 ### A message
 
-**Messages** is a list of records, one per message. Setting it redraws the list — pinned to
-the bottom if the reader was there, else where they were. Each record is a dictionary:
+**Messages** is a list of records, one per message, oldest first. Setting it redraws the list — pinned to the bottom if the reader was there, else where they were. In the properties panel it takes the same list as JSON text. Each record is a dictionary:
 
 | Key | Holds |
 |---|---|
-| `id` | Text that identifies the message — what `Message Click`, `Message Long Press` and `Update Message` name it by. |
+| `id` | Text that identifies the message — what **Message Click**, **Message Long Press** and **Update Message** name it by. |
 | `text` | The message, or a picture's caption. |
 | `senderId`, `senderName` | Who sent it. A `senderId` equal to **My Id** draws on the right. |
 | `avatar` | An image URL, one or two initials, or `""` — drawn beside the bubble when **Show Avatars** is on. |
@@ -100,9 +261,10 @@ width.
 | Property | Does |
 |---|---|
 | **Messages**, **My Id** | The list above, and the sender id that counts as you. |
-| **My Bubble Color**, **Their Bubble Color**, **My Text Color**, **Their Text Color**, **Time Color** | The two bubble fills and their text, and the colour of times, names, the typing line and the empty state. The defaults follow the theme: primary and on-primary for yours, secondary and on-secondary for theirs, neutral for times. |
-| **Bubble Radius** | The corner radius in dp (18). The corner nearest the sender tightens on the last bubble of a run. |
-| **Font**, **Font Size** | As on TextView (16 sp). |
+| **My Bubble Color**, **Their Bubble Color**, **My Text Color**, **Their Text Color**, **Time Color** | The two bubble fills and their text, and the colour of times, names, the typing line and the empty state. The defaults follow the theme: `primary` and `onPrimary` for yours, `secondary` and `onSecondary` for theirs, `neutral` for times. |
+| **Bubble Radius** | How rounded the bubbles are (18). The corner nearest the sender tightens on the last bubble of a run. |
+| **Font**, **Font Size** | As on TextView (16). |
+| **Background** | The fill behind the whole chat. Transparent by default, so the screen shows through. |
 | **Show Avatars**, **Show Names** | Off by default; turn both on for a group chat. A name is never drawn on your own messages. |
 | **Show Timestamps**, **Show Status** | On by default. |
 | **Typing Text** | `Priya is typing…` draws a typing line with animated dots under the list; `""` hides it. |
@@ -113,7 +275,7 @@ width.
 ### Events and functions
 
 - **Send** (text) — the send button or the keyboard's send key, with the trimmed text, once it is not empty. The composer has already cleared itself.
-- **Attach** — the attach button.
+- **Attach** — the attach button. Open a picker here and send what it returns as a message with an `imageUrl`.
 - **Message Click** and **Message Long Press** (id).
 - **Reached Top** — the list reached its first message: load older ones.
 - **Typing** (typing) — true when the composer goes from empty to text, false two seconds after the last keystroke or when it empties.
@@ -121,36 +283,234 @@ width.
 - **Update Message** (id, record) — replaces only the fields given, such as a status change.
 - **Scroll To Bottom** and **Clear**.
 
+## StatTile
+
+A metric tile for a dashboard: a big value, a small label under it and an optional icon above. Use it for a step count, a cart total, a health reading or any key figure.
+
+**Draws:** on the screen · **In new projects:** no, import it
+
+| Property | Default | What it does |
+|---|---|---|
+| **Value** | `0` | The big figure. |
+| **Label** | `Metric` | The caption under it, such as `Steps` or `Total`. |
+| **Icon**, **Icon Color** | none, `primary` | A small icon above the value. Empty shows none. |
+| **Value Font Size**, **Label Font Size** | 28, 13 | The sizes of the two lines. |
+| **Tabular Figures** | off | Gives every digit the same width, so a changing value holds still. |
+
+A StatTile has no events or functions. Set **Value** from your logic as the figure changes.
+
 ## GraphView
 
-Draws a line, bar or pie chart from a list of labelled values, and reports the point, bar or slice the user tapped.
+Draws a line, bar or pie chart from a list of labelled values, and reports the point, bar or slice the person tapped.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** no, import it
 
-**Events** — `Value Selected`
+| Property | Default | What it does |
+|---|---|---|
+| **Graph Type** | Line | **Line** for a trend over time, **Bar** to compare values, **Pie** for shares of a total. |
+| **Data JSON** | empty | The values, as a JSON list of objects with a `label` and a `value`. A pie slice may add its own `color` as `#RRGGBB` or `#AARRGGBB`. Text that cannot be read draws nothing. |
+| **Show Grid** | on | Faint guide lines behind a line chart. No effect on Bar or Pie. |
+| **Show Labels** | on | Each point's or bar's label under the chart. Pie charts show no labels. |
 
-**Functions** — `Set Data`, `Clear Data`, `Set Graph Type`
+For example, `[{"label": "Jan", "value": 12}, {"label": "Feb", "value": 19}]` draws two points.
+
+**Events**
+- **Value Selected** (label, value) — the chart was tapped, with the nearest point or bar, or the slice under the finger.
+
+**Functions**
+- **Set Data** (jsonStringData) — replaces the values and redraws, the same as setting **Data JSON**.
+- **Set Graph Type** (type) — switches between `Line`, `Bar` and `Pie` and redraws the same data.
+- **Clear Data** — removes every value.
+
+## Badge
+
+A small rounded label showing a count or a short word, for cart quantities, unread counts and status tags. For a notification dot, put it in a [Stack](/components/layout#stack) over an Icon and set its **Alignment** to top-right.
+
+**Draws:** on the screen · **In new projects:** no, import it
+
+| Property | Default | What it does |
+|---|---|---|
+| **Text** | `1` | The count or short word. |
+| **Background**, **Text Color** | `primary`, `onPrimary` | The pill's fill and its text. |
+| **Font Size** | 12 | The size of the text. |
+| **Border Radius** | 20 on every corner | Large values make a pill. |
+| **Tabular Figures** | off | Gives every digit the same width, so a changing count holds still. |
+
+A Badge has no events or functions. Hide it by turning **Visible** off when the count is 0.
+
+## Timeline
+
+A horizontal step indicator for a multi-step flow such as a checkout or an onboarding: numbered circles joined by lines, with a label under each. The current step and every step before it are drawn in the active colour.
+
+**Draws:** on the screen · **In new projects:** no, import it
+
+| Property | Default | What it does |
+|---|---|---|
+| **Steps** | `Cart,Address,Payment,Done` | The step labels, separated by commas. Each one becomes a numbered circle. |
+| **Current Step** | 0 | The step the person is on, counting from 0. |
+| **Active Color**, **Inactive Color** | `primary`, follows the theme | Done and current steps, and the steps still to come. |
+| **Font Size** | 12 | The labels and numbers. The circles scale with it. |
+
+A Timeline is display only: it has no events or functions. Set **Current Step** as the person moves through the flow.
+
+## Countdown
+
+A timer that counts down from a number of seconds and shows the time left, ticking every second while it runs: a sale ending, a workout interval, a snooze. It starts paused at one minute.
+
+**Draws:** on the screen · **In new projects:** no, import it
+
+| Property | Default | What it does |
+|---|---|---|
+| **Duration** | 60 | How many seconds to count down from. |
+| **Running** | off | On starts or resumes the countdown, off pauses it. It turns itself off at zero. |
+| **Format** | mm:ss | How the time left is written: **mm:ss**, **hh:mm:ss** or **ss** (a plain count of seconds). |
+| **Font Size** | 32 | The size of the time. |
+
+**Events**
+- **Tick** (secondsRemaining) — every second while it runs.
+- **Finished** — once, when it reaches zero.
+
+**Functions**
+- **Reset** — stops the timer and sets it back to **Duration**, ready to start again.
+
+**Read from blocks** — **Remaining** (seconds left).
 
 ## ProgressBar
 
-A horizontal bar that fills to show how far along a task is, either at a set percentage or as an endless animation while the length is unknown.
+A horizontal bar that fills to show how far along a task is, at a set percentage, or animates endlessly while the length is unknown.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** no, import it
 
-**Events** — `Click`
+| Property | Default | What it does |
+|---|---|---|
+| **Progress** | 50 | How much of the bar is filled, from 0 to 100. |
+| **Indeterminate** | off | Animates the bar endlessly instead, for work whose length is not known yet. |
+| **Color** | `primary` | The filled part of the bar. |
+
+**Events**
+- **Click** — the bar was tapped, for example to show details or offer to cancel.
 
 ## CircularProgress
 
-A round progress ring that either spins to show the app is busy or fills up to show how far a task has got.
+A round progress ring that spins to show the app is busy, or fills up to show how far a task has got.
 
-*Drawn on the screen.*
+**Draws:** on the screen · **In new projects:** no, import it
+
+| Property | Default | What it does |
+|---|---|---|
+| **Indeterminate** | on | Spins endlessly. Turn it off to show **Progress** instead. |
+| **Progress** | 50 | How much of the ring is filled, from 0 to 100, while **Indeterminate** is off. |
+| **Size**, **Stroke Width** | 24, 4 | The ring's diameter and thickness. |
+| **Color** | `primary` | The moving arc. |
+
+A CircularProgress has no events or functions. Hide it by turning **Visible** off when the work is done.
+
+## Skeleton
+
+A shimmering placeholder box shown while real content loads. Size it to stand in for a line of text, an avatar, a thumbnail or a whole card, then hide it when the data arrives.
+
+**Draws:** on the screen · **In new projects:** no, import it
+
+| Property | Default | What it does |
+|---|---|---|
+| **Width**, **Height** | Fill, 16 | 16 stands in for a line of text; use a larger height for a picture or a card. |
+| **Border Radius** | 6 on every corner | Make it round to stand in for an avatar. |
+| **Background** | `neutral` | The resting fill behind the shimmer. |
+| **Animated** | on | Sweeps a shimmer across the box. Off draws a plain box. |
+
+A Skeleton has no events or functions.
+
+## EmptyState
+
+A centred placeholder for an empty list, a search with no results or a failed load: a large icon, a title, a message and an optional action button.
+
+**Draws:** on the screen · **In new projects:** no, import it
+
+| Property | Default | What it does |
+|---|---|---|
+| **Icon**, **Icon Size** | inbox, 48 | The large icon above the title. |
+| **Title** | `Nothing here yet` | The short headline. |
+| **Message** | `There is nothing to show right now.` | The sentence under it, saying what is empty and what to do next. |
+| **Action Label** | empty | The button's label, such as `Retry` or `Add item`. Empty hides the button. |
+
+**Events**
+- **Action** — the action button was tapped. Retry the load, clear the search or add the first item here.
+
+## Callout
+
+A bordered banner with an icon, a bold title and a message, for an information note, a tip, a summary of form errors or an explanation of what went wrong. It draws its own content and holds no other components.
+
+**Draws:** on the screen · **In new projects:** no, import it
+
+| Property | Default | What it does |
+|---|---|---|
+| **Icon**, **Icon Color** | info, `primary` | The icon on the left, such as info, alert or check. |
+| **Title** | `Heads up` | The short bold headline. |
+| **Message** | `Something worth noting.` | The sentence under the title. |
+| **Font Size** | 14 | The message text. The title is a little larger. |
+
+A Callout has no events or functions.
 
 ## Notifier
 
-A non-visual helper that shows brief toast messages and alert, confirm and popup dialogs on top of the current screen.
+Shows brief toast messages, and alert, confirm and popup dialogs, over the current screen. For a dialog with your own layout, use a [Dialog](/components/layout#dialog).
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **In new projects:** no, import it
 
-**Events** — `Alert Closed`, `Confirm Selected`, `Popup Closed`
+| Property | Default | What it does |
+|---|---|---|
+| **Message** | empty | The text **Show Toast Default** shows. |
+| **Duration** | 0 | How long a toast stays: 0 for a short message, 1 for a longer one. |
 
-**Functions** — `Show Toast Default`, `Show Toast`, `Show Alert`, `Show Confirm`, `Show Popup`
+**Functions**
+- **Show Toast** (message) — shows a toast with the text you pass.
+- **Show Toast Default** — shows a toast with **Message**. Does nothing when **Message** is empty.
+- **Show Alert** (title, message, buttonText) — a dialog with one button. Tapping outside does not close it.
+- **Show Confirm** (title, message, yesText, noText) — a yes or no question.
+- **Show Popup** (title, message) — a dialog with an OK button that the person can also dismiss.
+
+**Events**
+- **Alert Closed** — the alert's button was tapped.
+- **Confirm Selected** (yes) — the confirm dialog was answered: true for the yes button, false for the no button.
+- **Popup Closed** — the popup went away, by OK or by being dismissed.
+
+## Troubleshooting content
+
+<Accordion>
+  <AccordionItem value="one-row" title="My list shows one row of placeholder text">
+    **Why:** **Item Count** starts at 1 so you can see the row template, and nothing has filled the list yet.
+
+    **Fix:** set **Data** to your list of records, or set **Item Count**, and fill each row in **Bind Item**.
+  </AccordionItem>
+  <AccordionItem value="rows-same" title="Every row shows the same text">
+    **Why:** **Bind Item** sets the template's text without reading the row's own record.
+
+    **Fix:** in **Bind Item**, call **Get Item** with the event's position, and set the components you get from **Get Row Component**.
+  </AccordionItem>
+  <AccordionItem value="refresh-spins" title="The pull-to-refresh spinner never stops">
+    **Why:** the list waits for your **Refresh** handler to say it has finished.
+
+    **Fix:** at the end of the **Refresh** handler, after the new data is in, set **Refreshing** to false.
+  </AccordionItem>
+  <AccordionItem value="image-blank" title="An Image stays empty">
+    **Why:** the asset name, web address or file path could not be loaded. The Image fires **Error** when that happens.
+
+    **Fix:** check the asset name in [Images, fonts and files](/guides/designing/assets), or the address, and handle **Error** to show a fallback picture.
+  </AccordionItem>
+  <AccordionItem value="chart-empty" title="My chart draws nothing">
+    **Why:** **Data JSON** is not a JSON list of objects with `label` and `value`, so it cannot be read.
+
+    **Fix:** make the text match this shape: `[{"label": "Jan", "value": 12}]`. Every entry needs both keys, and `value` must be a number.
+  </AccordionItem>
+  <AccordionItem value="qr-too-long" title="The content is too long for a QR code">
+    **Why:** QRCode's **Error** fires when the text does not fit even the largest code at the chosen **Error Correction**.
+
+    **Fix:** shorten the content, for example with a short link, or lower **Error Correction** if you are not using a logo.
+  </AccordionItem>
+</Accordion>
+
+## Next steps
+
+- [Data, APIs and storage](/guides/logic/data-and-apis): fetch the records your lists and charts show.
+- [Build a chat app](/guides/apps/chat-app): ChatView, Firestore and sign-in working together.
+- [Input components](/components/input): buttons, fields and pickers.

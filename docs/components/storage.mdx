@@ -1,78 +1,208 @@
 ---
-title: Storage components
-description: Keeping data on the device — key-value, SQL, files and the clipboard.
+title: "Storage components: AppStorage, SQLite, files"
+description: "Duddy's storage components: AppStorage key-value storage, SQLite tables, FileManager, FilePicker, FileDownloader and the clipboard, with their blocks."
 ---
 
-Keeping data on the device — key-value, SQL, files and the clipboard.
+These components keep data on the phone itself, so it is still there the next time the app opens and needs no network. Data saved this way stays on one phone; to share it between phones or people, use the [Firebase components](/components/firebase).
 
-<Callout type="info">
-  **AppStorage** stores text. Keep a number by converting it back when you read it, and keep a
-  structure by writing it as JSON.
-</Callout>
+AppStorage is already in every new project. Add the others with **Import component** at the foot of the component palette (see [Import components](/guides/marketplace/import-components)), or ask Vibe mode, which adds what a request needs.
 
-| Component | Does |
+| Component | What it does | Draws |
+|---|---|---|
+| [AppStorage](#appstorage) | Saves text values under keys, such as settings or a sign-in token. | Logic only |
+| [SQLite](#sqlite) | A database of tables you can search, sort and update with SQL. | Logic only |
+| [FileManager](#filemanager) | Reads, writes and deletes text files. | Logic only |
+| [FilePicker](#filepicker) | Lets the person choose files from the phone. | Logic only |
+| [FileDownloader](#filedownloader) | Downloads a file from a web address and saves it. | Logic only |
+| [Clipboard](#clipboard) | Copies text to the clipboard and pastes from it. | Logic only |
+
+## Choose a storage component
+
+| You want to keep | Use |
 |---|---|
-| [AppStorage](#appstorage) | A non-visual key-value store that saves text on the device, so values survive closing and reopening the app. |
-| [SQLite](#sqlite) | A SQLite database kept on the device, for storing structured data in tables that survives the app closing and needs no network. |
-| [FileManager](#filemanager) | Reads, writes, deletes and checks text files on the device; a plain file name is resolved inside the app private storage, an absolute path is used as given. |
-| [FilePicker](#filepicker) | Opens the device document chooser so the user can pick files, copies each one into app storage and reports a real file path. |
-| [FileDownloader](#filedownloader) | Downloads a file from an HTTP or HTTPS address in the background and saves it on the device, reporting progress while it runs. |
-| [Clipboard](#clipboard) | Reads and writes the device clipboard, so an app can copy text out for other apps and paste text a user copied elsewhere. |
+| A few values: a setting, a score, a token, the last screen opened | [AppStorage](#appstorage) |
+| Many records you search, sort or filter, such as notes or expenses | [SQLite](#sqlite) |
+| A whole file the app writes or reads | [FileManager](#filemanager) |
+| A file the person chooses | [FilePicker](#filepicker) |
+| A file from a web address | [FileDownloader](#filedownloader) |
+| Data shared between phones or people | [Firestore](/components/firebase#firestore), [FirebaseDB](/components/firebase#firebasedb) or [FirebaseStorage](/components/firebase#firebasestorage) |
 
 ## AppStorage
 
-A non-visual key-value store that saves text on the device, so values survive closing and reopening the app.
+Save small pieces of text under keys so they survive the app closing: a setting, a high score, a sign-in token. Every new project already has it.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS
 
-**Functions** — `Store Value`, `Get Value`, `Remove Value`, `Clear Storage`
+| Property | Default | What it does |
+|---|---|---|
+| **Name** | `Duddy` | The storage area the values live in. Use different names to keep unrelated groups apart. |
+
+**Functions**
+- **Store Value** (key, value) — saves the text under the key, replacing anything stored there.
+- **Get Value** (key, defaultValue) — returns the text saved under the key, or defaultValue when nothing was saved.
+- **Remove Value** (key) — deletes one key.
+- **Clear Storage** — deletes every key in the current **Name** area. It cannot be undone.
+
+### Save a list or object in AppStorage
+
+AppStorage stores text only. Store a number as text and convert it back when you read it. To store a list or a dictionary, turn it into text with the **to json text** block before **Store Value**, and turn it back with **parse json** after **Get Value**. Both blocks are under **Control** in the toolbox. For more than a few dozen records, use [SQLite](#sqlite) instead.
 
 ## SQLite
 
-A SQLite database kept on the device, for storing structured data in tables that survives the app closing and needs no network.
+Keep records in a SQLite database on the phone, in tables you can search, sort and update with SQL.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS
 
-**Events** — `Sql Executed`, `Query Result`, `Database Error`
+| Property | Default | What it does |
+|---|---|---|
+| **Database Name** | `app_database.db` | The database file. A different name is a separate database. |
+| **Version** | `1` | A version number for your table design. Duddy records it but changes no tables when you raise it. |
 
-**Functions** — `Execute Sql`, `Query`, `Insert`, `Update`, `Delete`, `Close Database`
+**Events**
+- **Sql Executed** (rowsAffected) — a statement run with **Execute Sql** finished.
+- **Query Result** (jsonRecordsString) — a **Query** finished. The rows arrive as a JSON array of objects keyed by column name, or `[]` when nothing matched.
+- **Database Error** (errorMessage) — the database could not open or a statement failed, with SQLite's message.
+
+**Functions**
+- **Execute Sql** (sql, jsonArrayParams) — runs a statement that returns no rows, such as `CREATE TABLE` or `INSERT`, and fires **Sql Executed**.
+- **Query** (sql, jsonArrayParams) — runs a `SELECT` and fires **Query Result**.
+- **Insert** (tableName, jsonObjectValues) — adds one row from a JSON object of column names and values, and returns the new row's id, or `-1` if it failed.
+- **Update** (tableName, jsonObjectValues, whereClause, jsonArrayParams) — changes the matching rows and returns how many changed, or `-1`.
+- **Delete** (tableName, whereClause, jsonArrayParams) — removes the matching rows and returns how many, or `-1`.
+- **Close Database** — closes the file. Every later call fails until **Database Name** or **Version** is set again.
+
+### Query a SQLite table with parameters
+
+Write a `?` in the SQL wherever a value goes, and pass the values as a JSON array in jsonArrayParams, in the same order. The database inserts them safely, so text a person typed can never change your SQL. **Query** passes every value as text.
+
+<CodeBlock
+  language="text"
+  filename="SQLite blocks for a notes table"
+  code={`Execute Sql   sql: CREATE TABLE IF NOT EXISTS notes (id INTEGER PRIMARY KEY, text TEXT)
+              jsonArrayParams: []
+
+Insert        tableName: notes
+              jsonObjectValues: {"text": "Buy milk"}
+
+Query         sql: SELECT * FROM notes WHERE text LIKE ? ORDER BY id DESC
+              jsonArrayParams: ["%milk%"]
+
+Query Result  [{"id": 1, "text": "Buy milk"}]`}
+/>
+
+Run the `CREATE TABLE IF NOT EXISTS` statements in the first screen's **Initialize** event, so the tables exist before anything reads them. When you add a column later, add an `ALTER TABLE` statement there too: raising **Version** does not change existing tables.
 
 ## FileManager
 
-Reads, writes, deletes and checks text files on the device; a plain file name is resolved inside the app private storage, an absolute path is used as given.
+Read and write whole text files on the phone, such as an exported list or a saved draft.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS
 
-**Events** — `File Written`, `Error Occurred`
+**Events**
+- **File Written** (filename) — **Write File** saved the file.
+- **Error Occurred** (message) — a read or write failed, or the file name was empty.
 
-**Functions** — `Write File`, `Read File`, `Delete File`, `File Exists`, `Get Documents Directory`, `Get Cache Directory`
+**Functions**
+- **Write File** (filename, content) — writes the text, replacing what was there and creating any missing folders.
+- **Read File** (filename) — returns the file's text, or empty text if the file is missing or unreadable. Check **File Exists** first to tell the two apart.
+- **Delete File** (filename) — deletes the file. It fires no event either way.
+- **File Exists** (filename) — true if the file is there.
+- **Get Documents Directory** — the full path of the app's private files folder.
+- **Get Cache Directory** — the full path of the app's cache folder, for temporary files the phone may delete when space runs low.
+
+A plain file name such as `notes.txt` is saved in the app's private files folder, which is kept until the app is uninstalled. A full path is used as given.
 
 ## FilePicker
 
-Opens the device document chooser so the user can pick files, copies each one into app storage and reports a real file path. Needs no storage permission.
+Let the person choose a file from the phone, such as a PDF to upload or a document to read. It needs no storage permission.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS
 
-**Events** — `File Picked`, `Files Picked`, `Cancelled`, `Error`
+| Property | Default | What it does |
+|---|---|---|
+| **File Type** | `*/*` | The kinds of file offered, as a MIME type such as `application/pdf` or `image/*`. `*/*` offers everything. |
+| **Allow Multiple** | off | Lets the person choose several files at once. Only the first 20 are kept. |
 
-**Functions** — `Open Picker`, `Get Path`, `Get Name`, `Clear`
+**Read from blocks:** **Selected Path**, **Selected Name** and **Selected Count**, for the current choice.
+
+**Events**
+- **File Picked** (path, name) — after every successful choice, with the first file.
+- **Files Picked** (paths, count) — straight after **File Picked** when more than one file was chosen. paths are joined by commas.
+- **Cancelled** — the person closed the chooser without choosing.
+- **Error** (message) — there is no file chooser, or the file cannot be read.
+
+**Functions**
+- **Open Picker** — opens the phone's file chooser, filtered by **File Type**.
+- **Get Path** (index) and **Get Name** (index) — the path or name of the chosen file at that position, counting from `0`.
+- **Clear** — forgets the current choice.
+
+The path you get is a copy of the file in the app's cache folder, which the phone may clear. To keep the file, write it somewhere permanent with [FileManager](#filemanager) or upload it with [FirebaseStorage](/components/firebase#firebasestorage).
 
 ## FileDownloader
 
-Downloads a file from an HTTP or HTTPS address in the background and saves it on the device, reporting progress while it runs.
+Download a file from an `https://` address and save it on the phone, showing progress as it goes.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS
 
-**Events** — `Download Progress`, `Download Completed`, `Download Failed`
+**Events**
+- **Download Progress** (progress) — the percentage done, from `0` to `100`. It stays silent when the server does not say how big the file is.
+- **Download Completed** (path) — the full path the file was saved to.
+- **Download Failed** (error) — the download could not finish: a missing address, a lost connection or an error from the server.
 
-**Functions** — `Download File`
+**Functions**
+- **Download File** (urlString, destPath) — downloads the file to destPath, creating any missing folders. A path without a leading `/`, such as `downloads/menu.pdf`, is saved in the app's private files folder.
 
 ## Clipboard
 
-Reads and writes the device clipboard, so an app can copy text out for other apps and paste text a user copied elsewhere.
+Copy text out of your app for the person to paste elsewhere, or read text they copied in another app.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+**Draws:** nothing (logic only) · **Platforms:** Android, iOS
 
-**Events** — `Copied`, `Error`
+**Read from blocks:** **Has Text** (the clipboard holds something to paste).
 
-**Functions** — `Copy`, `Paste`, `Clear`
+**Events**
+- **Copied** — **Copy** succeeded. Show a "Copied" message here.
+- **Error** (message) — the phone has no clipboard to copy to.
+
+**Functions**
+- **Copy** (text) — puts the text on the clipboard, replacing what was there.
+- **Paste** — returns the text on the clipboard, or empty text.
+- **Clear** — empties the clipboard. It does not fire **Copied**.
+
+On Android 10 and later an app can read the clipboard only while it is in front and has focus, so **Paste** in a screen's **Initialize** event returns empty text. Paste in response to a tap instead.
+
+## Troubleshooting storage
+
+<Accordion>
+  <AccordionItem value="paste-empty" title="Paste returns nothing on Android">
+    **Why:** Android 10 and later let an app read the clipboard only once it has focus, which it does not have while a screen is still opening.
+
+    **Fix:** call **Paste** from a button's **Click** event rather than from **Initialize**.
+  </AccordionItem>
+  <AccordionItem value="no-table" title="Database Error: no such table">
+    **Why:** the statement ran before the table was created, or the table was created under another **Database Name**.
+
+    **Fix:** run `CREATE TABLE IF NOT EXISTS` with **Execute Sql** in the first screen's **Initialize** event, and use the same **Database Name** on every screen.
+  </AccordionItem>
+  <AccordionItem value="not-open" title="Database Error: Database is not open">
+    **Why:** **Close Database** was called, and later calls fail until the database is opened again.
+
+    **Fix:** set **Database Name** or **Version** again to reopen it, or do not close a database that later screens still use.
+  </AccordionItem>
+  <AccordionItem value="query-empty" title="Query Result is an empty list">
+    **Why:** nothing matched. Often the number of `?` marks and values differ, or a `LIKE` search is missing its `%` wildcards.
+
+    **Fix:** pass exactly one value per `?`, in order, as a JSON array such as `["%milk%"]`.
+  </AccordionItem>
+  <AccordionItem value="read-empty" title="Read File returns empty text">
+    **Why:** the file is missing, or the name points somewhere else. A plain name is looked up in the app's private files folder.
+
+    **Fix:** check **File Exists** first, and use the same file name you wrote with **Write File**, or the path **Download Completed** handed you.
+  </AccordionItem>
+</Accordion>
+
+## Next steps
+
+- [Data, APIs and storage](/guides/logic/data-and-apis): save what an API returns.
+- [Firebase components](/components/firebase): keep data in the cloud and share it between people.
+- [Device and utility components](/components/other): share a saved file with Share.

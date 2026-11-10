@@ -1,79 +1,191 @@
 ---
-title: Themes and styling
-description: Build a palette once as named colours, and change the whole app by editing one value.
+title: Theme colours, dark mode and styling
+description: Set your app's nine colour roles, add a Dark collection that follows the phone's dark mode, generate a palette with AI, and style fills, glass and fonts.
 ---
 
-A theme is a collection of **named colours** — `primary`, `surface`, `onSurface`,
-`danger`, whatever you call them — that components reference instead of a hex code.
-Change the value once and every screen using that name follows.
+Components in Duddy point at a colour role, such as `primary` or `onBackground`, instead of a fixed colour. Change a role once and every component that uses it follows, on every screen. You set the roles in the designer under **Settings → Theme** (press `7` to open **Settings**).
 
-Open **Settings → Theme** in the designer.
+## How Duddy themes work: roles and collections
 
-## Collections
+A theme has a fixed set of nine colour roles. You cannot add roles of your own: you choose the colour each role has. A new project starts with these:
 
-A theme is stored as a named collection of variables. Most projects need one; keep several
-when you want a light and a dark set, or a seasonal variant, and switch a screen between
-them from the `Screen` component's **Theme** property.
+| Role | New project colour | What it is for |
+|---|---|---|
+| `primary` | `#4B1FA8` | Your brand colour. A Button's **Background** and the screen's status bar use it by default. |
+| `onPrimary` | `#FFFFFF` | Text and icons drawn on `primary`, such as a Button's **Text Color**. |
+| `secondary` | `#ECDFFF` | A second, quieter colour for surfaces that need to stand apart. |
+| `onSecondary` | `#21005D` | Text and icons drawn on `secondary`. |
+| `background` | `#FFFFFF` | The surface of cards and fields, such as a CardView's **Background**, and the navigation bar. |
+| `onBackground` | `#000000` | Body text, such as a TextView's **Text Color**. |
+| `sheet` | `#FAFAFA` | The screen behind everything: the Screen's **Background**. |
+| `neutral` | `#8A8598` | Hints, hairlines and borders, such as an Input's hint colour. |
+| `icon` | `#444444` | An Icon's **Color**. |
+
+The list on the **Theme** page also shows `transparent`. It is a fully transparent slot, not a role, so leave it as it is.
+
+A *collection* is one set of colours for the nine roles. Every project has **Default**, which cannot be renamed or deleted. A collection you add starts as a copy of **Default**, so every collection has the same roles and only the colours differ.
+
+<Figure
+  src="/media/guides/theme-roles.svg"
+  dark="/media/guides/theme-roles.dark.svg"
+  alt="The nine theme roles, primary, onPrimary, secondary, onSecondary, background, onBackground, sheet, neutral and icon, each with a colour in the Default collection and an example colour in a Dark collection. Arrows show which role a component property uses by default: Button Background uses primary, Button Text Color onPrimary, CardView Background background, TextView Text Color onBackground, Screen Background sheet, Input Hint Color neutral, and Icon Color icon."
+  caption="Every collection has the same nine roles; only the colours differ. The Default colours are a new project's, and the Dark ones are an example."
+  width={960}
+  height={470}
+/>
+
+## Change your app's colours
 
 <Steps>
-  <Step>Create a collection. Names start with a letter and use letters, numbers and underscores.</Step>
-  <Step>Add variables to it, one per role: not `blue600`, but `primary`, `surface`, `textMuted`.</Step>
-  <Step>Use those names everywhere on the canvas instead of picking a colour by hand.</Step>
+  <Step>Press `7` to open **Settings**, then choose **Theme**.</Step>
+  <Step>Under **Collections**, choose the collection to change. Start with **Default**.</Step>
+  <Step>Press the swatch beside a role to open its colour picker, and choose the new colour.</Step>
+  <Step>Close the picker. Duddy saves the change and shows **Theme saved**, and every component using that role redraws.</Step>
 </Steps>
 
-<Callout type="warning">
-  Deleting a collection takes its variables with it, and anything using them falls back to a
-  default colour. Rename rather than delete-and-recreate.
-</Callout>
+Colours are stored as `#RRGGBB`, or `#RRGGBBAA` with transparency. To reuse a colour somewhere else, press **Copy hex code** on its row.
 
-## Two shortcuts to a palette
+<FigureRow caption="The same layout in two palettes, as the canvas draws it.">
+  <Figure src="/media/apps/notes-green-home.png" alt="A notes app's home screen with a green top bar titled Notes, a large Your notes heading, a note card reading Groceries, and a green Add note button at the bottom." frame="phone" />
+  <Figure src="/media/apps/notes-blue-home.png" alt="The same notes home screen with a slate-blue top bar and a slate-blue Add note button." frame="phone" />
+</FigureRow>
 
-- **From an image** — upload a picture and Duddy pulls a palette out of it. Good when the
-  brand already exists as a logo or a photograph.
-- **Generated** — describe the look you want ("warm, editorial, cream paper and ink") and
-  have it generated into the collection.
+### Use a role on a component
 
-Both write ordinary variables, so you can edit any of them afterwards.
+Wherever a property takes a colour, its picker has a **Custom** / **Theme** switch at the top. Choose **Theme** and pick a role, and the component follows that role from then on. Use **Custom** only for a colour that belongs to one component alone: it does not change when you change the theme.
 
-## What a colour can be
+## Readable text is kept automatically
 
-Anywhere a colour is set — a background, a text colour, a border — you can choose:
+Each time a theme is saved, Duddy checks that the text and icon roles can be read against the surfaces they sit on. If a pair falls short, Duddy darkens or lightens the text role until it passes. It never moves `primary`, `secondary`, `background` or `sheet`, the colours you chose for your brand and surfaces.
 
-| Kind | Use it for |
+| Text role | Must be readable on | Minimum contrast |
+|---|---|---|
+| `onBackground` | `background` and `sheet` | 4.5:1 |
+| `onPrimary` | `primary` | 4.5:1 |
+| `onSecondary` | `secondary` | 4.5:1 |
+| `neutral`, `icon` | `background` | 3:1 |
+
+4.5:1 is the WCAG AA level for body text. The quieter roles, `neutral` and `icon`, need only 3:1, so captions and hints stay softer than headings.
+
+## Add a dark mode
+
+An app follows the phone's dark mode when the project has a collection named exactly `Dark`.
+
+<Steps>
+  <Step>In **Settings → Theme**, press the **+** beside **Collections** (**Create new collection**).</Step>
+  <Step>Enter the name `Dark`, with a capital D, and confirm. The new collection starts as a copy of **Default**.</Step>
+  <Step>With **Dark** selected, change the colours of the roles: usually a dark `background` and `sheet`, and a light `onBackground`.</Step>
+  <Step>To see a screen in its dark colours while you design, select the screen and set its **Theme** property to **Dark**.</Step>
+  <Step>Run the app with [Live test](/build/live-test) on a phone set to dark mode, and check every screen.</Step>
+</Steps>
+
+When a screen opens in the app, it uses the collection the app last switched to from logic. If the app has not switched, it uses **Dark** while the phone is in dark mode, and **Default** otherwise.
+
+<Figure
+  src="/media/guides/theme-which-collection-opens.svg"
+  dark="/media/guides/theme-which-collection-opens.dark.svg"
+  alt="When a screen opens, it uses the theme the app last switched to from logic, for the whole app. If the app has not switched, it uses the collection named Dark while the phone is in dark mode. Otherwise it uses Default. Setting a theme name that has no collection changes nothing."
+  caption="Name a collection Dark and your app follows the phone's dark mode."
+  width={960}
+  height={318}
+/>
+
+### Let people choose a theme
+
+To offer a theme switch in your app, set the screen's **Theme** from logic, for example with a **set Screen1.Theme to** block holding the text `Dark`. The switch applies to the whole app, and every screen opened after it keeps that collection. A name that matches no collection changes nothing.
+
+The choice lasts until the app closes. To remember it, save the name with [AppStorage](/components/storage#appstorage) when it changes, and set **Theme** again in your first screen's **Initialize** event.
+
+## Generate a palette
+
+The **Theme** page has two ways to start a palette quickly.
+
+| Option | What it does | Cost |
+|---|---|---|
+| **Generate with AI** | You describe the look, such as "warm coffee shop, cozy and premium", and the AI fills every role of the collection you have selected. | Spends [credits](/getting-started/credits-and-plans). |
+| **Generate from Image** | You choose a PNG or JPG, such as a logo, and Duddy lists the main colours in it as hex codes. Use them as the colours of your roles. | Free. It runs in your browser. |
+
+A generated palette is saved like any other edit, and the contrast check above applies to it too.
+
+## Fills: colour, gradient, glass and image
+
+A background can be more than a plain colour. Its picker, titled **Fill**, offers four modes under **Custom**:
+
+| Mode | What it does |
 |---|---|
-| **Theme colour** | Almost everything. A named variable from the current collection. |
-| **Custom colour** | A one-off that genuinely belongs to a single component. |
-| **Image** | A photograph or texture as a background. |
-| **Gradient** | Two or more stops with a direction. |
-| **Material** | A translucent, blurred surface — frosted, liquid glass, tinted or clear — with control over blur, tint, highlight and depth. |
+| **Color** | One solid colour. |
+| **Gradient** | Two or more colour stops with a direction. |
+| **Glass** | A translucent material that blurs what is behind it: **Frosted**, **Liquid glass**, **Tinted** or **Clear**. Under **Optics** you tune it with controls such as **Blur**, **Tint**, **Strength**, **Refraction**, **Highlight**, **Light angle**, **Depth**, **Brightness** and **Edge**; each material shows only the controls it uses, and **Reset** returns to its defaults. |
+| **Image** | A picture from your project's images. |
 
-<Callout type="info">
-  A material samples what is behind it, so it only reads as glass when there is something behind
-  it worth seeing. Over a plain background it just looks like a lighter box.
+**Glass** and **Image** are offered for fills and backgrounds only. A text or icon colour takes **Color** or **Gradient**.
+
+<Callout type="info" title="Glass needs something behind it">
+  Glass blurs and tints what is underneath. Over a plain background it looks like a lighter box, so place it over a photo or a colourful surface.
 </Callout>
 
-## Type
+## Fonts
 
-Fonts are project assets. Upload a family under **Assets → Fonts** and it becomes available
-in every Typography row, or use one of the fonts that ship with Duddy. Keep a scale — a
-display size, a title, a body, a caption — and set it on the components rather than typing a
-new number each time.
+A component that shows text has a **Typography** group in the properties panel. Its font opens **Select Font Family**, which lists the fonts you uploaded first, then 149 built-in families, each with the weights it ships.
+
+You can upload `.ttf` and `.otf` files under **Media Assets → Fonts**. Each file is one typeface. See [Images, fonts and files](/guides/designing/assets).
+
+<Callout type="warning" title="Uploaded fonts are not in builds yet">
+  An uploaded font draws on the canvas, but Android and iOS builds include the built-in families only. Use a built-in family for any text that must keep its typeface in the installed app.
+</Callout>
+
+Keep a small type scale, such as a title, a body size and a caption, and reuse it rather than choosing a new size for each component.
 
 ## Shapes and corners
 
-Corner radius is a normal Style property. For anything that is not a rounded rectangle,
-the `Shape` component draws real vector shapes — circles, pills, arches, clovers, or an
-outline you draw yourself — and clips its children to that outline.
+Containers and images have a **Border Radius** in their **Style** group for rounded corners. For anything that is not a rounded rectangle, use the [Shape](/components/content#shape) component. Its shapes come in the groups **Basic**, **Angular**, **Scalloped**, **Bursts**, **Playful** and **Adjustable**, and it clips whatever you put inside it to its outline.
 
-## Letting the AI restyle
+## Restyle the app with Vibe mode
 
-Ask the [Vibe chat](/ai/overview) for a new look — "make the whole app dark and teal" — and
-it restyles the app in one turn: a new palette, and every screen redrawn to it. Say what
-must stay ("keep the layouts") and it will. Components that reference theme names follow a
-palette change on their own — the practical argument for using theme names in the first
-place.
+You can also ask [Vibe mode](/ai/overview) for a new look, such as "make the whole app dark and teal". When your app already has a look, a restyle changes only what your request asks for and redraws only the screens that change. Say what must stay ("keep the layouts") to keep it. To set the look Vibe mode starts from, see [UI style](/ai/ui-style).
 
-<NextPrev
-  prev={{ title: "Layout and sizing", href: "/guides/designing/layout-and-sizing" }}
-  next={{ title: "Images, fonts and files", href: "/guides/designing/assets" }}
-/>
+## Troubleshooting
+
+<Accordion>
+  <AccordionItem value="not-a-theme-key" title='invalid operation: "surface" is not a theme key'>
+    **Why:** the theme accepts only the nine roles in the table above. A name such as `surface`, `danger` or `textMuted` is refused, whether you add it with **New variable**, **Add to theme** or **Add to library**, or rename a role to it.
+
+    **Fix:** change the colour of an existing role instead. If you deleted a role, add it back with **New variable** under its exact name.
+  </AccordionItem>
+  <AccordionItem value="variable-exists" title='A variable called "primary" already exists.'>
+    **Why:** every role already exists in your collections, so a new variable with a role's name is refused.
+
+    **Fix:** press the role's swatch and change its colour.
+  </AccordionItem>
+  <AccordionItem value="text-colour-changed" title="My text colour changed after I saved the theme">
+    **Why:** the text role was too close to its surface to read, so Duddy adjusted it to meet the minimum contrast.
+
+    **Fix:** this is expected. For a different text colour, choose one with more contrast against the surface, or change the surface colour.
+  </AccordionItem>
+  <AccordionItem value="dark-not-used" title="The app does not switch to dark mode">
+    **Why:** the collection is not named exactly `Dark`, or the app switched to another collection from logic, which takes priority.
+
+    **Fix:** rename the collection to `Dark`, with a capital D. Check that no block sets **Theme** when the app starts.
+  </AccordionItem>
+  <AccordionItem value="collection-names" title="Names have to start with a letter.">
+    **Why:** when you rename a collection or add a variable, the name must start with a letter and use only letters, numbers and underscores. The same rule gives **Use letters, numbers and underscores only.**
+
+    **Fix:** choose a name such as `Dark` or `Summer_sale`.
+  </AccordionItem>
+  <AccordionItem value="ai-credits" title="Not enough AI credits — top up or upgrade your plan">
+    **Why:** **Generate with AI** spends credits, and your balance is too low.
+
+    **Fix:** see [Credits](/getting-started/credits-and-plans), or use **Generate from Image**, which is free.
+  </AccordionItem>
+  <AccordionItem value="png-jpg-only" title="PNG and JPG images only.">
+    **Why:** **Generate from Image** reads PNG and JPG files only.
+
+    **Fix:** export the picture as PNG or JPG and choose it again.
+  </AccordionItem>
+</Accordion>
+
+## Next steps
+
+- [Images, fonts and files](/guides/designing/assets): add the pictures and fonts your design uses.
+- [Layout and sizing](/guides/designing/layout-and-sizing): space and align the components you have styled.
+- [Live test](/build/live-test): check both collections on a real phone.

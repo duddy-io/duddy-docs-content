@@ -1,0 +1,78 @@
+---
+title: Connect Firebase to your Duddy app
+description: Connect a Google account, pick a Firebase project for each app and let Duddy fetch google-services.json and GoogleService-Info.plist for you.
+isNew: true
+---
+
+Firebase gives the apps you build sign-in, a database, file storage and push messages. Duddy's
+[Firebase components](/components/firebase) talk to your own Firebase project, so each app needs
+that project's config files: `google-services.json` for Android and `GoogleService-Info.plist` for iOS.
+
+You can upload the files by hand, or connect the Google account that owns the Firebase project and
+pick it from a list. Access is read-only: Duddy reads the list of projects and their config files, and
+can never change your Firebase setup.
+
+## Connect your Google account
+
+<Steps>
+  <Step>Open **Integrations** in your dashboard and find **Firebase**.</Step>
+  <Step>Press **Continue with Google** and sign in with the Google account that owns your Firebase project.</Step>
+  <Step>Allow every permission Google asks for. If you untick one, Duddy cannot list your projects and the connection is not saved.</Step>
+</Steps>
+
+Do this once for your Duddy account. Every project you own can then pick from the same list.
+
+## Pick a project for each app
+
+<Steps>
+  <Step>In the designer, open **Settings → Integrations**.</Step>
+  <Step>In the Firebase section, choose **From account**. Duddy shows the Firebase projects on the connected account, grouped by Android and iOS app.</Step>
+  <Step>Pick the app for each platform. Duddy fetches the config file and shows **Using the config from** the app you chose.</Step>
+</Steps>
+
+To set the files yourself instead, choose **Upload** and add `google-services.json`, `GoogleService-Info.plist`, or both.
+
+<Callout type="warning">
+  Picking an app copies its config file into this project. It is a copy, not a live link, so pick the
+  app again after you change anything in the Firebase console.
+</Callout>
+
+## Register your apps in Firebase first
+
+Firebase hands out a config file only for an app registered in the Firebase project. If a platform
+reads **No Android app** or **No iOS app**, add that app in the
+[Firebase console](https://console.firebase.google.com), then reload the settings page.
+
+Use your app's package name from [Project settings](/getting-started/project-settings) when you
+register it, so the config matches the app Duddy builds.
+
+## Switch on what your app uses
+
+The config file only connects your app to the project. In the Firebase console, also turn on the
+services your app uses:
+
+- **Authentication → Get started → Email/Password** for email sign-in.
+- **Firestore Database → Create database** for documents.
+- **Storage** and **Realtime Database** if your app uses those components.
+
+## When Vibe mode adds Firebase
+
+If you ask Vibe mode for something that needs Firebase, such as accounts or a shared chat, it can
+import the Firebase components for you. When the project has no Firebase config yet, the reply says
+so and points you to **Settings → Integrations** before you build.
+
+## Troubleshooting
+
+| What you see | What to do |
+|---|---|
+| **… has no Firebase projects** (named after your Google account) | The connected Google account owns no Firebase project. Connect the account that does, or add this account to the project in the Firebase console. |
+| **Firebase connection errored** | Reconnect Firebase from **Integrations** in your dashboard. |
+| **Firebase has no config for that app yet.** | Register the app in the Firebase console, then pick it again. |
+| **Google revoked access — apps using Firebase will fail to build** | Reconnect Firebase from **Integrations** in your dashboard, then pick the project again in **Settings → Integrations**. |
+| A build stops because Firebase config is missing | A build that uses Firebase components needs the config for the platform you are building. Pick or upload it in **Settings → Integrations**. |
+
+## Next steps
+
+- [Firebase components](/components/firebase): sign-in, Firestore, Realtime Database, Storage and push messages.
+- [A chat app](/guides/apps/chat-app): sign-in, Firestore and live lists in one app.
+- [Fix a failed build](/build/troubleshoot-builds): every build error and what to do about it.

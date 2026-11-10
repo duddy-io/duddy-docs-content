@@ -1,103 +1,278 @@
 ---
-title: Logic blocks
-description: Wire behaviour with blocks — events, conditions, variables, lists and procedures — in the block editor.
+title: "Logic blocks: events, variables and procedures"
+description: "Wire app behaviour in Duddy's block editor: event handlers, built-in blocks, variables, start values, lists, procedures and fixing flagged block problems."
 ---
 
-Logic in Duddy is built out of blocks that snap together. If two blocks do not belong
-together, they will not connect, so a project cannot quietly hold logic that never runs.
+Logic in Duddy is made of blocks that snap together in the *block editor*. Each screen has its
+own logic, and the blocks [Vibe mode](/ai/overview) writes are the same blocks you drag yourself,
+so you can open and change anything it built.
 
-Switch between the designer and the block editor with `Ctrl` + `Shift` + `E`. Each screen
-has its own workspace.
+## Open the block editor
 
-## The shape of a program
+Press the **Code** button in the designer's header, or press `Ctrl` + `Shift` + `E`. The block
+editor opens on the screen you were designing. The same button, now labelled **Designer**, takes
+you back.
 
-Everything starts with an **event**: something happened. Inside the event you put
-**actions**: things to do about it.
+The rail on the left of the block editor has six tabs:
+
+| Tab | What it holds |
+|---|---|
+| **Vibe Mode** | The same Vibe mode chat as in the designer. Here it writes logic unless you type another command. |
+| **Default Blocks** | The built-in blocks, in nine categories (see [Built-in blocks by category](#built-in-blocks-by-category)). |
+| **Screen Components** | The blocks of every component on this screen. |
+| **Workspaces** | The pages this screen's logic is split across. |
+| **Screens** | Every screen in the project. Choose one to edit its logic. |
+| **Backpack** | Blocks you saved to reuse in any of your projects. |
+
+## Write your first event handler
+
+Everything starts with an *event*: something happened, such as a tap. The blocks inside the event
+block run, top to bottom, each time it happens. This example reacts when someone taps a button
+called `SignInButton`.
 
 <Steps>
-  <Step>Select a component in the toolbox — `SignInButton`, say.</Step>
-  <Step>Drag out its **Click** event. That is the hat block everything else goes inside.</Step>
-  <Step>Fill it with actions: read a field, check a condition, open a screen, call an API.</Step>
+  <Step>Open **Screen Components** and select `SignInButton`. Its blocks open in a flyout.</Step>
+  <Step>Drag `when SignInButton.Click do` onto the workspace. This is the event block, sometimes called a hat block.</Step>
+  <Step>Add the actions inside it: for example an `if` from **Control** that checks a field, then a `call` block or an `open another screen` block.</Step>
+  <Step>Run the app on your phone with [Live test](/build/live-test) and tap the button.</Step>
 </Steps>
 
-## What is in the toolbox
+Blocks only snap into sockets that accept their kind of value: a number will not plug into a
+yes-or-no socket, and a dictionary will not plug into a text socket. A block left loose on the
+workspace never runs, and the editor flags it so you can attach it or delete it.
 
-The left of the block editor holds two kinds of blocks.
+### Event parameters
 
-**Per component** — every component on the screen contributes its own:
+Some events hand you values. **Got Response** on an
+[HttpRequest](/components/connectivity#httprequest) gives `responseCode`, `response` and `tag`, which
+sit on the event block as green blocks. Drag one into a socket inside the handler to use it; the
+event block keeps its own copy.
 
-| Block | Is |
+An event parameter is readable only inside its own handler. A procedure called from the handler
+cannot see it, so pass the value in as one of the procedure's inputs.
+
+## The blocks a component gives you
+
+Every component adds three kinds of block under **Screen Components**:
+
+| Kind | Block shape | Example |
+|---|---|---|
+| Event | `when <component>.<event> do` | `when Input1.Text Changed do` |
+| Property | `set <component>.<property> to` and `get <component>.<property>` | `set Label1.Text to`, `get Switch1.Checked` |
+| Function | `call <component>.<function>` | `call HttpRequest1.Make Request` |
+
+<Figure
+  src="/media/components/component-anatomy.svg"
+  dark="/media/components/component-anatomy.dark.svg"
+  alt="An Input named Input1 and its three kinds of member. Properties such as Text, Hint Text and Enabled appear in the properties panel at design time and as blocks in your logic: set Input1.Text to, and Input1.Text. Events such as Text Changed, Submit and Focus become hat blocks such as when Input1.Submit do, where logic starts; the blocks inside run each time the event fires. Functions such as Request Focus and Clear Focus become call blocks such as call Input1.Request Focus, which you run from any event handler."
+  caption="Every component exposes properties, events and functions, and each one becomes a kind of block."
+  width={960}
+  height={432}
+/>
+
+Hover over a block to read what it does. When a block does not work on every platform, its tooltip
+ends with a line such as "Works on Android and iOS only." A build for a platform that lacks the
+feature is refused, so check these before you rely on them. Each component's events and functions
+are listed in the [component reference](/components/overview).
+
+Give components clear names before you wire them, because blocks show the name and `Button1` tells
+you nothing six screens later. Renaming later is safe: every block that uses the component follows
+the new name. Deleting a component deletes its blocks with it, as one change you can undo.
+
+## Built-in blocks by category
+
+**Default Blocks** holds nine categories, in this order:
+
+| Category | Holds |
 |---|---|
-| **Events** | Something the component tells you about: Click, Text Changed, Got Response, Location Changed. |
-| **Properties** | Get or set anything the component exposes — a label's Text, a switch's Checked, a container's Background. |
-| **Functions** | Things you can tell the component to do: Show, Play, Make Request, Store Value. |
+| **Control** | `if` with `else if` and `else`; counted loops (`for each … from … to … by`), `for each item in list` and `while`; an inline `if … then … else` value; `do … result`; `evaluate but ignore result`; screen navigation (`open another screen`, with or without a start value, `get start value`, `close screen`, `replace this screen with`, `close application`); `parse json` and `to json text`. |
+| **Logic** | `true`, `false`, `not`, equals and not equals, `and`, `or`. |
+| **Math** | Numbers, comparisons (`=`, `≠`, `<`, `≤`, `>`, `≥`), arithmetic (`+`, `-`, `×`, `÷`, `^`), square root, absolute, negate, `ln`, `log10`, `e^`, `10^`, trigonometry, constants such as π, `round`, `round up`, `round down`, `remainder of` and `random integer from … to`. |
+| **Text** | Text, `join`, **format number**, **format duration**, **format date**, `length`, `is empty?`, `is string?`, `compare texts`, `trim`, upper and lower case, `starts at`, `contains`, `split`, `split at spaces`, `segment`, `replace all` and `reverse`. |
+| **Lists** | `make a list`, `add items to list`, `length of list`, `is list empty?`, `is in list?`, `get list item`, `remove list item`, `replace list item` and `sort list`. |
+| **Dictionary** | `make a dictionary with key`, `set key`, `get value for key`, `remove key`, `has key`, `size of dictionary`, `clear dictionary`, `get keys of dictionary` and `get values of dictionary`. |
+| **Miscellaneous** | Values for properties: colours (hex, theme colour, gradient, RGB, blend, random), images, dimensions, alignment, text alignment, image size, position, icons, themes, fonts and percentages. |
+| **Variables** | `create variable … as`, `set … to` and `get variable`. |
+| **Procedures** | `to … do`, `to … do … return` and the `call` blocks that run them. |
 
-Every component's events and functions are listed in the
-[component reference](/components/overview).
+There is no wait or repeat-every block. For a delay or a repeating action, use a
+[Clock](/components/other#clock): put the work in its **Fire** event and turn its **Enabled** on.
+**Timer Interval** sets the gap in milliseconds, and **Fire Once** makes it a one-off delay.
 
-**Built in** — the general-purpose families:
+Comparisons treat both sides as numbers when both are numbers, and as text otherwise.
 
-| Family | Holds |
-|---|---|
-| **Logic** | `if / else`, comparisons, `and` / `or` / `not`, true and false. |
-| **Control** | Loops, repeat, break, wait. |
-| **Math** | Arithmetic, rounding, random numbers, min and max. |
-| **Text** | Join, length, substring, case, replace, split, and **format number**. |
-| **Lists** | Create, add, length, contains, get, replace and remove by index. |
-| **Dictionaries** | Key-value structures — what a JSON response becomes. |
-| **Variables** | Named values you set and read. |
-| **Procedures** | Your own reusable blocks, with parameters and a return value. |
+## Format numbers, durations and dates
 
-## Showing a number
+A number reaches a label as its plain digits: a total of 185000 shows as `185000`. Three blocks in
+**Text** turn a value into the text people expect to read.
 
-A number reaches a label as its plain digits: a total of 185000 shows as `185000`. To show
-it the way people read money and counts, put it through **format number** before you join
-it to anything:
+### format number
 
 | Setting | Does |
 |---|---|
 | **decimals** | Fixed places, 0 to 10. A half rounds away from zero, so 2.5 shows as `3` and -2.5 as `-3`. |
 | **grouping** | `1,234,567` (thousands), `12,34,567` (lakhs and crores: the last three digits, then twos), or none. |
 
-So `join "₹" with format number (total, decimals 0, grouping 12,34,567)` shows `₹1,85,000`,
-and an average of 33.333… with 1 decimal shows `33.3`. A negative keeps its minus before the
-digits (`-1,240`). It reads the same on Android, iOS, the web and a Live Test.
+So `join "₹" with format number (total, decimals 0, grouping 12,34,567)` shows `₹1,85,000`, and an
+average of 33.333… with 1 decimal shows `33.3`. A negative keeps its minus before the digits
+(`-1,240`). The Math block `round` works differently: it rounds a half up, so -2.5 becomes -2.
 
-## Variables
+### format duration
 
-Create a variable for anything you need to remember between events — the item a user
-selected, a running total, whether a request is already in flight.
+Takes an amount in **seconds**, **minutes** or **milliseconds** and writes it in one of three
+styles: `m:ss` (`3:34`, and `1:02:15` past an hour), `h:mm:ss` (always shows hours) or
+`1 h 15 min` (words, such as `45 min` or `30 s`).
 
-<Callout type="info">
-  Variables belong to the screen that declares them. To carry a value to another screen, set a
-  global value before you navigate, or write it to
-  [AppStorage](/components/storage) when it should survive the app closing.
+### format date
+
+Reads a date as apps store it, such as `2026-06-03`, `2026-06-03T09:14` or a time such as `09:14`,
+and writes it in one of ten patterns: `3 Jun`, `3 Jun 2026`, `Jun 3`, `Jun 3, 2026`, `Wed, 3 Jun`,
+`Wednesday`, `June 2026`, `Wednesday, 3 June 2026`, `09:14` or `9:14 am`. Text that is not a date is
+shown unchanged.
+
+<Callout type="warning" title="format date ignores time zones">
+  A time-zone ending such as `Z` or `+05:30` is read and then ignored, so a time stored in UTC shows
+  as UTC. Firestore timestamps are UTC.
 </Callout>
 
-## Procedures
+All three blocks give the same result on Android, iOS and in Live test.
 
-When the same five blocks appear in three handlers, make them a procedure and call it from
-all three. Procedures take parameters and can return a value, and they show up in the
-toolbox beside the built-in blocks.
+## Use variables
 
-## Keeping a workspace readable
+Create a variable for anything you need to remember between events: the item someone selected, a
+running total, whether a request is already in flight.
 
-- **Name components before you wire them.** Blocks address components by name, and
-  `Button1` tells you nothing six screens later.
-- **One event, one job.** If a Click handler is twenty blocks tall, most of it wants to be a
-  procedure.
-- **Validation runs as you build.** A block with an empty socket, a duplicate handler for the
-  same event, or a reference to a component you deleted is flagged in the editor — fix those
-  before you build, because they compile to nothing.
+- `create variable … as` declares it with a starting value. It stands on the workspace on its own,
+  not inside an event.
+- `set … to` changes it and `get variable` reads it.
 
-## Asking the AI for logic
+Variables belong to the screen that declares them, across all of that screen's workspaces. A loop's
+variable and a procedure's inputs are different: they exist only inside that loop or procedure, and
+the variable dropdowns there offer them.
 
-`/logic` in the [Vibe chat](/ai/overview) wires behaviour onto components that already
-exist: "when Sign in is tapped, check the email field is not empty, then open Home".
-What it writes is ordinary blocks in the same workspace, so you can open it up and adjust
-anything it did.
+## Pass a value to another screen
 
-<NextPrev
-  prev={{ title: "Images, fonts and files", href: "/guides/designing/assets" }}
-  next={{ title: "Data, APIs and storage", href: "/guides/logic/data-and-apis" }}
-/>
+A screen cannot read another screen's variables. To hand a value to the next screen, open it with
+`open another screen with start value` and read the value there with `get start value`, usually in
+that screen's **Initialize** event. `replace this screen with start value` does the same and also
+takes the current screen away, so Back skips it, which suits a sign-in screen moving on.
+
+To keep a value after the app closes, store it on the device with
+[AppStorage](/components/storage#appstorage). See
+[Screens and navigation](/guides/designing/screens) for the navigation blocks in full.
+
+## Work with lists and dictionaries
+
+<Callout type="warning" title="Lists count from 0">
+  The first item of a list is at index 0, the second at 1. A read past the end gives nothing rather
+  than stopping the app.
+</Callout>
+
+- A *dictionary* holds values by key, as a JSON object does. Build one with
+  `make a dictionary with key`, and read it with `in dictionary … get value for key`.
+- `parse json` and `to json text` live in **Control**. `parse json` turns JSON text into a
+  dictionary or a list, and gives nothing for text that is not JSON. `to json text` goes the other
+  way: use it to put a dictionary or list into a text socket, such as an HttpRequest **Body**.
+- A list or dictionary placed on a label shows as its JSON, which helps when you are checking what
+  you have.
+
+[Call APIs and store data](/guides/logic/data-and-apis) shows these blocks reading a real API
+response.
+
+## Create a procedure
+
+When the same blocks appear in three handlers, make them a procedure and call it from all three.
+
+<Steps>
+  <Step>From **Procedures**, drag out `to … do`, or `to … do … return` if it should hand back a value, and give it a name.</Step>
+  <Step>To add inputs, press the gear on the block and add a `with input` for each one. Inside the procedure, read an input with `get variable`.</Step>
+  <Step>Run it from any handler on the same screen with its `call` block.</Step>
+</Steps>
+
+Procedures belong to their screen, like variables.
+
+## Organise a screen's logic
+
+- **Workspaces.** A screen's logic starts in one workspace, `Workspace1`. On a large screen, add
+  more from the **Workspaces** tab with **Add New** (the plus beside a workspace) to split the logic
+  into pages. Names must be unique, and you cannot delete the workspace you are on.
+- **Search.** Press `Shift` + `F` to search the blocks and comments in the current workspace.
+  Choose a result to jump to it.
+- **Backpack.** Right-click a block and choose **Add to Backpack** to keep a copy. Your backpack
+  follows your account into every project: open the **Backpack** tab and press **Add to canvas**,
+  or **Copy** and then `Ctrl` + `V`.
+- **Blocks as an image.** Right-click a block and choose **Download this block as image**, or
+  right-click the workspace for **Download all blocks as image**. Drop that PNG on a block
+  workspace later to add the same blocks again.
+
+## Find and fix block problems
+
+The block editor checks your logic as you work. In its header, the **Problems in this screen**
+button shows two counts: warnings and errors.
+
+<Steps>
+  <Step>Press the problems button to open the list of flagged blocks.</Step>
+  <Step>Choose a problem to jump to its block. With the list open, the up and down arrow keys step through them.</Step>
+  <Step>Fix the block, or press **Fix with AI**. It sends the flagged blocks to Vibe mode as one turn, shown in the chat as "Fix the problems in this screen", and asks it to edit only those blocks. It uses credits like any other turn.</Step>
+</Steps>
+
+| Message | What it means |
+|---|---|
+| This block is disconnected and never runs — attach it or delete it. | A warning: the block is loose on the workspace. |
+| Button1.Click is handled more than once in this workspace — both handlers run. | An error: two event blocks for the same event. Merge them into one. |
+| 'Label1' is not on this screen any more — this block cannot run. | An error: the block names a component this screen does not have, often after pasting blocks from another screen. |
+| Variable 'total' is undefined or out of scope here. | An error: the variable is not declared on this screen, or the block sits outside the loop or procedure it belongs to. |
+| Please select a variable. | An error: the block's dropdown still reads `none`. "Please select a procedure to call." is the same for a `call` block. |
+| Duplicate declaration for variable 'total'. | An error: two `create variable` blocks with one name. The same check covers procedures and the screen's other workspaces. |
+| Warning: Division by zero. | A warning: a `÷` block divides by a typed 0. |
+| Nothing is plugged into VALUE — this reads as empty when the app runs. | A warning on AI-written blocks only: a socket the AI left empty. |
+
+## Ask Vibe mode to write logic
+
+With the block editor open, a message to Vibe mode is treated as `/logic` unless you type another
+command: "when Sign in is tapped, check the email field is not empty, then open Home". It writes
+ordinary blocks into the workspace, with a one-sentence note above each handler and procedure it
+creates, so you can read what it did and change anything. Each turn uses credits; see
+[Credits](/getting-started/credits-and-plans).
+
+## Troubleshooting
+
+<Accordion>
+  <AccordionItem value="snap" title="A block will not snap into a socket">
+    **Why:** the socket expects a different kind of value, such as a number, yes or no, or text.
+    **Fix:** convert the value first. For a dictionary or list going into a text socket, put it through `to json text`.
+  </AccordionItem>
+  <AccordionItem value="nothing-happens" title="Nothing happens when I tap">
+    **Why:** the event block is for a different component, the blocks are loose rather than inside the handler, or the component is hidden.
+    **Fix:** check the component name on the event block, open the problems list for disconnected blocks, and check the component's **Visible** is on.
+  </AccordionItem>
+  <AccordionItem value="empty-start-value" title="A value is empty on the next screen">
+    **Why:** variables belong to one screen.
+    **Fix:** open the screen with `open another screen with start value` and read it with `get start value` there.
+  </AccordionItem>
+  <AccordionItem value="wrong-item" title="A list gives the wrong item">
+    **Why:** lists count from 0.
+    **Fix:** use index 0 for the first item and `length of list` minus 1 for the last.
+  </AccordionItem>
+  <AccordionItem value="unbound" title="Some blocks in this app's logic have no variable or procedure selected, so it could not be built.">
+    **Why:** a build found a block whose dropdown still reads `none`. A similar message says a block uses a variable or procedure that is not on its screen.
+    **Fix:** open the block editor on the screens the build names, set each block marked with a red cross or delete it, then build again.
+  </AccordionItem>
+  <AccordionItem value="platform" title="Some blocks in this app's logic use features that iOS apps cannot do, so it could not be built.">
+    **Why:** a block uses a feature that iOS does not have, such as an Android-only Wi-Fi reading. The build lists each one by screen, component and member.
+    **Fix:** remove those blocks, or guard them so they only run where they are supported, then build again. The block's tooltip says which platforms it works on.
+  </AccordionItem>
+  <AccordionItem value="paused" title="Editing is paused: some blocks could not be opened. Nothing is saved until they can be.">
+    **Why:** the workspace did not load whole, so the editor stops you editing rather than lose blocks. When the banner names components instead, the blocks refer to components this screen or project does not have.
+    **Fix:** reload the page. If the banner names components, add them back with **Import component** in the designer. If the banner stays, ask in [the Duddy Discord](https://duddy.io/social/discord).
+  </AccordionItem>
+</Accordion>
+
+## Next steps
+
+<CardGrid>
+  <Card title="Data, APIs and storage" href="/guides/logic/data-and-apis">Call a web API, read JSON and keep data on the device.</Card>
+  <Card title="Screens and navigation" href="/guides/designing/screens">Open, replace and close screens from your logic.</Card>
+  <Card title="Vibe mode" href="/ai/overview">Describe behaviour in a sentence and let the AI write the blocks.</Card>
+  <Card title="Component reference" href="/components/overview">Every component's events, properties and functions.</Card>
+</CardGrid>

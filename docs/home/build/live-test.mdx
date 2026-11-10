@@ -1,0 +1,209 @@
+---
+title: "Live test: run your app on your phone"
+description: Install a test app of your Duddy project on Android or iOS, pair it with a code and watch every edit appear on the phone. Free, with clear rules for rebuilds.
+isNew: true
+---
+
+A *test app* is your own app, with your app name, icon and every component the project can use,
+that connects to the designer and draws your project as you edit it. You build and install it
+once. After that, the screens, logic and theme you change in the designer reach the phone without
+another build, so you can try real behaviour on a real device while you design.
+
+<Figure
+  src="/media/home/live-test-vs-release-build.svg"
+  dark="/media/home/live-test-vs-release-build.dark.svg"
+  alt="Two columns. Live test: build your test app once, free with up to six rebuilds an hour per project; install it and pair it with the QR code or the pairing code; then screens and logic update on the phone as you design. Rebuild it after changing the app name, package id, icon, splash screen, version, permissions or integration keys, or after adding, removing or updating components. Release build: choose Android App (.apk) or iOS App (.ipa) from Build, Duddy compiles a standalone app with Gradle or with Xcode on a Mac, and you install or share the file; the download and its link last one hour. It is free within your plan's hourly limit and costs a few credits past it."
+  caption="Use Live test while you design, and a release build when you want a file to share."
+  width={960}
+  height={480}
+/>
+
+## How Live test works
+
+Press **Live test** in the designer header, beside **Build**, to open the Live test panel. It has
+three parts:
+
+- **The test app** for the platform you pick: whether one exists, whether it is up to date, and a
+  button to build it.
+- **The pairing code**: an 8-character code, with a QR code above it, that connects a phone's test
+  app to this project.
+- **Devices and the device log**: the phones paired right now, and the log and errors from the
+  app running on them.
+
+A test app is compiled like a release build of your app, with the same package name, icon, splash
+screen, permissions and integration keys. Instead of one fixed set of screens, it carries the Duddy
+runtime and every component the project can use, and it draws whatever the project holds at that
+moment. That is why most edits need no rebuild, and why a few do.
+
+## Before you start
+
+- **Write access to the project.** For a read-only collaborator the **Live test** button is greyed
+  out, with the tooltip "Read-only: Live test disabled".
+- **The platform switched on** under **Target platforms** in
+  [Project settings](/getting-started/project-settings).
+- **For Android:** any Android phone.
+- **For iOS:** an iPhone registered to your Apple Developer account, a plan that includes iOS
+  builds and a connected Apple key. An iOS test app is signed ad hoc, exactly like a release
+  build, so it installs only on registered iPhones. [iOS builds](/build/ios-builds) lists what
+  you need.
+
+## Build and install the test app
+
+<Steps>
+  <Step>Press **Live test** in the designer header and choose the **Android** or **iOS** tab.</Step>
+  <Step>Press **Build test app**. The panel closes and the console opens to show the build. On the **iOS** tab, the **Before we build for iOS** checklist runs first; press **Build iOS app** when every check passes.</Step>
+  <Step>When the console says **Ready**, scan its QR code with the phone's camera. On Android you can also use **Download app** and move the `.apk` to the phone.</Step>
+  <Step>Install the app. On Android, allow installs from your browser or file manager when the phone asks.</Step>
+</Steps>
+
+To install the same test app on another phone later, open the panel again and press **Download
+the test app again**, or scan the panel's QR code with that phone. A test app's download lasts
+7 days; after that the panel says "The download link has expired — rebuild to download it
+again."
+
+## Pair your phone
+
+<Steps>
+  <Step>Open the test app on the phone. It shows **Pair with the designer** and a box for a code.</Step>
+  <Step>Type the 8-character code shown in the Live test panel, and press **Pair**. The copy button beside the code copies it.</Step>
+  <Step>The phone loads your project. Keep designing: every change you make appears on the phone as you make it.</Step>
+</Steps>
+
+The code belongs to the project, not to a platform, so the same code pairs an Android test app
+and an iOS test app. A code is valid for 15 minutes; the panel shows a fresh one while it is
+open.
+
+Scanning the panel's QR code with a phone's camera opens a page with a link to install the test
+app and the same three steps. Use it to set up a second phone, or a colleague's.
+
+On the phone, shake it to open the test app's own log panel.
+
+## What updates live and what needs a rebuild
+
+The panel compares the test app with the project. When they no longer match, it says "This test
+app was built with different capabilities." and lists what changed under **Added**, **Removed**,
+**Updated** and **Changed**. Press **Rebuild test app**, then install the new build on each phone.
+
+| Change in the designer | On the paired phone |
+|---|---|
+| Screens, layouts, properties and text | Updates live |
+| Logic blocks | Updates live |
+| Theme colours and project assets such as images | Updates live |
+| Placing components the project already has | Updates live |
+| Importing a component, removing one, or updating one to a new version | Rebuild |
+| **App name**, **Package name**, **Version code**, icon or splash screen | Rebuild |
+| Permissions, the manifest, deep links or Min SDK and Target SDK | Rebuild |
+| Keys and config files under **Settings → Integrations** | Rebuild |
+| A new version of the Duddy runtime | Rebuild |
+
+Rebuilding does not change the app already on a phone. The panel marks a phone that still runs
+the previous build as **old app** and says "One device is running an older test app — install the
+current one on it." Install the new build on that phone to clear it.
+
+## Watch the device log
+
+The **Device log** at the bottom of the panel shows log lines and errors from the app running on
+your paired phones. An error names the screen it happened on. Select it to open that screen in the
+designer, and the block that caused it when the app knows which one.
+
+## Manage paired phones
+
+The panel lists every paired phone with its model and system version. Several phones can follow
+the same project at once, on Android and iOS.
+
+To unpair them all, press the **Disconnect every device** button beside the device count. Every
+phone loses its pairing at once, and the panel confirms with "Disconnected every test device". To
+pair a phone again, type a current code into its test app.
+
+## Limits and costs
+
+- **Free.** Test builds never cost credits and do not count towards your plan's hourly build
+  limit.
+- **6 test builds an hour per project.** A test app rarely needs rebuilding, so the seventh
+  build in an hour is refused with "That is a lot of test builds — wait a few minutes before
+  rebuilding again".
+- **Downloads last 7 days.** Rebuild to get a new download after that. Apps already installed
+  are not affected.
+- **Web test apps are coming soon.** The **Web** tab says so and starts no build. Its pairing code
+  still works with an Android or iOS test app.
+
+## Troubleshooting
+
+<Accordion>
+  <AccordionItem value="rate" title="That is a lot of test builds — wait a few minutes before rebuilding again">
+    **Why:** this project has had 6 test builds in the last hour.
+
+    **Fix:** wait, then press **Rebuild test app** again. Make every capability change you need (components, icon, permissions) before you rebuild, so one build covers them all.
+  </AccordionItem>
+  <AccordionItem value="stale" title="This test app was built with different capabilities.">
+    **Why:** you changed something the test app cannot pick up live, such as a new component or the app's icon. The rows under the message say what.
+
+    **Fix:** press **Rebuild test app**, then install the new build on each phone.
+  </AccordionItem>
+  <AccordionItem value="old-app" title="One device is running an older test app — install the current one on it.">
+    **Why:** you rebuilt the test app, but that phone still runs the previous one.
+
+    **Fix:** on that phone, install the current build from **Download the test app again** or the panel's QR code.
+  </AccordionItem>
+  <AccordionItem value="expired-download" title="The download link has expired — rebuild to download it again.">
+    **Why:** a test app's download lasts 7 days.
+
+    **Fix:** rebuild the test app to get a new download. Phones that already have it installed are not affected.
+  </AccordionItem>
+  <AccordionItem value="code-expired" title="That pairing code has expired — open Live Test again for a new one">
+    **Why:** the code is not the one the project uses now. It is more than 15 minutes old, a newer code has replaced it, or a character was mistyped.
+
+    **Fix:** open the Live test panel in the designer and type the code it shows now.
+  </AccordionItem>
+  <AccordionItem value="code-invalid" title="That pairing code is not valid">
+    **Why:** the code typed into the test app is not 8 characters long.
+
+    **Fix:** type all 8 characters shown in the Live test panel.
+  </AccordionItem>
+  <AccordionItem value="pair-attempts" title="Too many pairing attempts — wait a minute and try again">
+    **Why:** too many codes were tried from your network in a short time.
+
+    **Fix:** stop for a minute, then type the current code once. Each attempt during the wait restarts the minute.
+  </AccordionItem>
+  <AccordionItem value="ios-installs-nowhere" title="The iOS test app does not install on my iPhone">
+    **Why:** an iOS test app installs only on iPhones registered to your Apple Developer account when it was built, running iOS 26 or later. The checklist warns "No devices are registered, so the app will build but will not install on any iPhone."
+
+    **Fix:** register the iPhone's UDID under **Certificates, Identifiers & Profiles → Devices** at developer.apple.com, then rebuild the test app. See [iOS builds](/build/ios-builds).
+  </AccordionItem>
+  <AccordionItem value="unreachable" title="Could not reach the live test service.">
+    **Why:** the designer got no answer at all, usually because your connection dropped.
+
+    **Fix:** check your connection and press **Try again** in the panel.
+  </AccordionItem>
+  <AccordionItem value="unavailable" title="Test builds are unavailable right now — try again in a moment">
+    **Why:** a problem on Duddy's side stopped the test build from starting. Nothing was built.
+
+    **Fix:** try again in a moment. If it persists, check [status.duddy.io](https://status.duddy.io).
+  </AccordionItem>
+  <AccordionItem value="switched-off" title="Live test is switched off on this server.">
+    **Why:** Live test is temporarily unavailable.
+
+    **Fix:** try again later. Release builds from **Build** still work meanwhile.
+  </AccordionItem>
+</Accordion>
+
+A test build can also be refused for the same reasons as a release build, such as a platform
+switched off under **Target platforms** or no build worker online. See
+[Fix a failed build](/build/troubleshoot-builds).
+
+## Next steps
+
+<CardGrid>
+  <Card title="Build the app" href="/getting-started/build-the-app">
+    Make a release build to keep, install or share.
+  </Card>
+  <Card title="iOS builds" href="/build/ios-builds">
+    Set up your Apple account for iOS test apps.
+  </Card>
+  <Card title="Share and publish" href="/build/share-and-publish">
+    Send your app to testers and prepare for the stores.
+  </Card>
+  <Card title="Logic blocks" href="/guides/logic/blocks">
+    Wire behaviour, then try it on the phone.
+  </Card>
+</CardGrid>

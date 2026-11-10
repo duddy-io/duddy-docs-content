@@ -1,80 +1,231 @@
 ---
-title: Data, APIs and storage
-description: Call a web service, read the response, keep data on the device, and hold a live connection open.
+title: Call APIs and store data in your app
+description: "Call a REST API with HttpRequest, read the JSON response, show it in a list, save data on the device with AppStorage or SQLite, and keep a WebSocket open."
 ---
 
-Most apps are a screen plus a request. Duddy covers the request half with components that
-have no visible form: drop one on a screen and it contributes blocks, nothing else.
+Most apps are a screen plus a request. The components that do the request half are *logic-only*:
+they have no box on the canvas, and they add blocks to the block editor under
+**Screen Components**. [AppStorage](/components/storage#appstorage) is already in every new project;
+add the others with **Import component** at the foot of the component palette (see
+[Import components](/guides/marketplace/import-components)).
 
-## Calling an API
+## Before you start
 
-`HttpRequest` calls a web address and hands you back the status code and the response body.
+- Know how event handlers and `set` and `call` blocks work: see [Logic blocks](/guides/logic/blocks).
+- Use `https://` addresses. Android 9 and later and iOS refuse plain `http://` by default, and
+  Duddy builds do not change that.
+- You do not need to set up any permission. HttpRequest adds the Android internet permission
+  itself.
 
-<Steps>
-  <Step>Drop an **HttpRequest** onto the screen. It draws nothing.</Step>
-  <Step>Set headers if you need them — an API key, a content type — with **Set Header**.</Step>
-  <Step>Call **Make Request** with the URL, the method and (for a POST or PUT) the body.</Step>
-  <Step>Handle **Got Response** for the result and **Error Occurred** for a failure. Both will happen in the wild; handle both.</Step>
-</Steps>
+## Call a REST API with HttpRequest
 
-The response body arrives as text. JSON becomes a dictionary you read with the Dictionary
-blocks, and a JSON array becomes a list you can loop over.
-
-<Callout type="warning">
-  A request is not instant. Show something while it runs — a `CircularProgress`, or a button that
-  disables itself — and turn it off in **both** the response and the error handler.
-</Callout>
-
-### Reading a JSON response
+[HttpRequest](/components/connectivity#httprequest) calls a web address and hands back the status
+code and the body. You describe the request with its properties, then send it with
+**Make Request**, which takes no inputs.
 
 <Steps>
-  <Step>Parse the body into a dictionary.</Step>
-  <Step>Pull values out by key. Nested objects are dictionaries inside dictionaries; arrays are lists.</Step>
-  <Step>Feed a list straight into a [RecyclerView](/components/content) and fill each row in its **Bind Item** event.</Step>
+  <Step>Import **HttpRequest** and drag it onto the screen. It appears in the block editor as `HttpRequest1`.</Step>
+  <Step>Set **URL** and **Method** in the properties panel, or from blocks with `set HttpRequest1.URL to`. For POST, PUT or PATCH, set **Body** as well.</Step>
+  <Step>If the API needs a header, such as a signed-in user's token, add it with `call HttpRequest1.Set Header`.</Step>
+  <Step>Send the request with `call HttpRequest1.Make Request`, for example in the screen's **Initialize** event or a button's **Click**.</Step>
+  <Step>Handle `when HttpRequest1.Got Response`, which gives `responseCode`, `response` and `tag`, and `when HttpRequest1.Error Occurred`, which gives `error` and `tag`.</Step>
 </Steps>
 
-<Callout type="info">
-  Never put a secret in an app. Anything shipped inside a build can be read out of it, so keys that
-  must stay private belong on a server you control, with the app calling that.
-</Callout>
-
-## Keeping data on the device
-
-| Component | For |
-|---|---|
-| **AppStorage** | Small key-value values that must survive the app closing: a token, a preference, the last screen. |
-| **SQLite** | Structured data in tables, queried with SQL, working offline. |
-| **FileManager** | Reading and writing files in the app's private storage. |
-| **FileDownloader** | Pulling a file down in the background, with progress. |
-| **Clipboard** | Copying text out to other apps and pasting text in. |
-
-`AppStorage` stores text. Store a number as text and convert it back when you read it; store
-a structure by writing it as JSON.
-
-## Live connections
-
-`WebSocket` keeps a two-way connection open, so the server can push to the app instead of
-the app polling for changes. Connect, handle **Message Received**, send with **Send
-Message**, and disconnect when the screen closes — a connection nobody closes is a battery
-cost nobody sees.
-
-## A backend without building one
-
-If you would rather not run a server, the Firebase components cover authentication, a
-database, file storage, push messaging and analytics. Connect a Firebase project under
-[Integrations](/getting-started/project-settings#integrations), then wire the blocks like any
-others. See [Firebase components](/components/firebase).
-
-## A shape that works
-
-<Steps>
-  <Step>**Screen Initialize** — show a loading indicator, then make the request.</Step>
-  <Step>**Got Response** — hide the indicator, parse the body, fill the list.</Step>
-  <Step>**Error Occurred** — hide the indicator, show a message, offer a retry.</Step>
-  <Step>Cache what you can into `AppStorage`, so the screen has something to show before the request comes back.</Step>
-</Steps>
-
-<NextPrev
-  prev={{ title: "Logic blocks", href: "/guides/logic/blocks" }}
-  next={{ title: "Build a chat app", href: "/guides/apps/chat-app" }}
+<Figure
+  src="/media/guides/http-request-flow.svg"
+  dark="/media/guides/http-request-flow.dark.svg"
+  alt="A sequence between your blocks, HttpRequest1 and the server. Your blocks set URL, Method and Body, then call HttpRequest1.Make Request, which takes no arguments, and the request goes to the server. If the server answers, with any status code, Got Response fires with responseCode, response and tag: for 200 to 299, parse json and use the data; for any other code, including a 404, show a message. If no answer comes back, because there is no network or the address is wrong, Error Occurred fires with error and tag: show a message and offer Retry."
+  caption="Got Response fires for every answer, 404s included, so check responseCode. Error Occurred means no answer came back."
+  width={960}
+  height={560}
 />
+
+<Callout type="warning" title="A 404 is still a response">
+  **Got Response** fires whenever the server answers, with 200, 404 or 500 alike. Check that
+  `responseCode` is between 200 and 299 before you use the body. **Error Occurred** fires only when
+  no answer came back, such as no network or an address that cannot be reached.
+</Callout>
+
+| Member | Kind | What it does |
+|---|---|---|
+| **URL** | Property | The full address, including `https://`. |
+| **Method** | Property | GET (the default), POST, PUT, DELETE or PATCH. Any other value is treated as GET. |
+| **Body** | Property | Text sent with the request, usually JSON. It is not sent on a GET or when it is empty. |
+| **Tag** | Property | A label handed back with this request's answer, to tell several requests apart. |
+| **Set Header** (name, value) | Function | Adds or replaces a header for every request from now on. |
+| **Clear Headers** | Function | Removes the headers you added. |
+| **Make Request** | Function | Sends the request with the current URL, Method, Body, headers and Tag. |
+| **Got Response** (responseCode, response, tag) | Event | The server answered. `response` is the body as text. |
+| **Error Occurred** (error, tag) | Event | The request could not be sent or completed. |
+
+Every request is sent with `Content-Type` and `Accept` set to `application/json`. A **Set Header**
+with the same name replaces either one.
+
+### Send JSON in a request body
+
+<Steps>
+  <Step>Build the data with `make a dictionary with key` from **Dictionary**, for example `name` and `email`.</Step>
+  <Step>Put the dictionary through `to json text`, from **Control**. A dictionary will not snap into **Body** directly, because **Body** takes text.</Step>
+  <Step>Set **Method** to POST and `set HttpRequest1.Body to` that text, then call **Make Request**.</Step>
+</Steps>
+
+### Read a JSON response
+
+In **Got Response**, put `response` through `parse json`, from **Control**:
+
+- A JSON object becomes a dictionary. Read a value with `in dictionary … get value for key`. A
+  nested object is a dictionary inside the dictionary.
+- A JSON array becomes a list. Lists count from 0, so the first item is at index 0.
+- Text that is not JSON gives nothing. If that happens, show `response` on a label to see what the
+  server sent back; an error page in HTML is a common cause.
+
+### Make several requests on one screen
+
+One HttpRequest can make several requests. Set **Tag** before each **Make Request**, for example
+`products` and then `profile`, and check `tag` in **Got Response** to tell the answers apart. Each
+request is fixed when you send it, so changing a property afterwards does not affect a request
+already on its way.
+
+## Show API results in a list
+
+A [RecyclerView](/components/content#recyclerview) is in every new project and draws one row per
+record. You design one row inside it, and it repeats that row for each record.
+
+<Steps>
+  <Step>Name the RecyclerView `List1`, and place the components for one row inside it, such as a TextView called `TitleLabel`.</Step>
+  <Step>In **Got Response**, `set List1.Data to` the list you got from `parse json`. The list draws one row per record.</Step>
+  <Step>In `when List1.Bind Item`, which gives `position`, read the row's record with `call List1.Get Item` at that `position`.</Step>
+  <Step>Set the row's components from the record, such as `set TitleLabel.Text to` its `title`. Inside **Bind Item**, a component in the row means the row being filled.</Step>
+</Steps>
+
+Set the list's **Loading** to true when you send the request and to false in both **Got Response**
+and **Error Occurred**; it shows a spinner over the list meanwhile. **Empty Text** is shown when
+there are no rows.
+
+## Keep secrets off the phone
+
+<Callout type="warning" title="Never ship a secret in an app">
+  Anything inside a build can be read out of it, including keys typed into blocks or properties. Keep
+  private keys on a server you control and have the app call that server, or use Firebase with
+  security rules.
+</Callout>
+
+A key meant to be public, such as a key restricted to your app, is fine in the app. A key that can
+spend money, read other people's data or send messages on your behalf is not.
+
+## Save data on the device
+
+AppStorage, SQLite and FileManager keep data on the phone itself, so it is still there the next time
+the app opens.
+
+| Component | Use it for | Key blocks |
+|---|---|---|
+| [AppStorage](/components/storage#appstorage) | A few values: a setting, a token, the last screen. | **Store Value** (key, value), **Get Value** (key, default), **Remove Value**, **Clear Storage** |
+| [SQLite](/components/storage#sqlite) | Rows you search, sort and filter, offline. | **Execute Sql**, **Query** with **Query Result**, **Insert**, **Update**, **Delete**, **Database Error** |
+| [FileManager](/components/storage#filemanager) | Whole files of text in the app's private folder. | **Write File** with **File Written**, **Read File**, **File Exists**, **Delete File** |
+| [FileDownloader](/components/storage#filedownloader) | Fetching a file from a URL. | **Download File** with **Download Progress**, **Download Completed** and **Download Failed** |
+| [Clipboard](/components/storage#clipboard) | Copying text out to other apps and pasting text in. | **Copy** with **Copied**, **Paste**, **Clear** |
+
+<Figure
+  src="/media/apps/notes-editor.png"
+  alt="A note editor in a slate-blue theme with Title and Note fields filled in, a Save button, and a Delete note text button below it."
+  caption="An editor screen that saves and deletes one record on the device."
+  frame="phone"
+/>
+
+- **AppStorage stores text.** Store a number as text and convert it back when you read it, and
+  store a list or dictionary with `to json text` and read it back with `parse json`. **Get Value**
+  returns the default you give it when nothing is stored under the key. Values live in a named
+  storage area (the **Name** property), and **Clear Storage** empties that area for good.
+- **SQLite** keeps its tables in a file called `app_database.db` unless you change
+  **Database Name**. Create your tables with `CREATE TABLE IF NOT EXISTS` in the screen's
+  **Initialize**. **Query Result** gives the rows as a JSON array of objects keyed by column name,
+  ready for `parse json`.
+- **FileManager** resolves a plain file name inside the app's private files folder. **Read File**
+  returns empty text when the file is missing, so check **File Exists** first.
+
+## Use a WebSocket for live updates
+
+A [WebSocket](/components/connectivity#websocket) keeps a two-way connection open, so the server can
+push to the app instead of the app asking again and again.
+
+<Steps>
+  <Step>Set **URL** to the server's `wss://` address and call **Connect**.</Step>
+  <Step>Wait for **Connection Established** before you call **Send Message**. On a closed connection, **Send Message** sends nothing and fires nothing.</Step>
+  <Step>Handle **Message Received**, which gives `message`. Only text messages arrive.</Step>
+  <Step>Call **Disconnect** when the screen no longer needs it. **Connection Closed** fires whichever side closed it, and reopening takes another **Connect**.</Step>
+</Steps>
+
+A connection nobody closes is a battery cost nobody sees.
+
+## Check the connection first
+
+[NetworkTools](/components/connectivity#networktools) tells you whether the phone is online before
+you send a request. **Check Connection** returns true or false straight away. Turn **Monitoring**
+on to get **Connected**, which gives `connectionType` (WiFi, Cellular, Ethernet, VPN or Other), and
+**Disconnected** as the phone goes online and offline.
+
+## Use Firebase as your backend
+
+If you would rather not run a server, the [Firebase components](/components/firebase) cover
+sign-in, Cloud Firestore and the Realtime Database, file storage, push notifications and
+analytics, all on your own Firebase project. Connect the project first, as
+[Firebase](/integration/firebase) explains, then wire the blocks like any others.
+[A chat app](/guides/apps/chat-app) builds a complete example.
+
+## A pattern that works
+
+<Steps>
+  <Step>**Initialize**: read the last saved copy with AppStorage **Get Value**. If there is one, `parse json` it and show it straight away. Then set the list's **Loading** to true and call **Make Request**.</Step>
+  <Step>**Got Response**: set **Loading** to false. If `responseCode` is between 200 and 299, `parse json` the body, set the list's **Data**, and store `response` with **Store Value** for next time. Otherwise show a message.</Step>
+  <Step>**Error Occurred**: set **Loading** to false, show a message, and offer a retry button that calls **Make Request** again.</Step>
+</Steps>
+
+The screen has something to show before the request comes back, and a failed request never leaves
+a spinner turning.
+
+## Troubleshooting
+
+<Accordion>
+  <AccordionItem value="url-empty" title="HTTP Request failed: URL is empty.">
+    **Why:** **Make Request** ran before **URL** was set. It arrives in **Error Occurred**.
+    **Fix:** set **URL** in the properties panel, or set it with a block before you call **Make Request**.
+  </AccordionItem>
+  <AccordionItem value="401" title="Got Response gives 401 or 403">
+    **Why:** the server answered but refused the request, usually because a header is missing or wrong.
+    **Fix:** check the API's documentation for the header it expects and add it with **Set Header** before **Make Request**.
+  </AccordionItem>
+  <AccordionItem value="404" title="Got Response gives 404">
+    **Why:** the server has nothing at that address.
+    **Fix:** check **URL**, including the path, and the **Method** the API expects.
+  </AccordionItem>
+  <AccordionItem value="parse" title="parse json gives nothing">
+    **Why:** the body is not JSON, often an HTML error page.
+    **Fix:** show `response` on a label to see it, and check `responseCode` first.
+  </AccordionItem>
+  <AccordionItem value="cleartext" title="Error Occurred says cleartext traffic is not permitted">
+    **Why:** the address starts with `http://`, which phones refuse by default.
+    **Fix:** use the `https://` address. If the server has none, it needs one before a phone app can call it.
+  </AccordionItem>
+  <AccordionItem value="body-snap" title="A dictionary will not snap into Body">
+    **Why:** **Body** takes text.
+    **Fix:** put the dictionary through `to json text` first.
+  </AccordionItem>
+  <AccordionItem value="socket" title="Send Message does nothing">
+    **Why:** the WebSocket is not connected yet, or has closed.
+    **Fix:** send only after **Connection Established**, and call **Connect** again after **Connection Closed**.
+  </AccordionItem>
+  <AccordionItem value="no-table" title="Database Error says no such table">
+    **Why:** the query ran before the table was created.
+    **Fix:** run `CREATE TABLE IF NOT EXISTS` with **Execute Sql** in the screen's **Initialize**, before any query.
+  </AccordionItem>
+</Accordion>
+
+## Next steps
+
+<CardGrid>
+  <Card title="Notifications" href="/guides/logic/notifications">Remind people, receive push messages and ring alarms.</Card>
+  <Card title="A chat app" href="/guides/apps/chat-app">Build a live chat on Firebase from start to finish.</Card>
+  <Card title="Storage components" href="/components/storage">Every storage block, with its inputs and events.</Card>
+  <Card title="Connectivity components" href="/components/connectivity">HttpRequest, WebSocket, NetworkTools and more.</Card>
+</CardGrid>

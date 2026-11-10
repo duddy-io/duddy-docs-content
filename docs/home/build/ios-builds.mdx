@@ -1,0 +1,177 @@
+---
+title: "iOS builds: sign and install on iPhone"
+description: Build an ad hoc iOS app with Duddy. See what your plan and Apple account need, what each preflight check means, and how to install the app on an iPhone.
+isNew: true
+---
+
+An iOS build gives you an ad hoc `.ipa`: your app, signed with your own Apple Developer key, that
+installs over the air on the iPhones registered to your Apple Developer account. Duddy compiles it
+with Xcode on a Mac build worker. The app runs on iOS 26 or later.
+
+<Badge type="beta" /> iOS builds are in beta, so expect rough edges. The first time you start one,
+Duddy says so.
+
+## What an iOS build is, and what it is not
+
+- **It is an ad hoc build.** Apple only lets an ad hoc app install on devices registered to your
+  developer account when the build is signed. That suits you, your team and your testers.
+- **Duddy handles the signing.** If your Apple account has no distribution certificate or
+  provisioning profile for the app yet, the build creates them with your key.
+- **It is not a TestFlight or App Store build.** Duddy does not upload builds to TestFlight or
+  App Store Connect, and an ad hoc build cannot be submitted to the App Store.
+  [Share and publish](/build/share-and-publish) explains where that leaves the App Store.
+
+## Before you start
+
+- **A plan that includes iOS builds.** The free trial and Pro include them; Starter does not.
+  Compare plans on [Plans and limits](/account/plans-and-limits).
+- **A paid Apple Developer Program membership.**
+- **An App Store Connect API key connected to your Duddy account.** Create it with the **App
+  Manager** role and connect it on the **Integrations** page of your dashboard, under **Apple
+  Developer**. [Apple](/integration/apple) walks through it. The key that signs a build belongs to
+  the person who starts it, so every collaborator who builds for iOS connects their own.
+- **Your package name registered with Apple as a Bundle ID**, under **Certificates, Identifiers &
+  Profiles → Identifiers** at developer.apple.com. It must match the **Package name** in
+  **Settings → Project** exactly, letter case included. A Bundle ID uses letters, digits and
+  hyphens, in at least two dot-separated parts that each start with a letter, so an underscore
+  that Android accepts is not allowed here.
+- **Every iPhone that will install the app registered** under **Certificates, Identifiers &
+  Profiles → Devices**, by its UDID, before you build.
+- **iOS switched on** under **Target platforms** in **Settings → Project**.
+
+## Build the iOS app
+
+<Steps>
+  <Step>Press **Build** at the top right of the designer, or press `Ctrl` + `B` (`⌘` + `B` on a Mac), and choose **iOS App (.ipa)** under **Others**.</Step>
+  <Step>The first time, a **Beta Feature** notice says "iOS builds are currently in beta and may not work properly or encounter unexpected issues. We are actively improving them." Press **Proceed**. It does not appear again in that browser.</Step>
+  <Step>A checklist titled **Before we build for iOS** checks your Apple setup. If a check fails, fix it on Apple's site or in Duddy, then press **Check again**.</Step>
+  <Step>Press **Build iOS app**. The button stays disabled while any check fails.</Step>
+  <Step>Follow the build in the console. When it says **Ready**, [install the build](#install-the-build-on-an-iphone).</Step>
+</Steps>
+
+If you are past your plan's hourly build limit, the price dialog appears before the build starts,
+as for any build. See [Build the app](/getting-started/build-the-app#what-a-build-costs).
+
+## The iOS preflight checklist
+
+**Before we build for iOS** runs these checks in order. Only a failed check stops a build. A
+warning is something Duddy fixes for itself, or something you should know. A check that cannot
+reach App Store Connect is reported as unknown and never blocks a build.
+
+| Check | Fails when | Warns when | What to do |
+|---|---|---|---|
+| **Apple Developer account connected** | No App Store Connect API key is connected to your account. | — | Connect **Apple Developer** on the dashboard's **Integrations** page. |
+| **API key is valid** | The issuer ID, key ID or `.p8` file is malformed, or App Store Connect rejected the key. | — | Check the key is not revoked and its role includes **App Manager**, then reconnect it. |
+| **Bundle ID set** | The project has no package name, or it is not a valid bundle identifier. | — | Set the **Package name** in **Settings → Project**. |
+| **Bundle ID registered with Apple** | The package name is not registered in this Apple Developer account. | — | Register it under **Identifiers**, or change the package name to one that is registered. |
+| **Signing certificate available** | — | There is no distribution certificate yet, or the account has Apple's maximum. | Nothing, unless you are at the maximum: then revoke an unused certificate under **Certificates**. |
+| **Provisioning profile ready** | — | There is no profile for this app yet, or the old ones are expired or invalid. | Nothing. The build creates a fresh one. |
+| **Test devices registered** | — | No devices are registered, so the app will build but install on no iPhone. | Add each iPhone's UDID under **Devices**, then build again so the profile includes it. |
+| **A build worker is online** | No macOS build worker is online. | — | Try again shortly. |
+
+When the key or the package name fails, the checks after it are skipped: there is no point
+asking Apple about a Bundle ID with a key it rejects.
+
+Duddy runs the same checks again when the build starts, because a collaborator can change the
+package name in the meantime. If one fails then, the build is refused with that check's message
+and its fix, and nothing is spent.
+
+## Mac build workers
+
+iOS apps compile on Macs. When the Macs are busy, your build waits its turn and the console shows
+**Building** until a Mac picks it up. When no Mac is online at all, the build is refused straight
+away with "No macOS build worker is online, so an iOS build cannot be started right now. Please
+try again shortly." Nothing is charged for a refused build.
+
+## Install the build on an iPhone
+
+When the console says **Ready**, use the **Install this build** panel within the hour:
+
+- Scan the QR code with the iPhone's camera. The code is an over-the-air install link: follow
+  the prompt on the iPhone to install the app.
+- **Download app** saves the `.ipa` file to your computer, to install with your own tools.
+- **Copy link** copies the link to that `.ipa` file.
+
+The file and the links last one hour. After that the link answers "This download link has
+expired. Build the app again to get a new one."
+
+The app installs only on an iPhone that is registered to your account and runs iOS 26 or later.
+An iPhone registered after the build was made needs a new build. To get the app onto someone
+else's iPhone, see [Share and publish](/build/share-and-publish).
+
+## Live test on iOS
+
+An iOS test app for [Live test](/build/live-test) is signed the same way, ad hoc, with your key.
+It needs everything on this page, passes the same checklist, and installs only on registered
+iPhones.
+
+## Troubleshooting
+
+<Accordion>
+  <AccordionItem value="plan" title="iOS builds are not included in your plan">
+    **Why:** your plan does not include iOS builds. Starter is Android only.
+
+    **Fix:** upgrade to a plan with iOS builds. See [Plans and limits](/account/plans-and-limits).
+  </AccordionItem>
+  <AccordionItem value="target" title="This app is not built for iOS. Turn iOS on under Target platforms in Project settings to build it.">
+    **Why:** iOS is switched off for this project.
+
+    **Fix:** turn on **iOS** under **Target platforms** in **Settings → Project**, then build again.
+  </AccordionItem>
+  <AccordionItem value="no-key" title="No App Store Connect API key is connected to your account.">
+    **Why:** the person building has not connected an Apple key. Each person who builds for iOS needs their own.
+
+    **Fix:** connect one on your dashboard's **Integrations** page. See [Apple](/integration/apple).
+  </AccordionItem>
+  <AccordionItem value="rejected" title="App Store Connect rejected the key.">
+    **Why:** the key was revoked, replaced, or does not have the access a build needs.
+
+    **Fix:** check the key in App Store Connect under **Users and Access**, make sure its role includes **App Manager**, and reconnect it in Duddy.
+  </AccordionItem>
+  <AccordionItem value="bundle-unregistered" title="… is not registered in this Apple Developer account.">
+    **Why:** the project's package name has no matching Bundle ID in your Apple account. A difference in letter case counts.
+
+    **Fix:** register it at developer.apple.com under **Certificates, Identifiers & Profiles → Identifiers**, or change the package name in **Settings → Project** to one that is registered.
+  </AccordionItem>
+  <AccordionItem value="no-devices" title="No devices are registered, so the app will build but will not install on any iPhone.">
+    **Why:** an ad hoc app installs only on registered devices, and your account has none.
+
+    **Fix:** add the iPhone's UDID under **Certificates, Identifiers & Profiles → Devices**, then start a new build.
+  </AccordionItem>
+  <AccordionItem value="no-mac" title="No macOS build worker is online, so an iOS build cannot be started right now. Please try again shortly.">
+    **Why:** no Mac is available to compile iOS apps at the moment. Nothing is wrong with your app.
+
+    **Fix:** try again in a few minutes. You were not charged.
+  </AccordionItem>
+  <AccordionItem value="wont-install" title="The app downloads but does not install on an iPhone">
+    **Why:** the iPhone was not registered when the build was made, or it runs a version of iOS older than 26.
+
+    **Fix:** register the iPhone, update it to iOS 26 or later, and start a new build.
+  </AccordionItem>
+  <AccordionItem value="expired" title="This download link has expired. Build the app again to get a new one.">
+    **Why:** a release build's file and links last one hour.
+
+    **Fix:** build again, and install or download the app straight away.
+  </AccordionItem>
+</Accordion>
+
+A build that fails part-way with an Apple message, such as "Apple would not issue a signing
+profile for this app.", is covered in
+[Fix a failed build](/build/troubleshoot-builds#ios-signing-and-your-apple-account).
+
+## Next steps
+
+<CardGrid>
+  <Card title="Apple" href="/integration/apple">
+    Create and connect your App Store Connect API key.
+  </Card>
+  <Card title="Live test" href="/build/live-test">
+    Run the project on a registered iPhone while you design.
+  </Card>
+  <Card title="Share and publish" href="/build/share-and-publish">
+    Get your app to testers and see where the App Store stands.
+  </Card>
+  <Card title="Fix a failed build" href="/build/troubleshoot-builds">
+    Every build message and what to do about it.
+  </Card>
+</CardGrid>

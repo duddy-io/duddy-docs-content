@@ -1,0 +1,278 @@
+---
+title: "Fix a failed build: messages and fixes"
+description: Find the message your Duddy build stopped with, from refusals before it starts to failures part-way through, and what to do about each one.
+isNew: true
+---
+
+Every build that does not finish ends with a plain sentence: what went wrong, then what to do.
+Find yours on this page. Messages are quoted as Duddy shows them; where a message names something
+from your project, such as a screen or a component, that part is shown as "…".
+
+## Read the message
+
+A build can stop in two places, and the message appears in a different spot for each:
+
+- **Refused before it starts.** A red message appears at the bottom of the designer, and the
+  console shows **Failed** with "Failed to create build". Nothing was built and nothing was
+  charged.
+- **Failed part-way.** The console shows **Failed**, and its last red line is the diagnosis: a
+  headline, sometimes "Affected:" followed by the screens or components involved, then what to
+  do.
+
+The end of a diagnosis tells you whose problem it is:
+
+| The message says | Whose problem | What to do |
+|---|---|---|
+| Where to fix it, such as "Open the block editor" or "Settings -> Integrations" | Your project | Fix it there and build again. |
+| "Nothing is wrong with your app" | The build server | Start the build again in a few minutes. |
+| "Please report it with this build id" | Duddy's own code | [Report it](#report-a-problem). Your project is fine. |
+
+## Refused before the build starts
+
+<Accordion>
+  <AccordionItem value="target" title="This app is not built for iOS. Turn iOS on under Target platforms in Project settings to build it.">
+    **Why:** the platform you chose is switched off for this project. The same sentence names Android when Android is off.
+
+    **Fix:** turn the platform on under **Target platforms** in **Settings → Project**, then build again. See [Project settings](/getting-started/project-settings).
+  </AccordionItem>
+  <AccordionItem value="ios-plan" title="iOS builds are not included in your plan">
+    **Why:** your plan does not include iOS builds.
+
+    **Fix:** upgrade to a plan that includes them. See [Plans and limits](/account/plans-and-limits).
+  </AccordionItem>
+  <AccordionItem value="ios-preflight" title="A message about your Apple key, Bundle ID or devices">
+    **Why:** one of the iOS checks failed when the build started. The message is that check's own sentence, followed by its fix.
+
+    **Fix:** find the check in [the iOS preflight checklist](/build/ios-builds#the-ios-preflight-checklist), fix it, and build again.
+  </AccordionItem>
+  <AccordionItem value="overage" title="This build costs credits">
+    **Why:** you have used the builds your plan includes this hour. This is a question, not an error.
+
+    **Fix:** press **Build** to pay the price shown, or **Cancel** to spend nothing. The console then says "Build cancelled — no credits were spent." See [Build the app](/getting-started/build-the-app#what-a-build-costs).
+  </AccordionItem>
+  <AccordionItem value="credits" title="Not enough AI credits — top up or upgrade your plan">
+    **Why:** you accepted a build's price, but your balance cannot cover it.
+
+    **Fix:** top up or upgrade, or wait for the hour to end and build for free. See [Credits](/getting-started/credits-and-plans).
+  </AccordionItem>
+  <AccordionItem value="credits-held" title="… held by AI requests still running on this account, and this needs …. Try again when they finish.">
+    **Why:** Vibe mode requests that are still running have reserved the credits this build needs.
+
+    **Fix:** wait for them to finish, then build again.
+  </AccordionItem>
+  <AccordionItem value="hourly-limit" title="Hourly build limit reached — try again later or upgrade your plan">
+    **Why:** you have used your plan's builds for this hour, and your plan does not sell extra builds.
+
+    **Fix:** wait for the hour to end, or upgrade. Live test builds are not affected.
+  </AccordionItem>
+  <AccordionItem value="no-worker" title="No build worker is online right now, so this build could not be started. Please try again shortly.">
+    **Why:** no build machine is available at the moment. Nothing is wrong with your app.
+
+    **Fix:** try again in a few minutes. Nothing was charged.
+  </AccordionItem>
+  <AccordionItem value="no-mac" title="No macOS build worker is online, so an iOS build cannot be started right now. Please try again shortly.">
+    **Why:** no Mac is available to compile iOS apps at the moment.
+
+    **Fix:** try again in a few minutes, or build for Android meanwhile. Nothing was charged.
+  </AccordionItem>
+  <AccordionItem value="billing" title="Billing is temporarily unreachable, so your plan limits can't be verified right now. Please try again in a moment.">
+    **Why:** Duddy could not check your plan, so it refused the build rather than guess.
+
+    **Fix:** try again in a moment. If it persists, check [status.duddy.io](https://status.duddy.io).
+  </AccordionItem>
+  <AccordionItem value="read-only" title="Read-only: Building disabled">
+    **Why:** you are a read-only collaborator on this project.
+
+    **Fix:** ask the project's owner or an admin for write access.
+  </AccordionItem>
+</Accordion>
+
+## Problems in your project
+
+These failures have a fix you can make. The message says where.
+
+### Firebase configuration
+
+A project that uses Firebase components needs Firebase's config file for each platform it builds
+for: `google-services.json` for Android and `GoogleService-Info.plist` for iOS. You attach them in
+the designer under **Settings → Integrations**, in the Firebase section. See
+[Firebase](/integration/firebase).
+
+<Accordion>
+  <AccordionItem value="fb-missing" title="This app uses Firebase, but no Firebase config is attached for its Android build.">
+    **Why:** the app uses Firebase, and no config is attached for the platform you are building. The iOS build says the same with "iOS". An Android build can also say "This app uses Firebase, but no Firebase configuration is attached to it."
+
+    **Fix:** in **Settings → Integrations**, pick the Firebase app with **From account**, or upload the file, press **Save**, and build again.
+  </AccordionItem>
+  <AccordionItem value="fb-different-android" title="The google-services.json attached to this project is for a different Android app.">
+    **Why:** the file registers a different package name from your app's.
+
+    **Fix:** in the Firebase console, add an Android app with your package name to the project, download its `google-services.json` and attach it. Or set the package name back in **Settings → Project**.
+  </AccordionItem>
+  <AccordionItem value="fb-different-ios" title="The GoogleService-Info.plist attached to this project is for a different iOS app.">
+    **Why:** the file names a different bundle ID from your app's package name.
+
+    **Fix:** in the Firebase console, add an iOS app with your package name as its bundle ID, download its `GoogleService-Info.plist` and attach it.
+  </AccordionItem>
+  <AccordionItem value="fb-wrong-file" title="The file attached as google-services.json is a GoogleService-Info.plist.">
+    **Why:** the two files were swapped. The reverse mistake says "The file attached as GoogleService-Info.plist is a google-services.json."
+
+    **Fix:** attach the `.json` in the Android row and the `.plist` in the iOS row, press **Save**, and build again.
+  </AccordionItem>
+  <AccordionItem value="fb-bad-file" title="The google-services.json attached to this project is incomplete.">
+    **Why:** the file is damaged or edited. Related messages say the file "is not a Firebase config file" or "carries an API key Firebase refuses".
+
+    **Fix:** download the file again from the Firebase console (**Project settings → Your apps**), attach it, press **Save**, and build again.
+  </AccordionItem>
+</Accordion>
+
+### Components and blocks
+
+<Accordion>
+  <AccordionItem value="unsupported-components" title="This app uses components that iOS apps cannot run, so it could not be built.">
+    **Why:** some components have no iOS version. The line after it lists them under "Affected:".
+
+    **Fix:** remove those components from your screens to build for iOS, or build for Android, where they work.
+  </AccordionItem>
+  <AccordionItem value="unsupported-blocks" title="Some blocks in this app's logic use features that iOS apps cannot do, so it could not be built.">
+    **Why:** some blocks call a property, event or function that iOS does not support. "Affected:" names them.
+
+    **Fix:** open the block editor on those screens and remove the blocks, or make sure they only run on platforms that support them, then build again.
+  </AccordionItem>
+  <AccordionItem value="unset-blocks" title="Some blocks in this app's logic have no variable or procedure selected, so it could not be built.">
+    **Why:** a block's dropdown was never set. Similar messages say blocks "use a variable or procedure that is not on their screen" or "point at a variable or procedure that is not on their screen", which happens when one was deleted or lives on another screen.
+
+    **Fix:** open the block editor on the screens listed and look for blocks marked with a red cross, whose dropdown reads "none". Pick the variable or procedure each one should use, or delete the block, then build again.
+  </AccordionItem>
+  <AccordionItem value="manifest" title="Two parts of this app ask Android for conflicting settings, so its manifest could not be assembled.">
+    **Why:** usually two components want different versions of the same permission or feature.
+
+    **Fix:** remove the component you added most recently and build again. That tells you which one it is.
+  </AccordionItem>
+  <AccordionItem value="missing-library" title="A component in this app depends on a library that does not exist.">
+    **Why:** a component declares a library that cannot be found. Its author has to fix it.
+
+    **Fix:** remove that component. It is the only workaround until its author publishes a fix.
+  </AccordionItem>
+  <AccordionItem value="ios-library" title="A component in this app asks for an iOS library that could not be installed.">
+    **Why:** a component declares an iOS library that cannot be installed. Its author has to fix it.
+
+    **Fix:** remove that component to build for iOS.
+  </AccordionItem>
+</Accordion>
+
+### iOS signing and your Apple account
+
+These messages end with advice to open **Settings → Integrations** in the designer. Your Apple key
+is not there: it lives on the **Integrations** page of your dashboard, under **Apple Developer**.
+See [Apple](/integration/apple).
+
+<Accordion>
+  <AccordionItem value="apple-none" title="No Apple Developer account is connected to this account, so an iOS app cannot be signed.">
+    **Why:** the person who started the build has no Apple key connected.
+
+    **Fix:** connect **Apple Developer** on your dashboard's **Integrations** page, then build again.
+  </AccordionItem>
+  <AccordionItem value="apple-incomplete" title="The Apple Developer key connected to this account is incomplete.">
+    **Why:** the connected key is missing its Key ID, its Issuer ID or the `.p8` file.
+
+    **Fix:** reconnect **Apple Developer** with all three, then build again.
+  </AccordionItem>
+  <AccordionItem value="apple-rejected" title="Apple rejected the developer key attached to this account.">
+    **Why:** Apple refused the key during the build. It may have been revoked or replaced.
+
+    **Fix:** check the key in App Store Connect, reconnect it in Duddy, then build again.
+  </AccordionItem>
+  <AccordionItem value="apple-profile" title="Apple would not issue a signing profile for this app.">
+    **Why:** usually the app's package name is not registered as a Bundle ID in your Apple Developer account, or the account's agreements need accepting again.
+
+    **Fix:** check both, at developer.apple.com and in App Store Connect, then build again.
+  </AccordionItem>
+</Accordion>
+
+## Problems on the build server
+
+These are not your app's fault. The build server ran into trouble of its own. Start the build
+again in a few minutes.
+
+- "The build server ran out of memory, even after retrying with a lighter configuration."
+- "The build server ran out of disk space."
+- "The build server could not reach a package repository."
+- "The build server could not download this project."
+- "Your app was built, but the build server could not upload it."
+
+If the same message comes back several times, check [status.duddy.io](https://status.duddy.io),
+then [report it](#report-a-problem).
+
+## Problems in Duddy's own code
+
+These failures are bugs on Duddy's side. Your project is safe and nothing in it needs changing.
+Each one asks you to report it with the build ID.
+
+- "The code Duddy generated for this app did not compile."
+- "The app's icons, colours or layouts could not be packaged."
+- "The app compiled, but signing it failed."
+- "The build server is missing part of the Android toolchain this app needs."
+- "The iOS toolchain on the build server failed before it reached your app's code."
+- "Something in this project made the build server fail while reading it."
+- "The Android build failed and we could not tell why." (or "The iOS build failed…")
+
+[Report it](#report-a-problem) and include the build ID, which appears under the console's title.
+
+## Notices in a finished build
+
+Amber lines in the log are notices. The build carried on, but changed or left out something you
+may want to fix in your settings:
+
+| Notice | What to do |
+|---|---|
+| "This app's start screen is set to '…', which no longer exists. '…' will open instead — set the start screen in the app settings." | Choose an **Entry screen** in **Settings → Project**. |
+| "Target SDK … is newer than any Android version this build supports, so the app was built for …. Pick … or lower in the app settings." | Choose a supported **Target SDK** in **Settings → Project**. |
+| "Min SDK … is above the target SDK, so the app runs from Android API …. Pick a lower Min SDK in the app settings." | Lower **Min SDK** in **Settings → Project**. |
+| "The icon '…' …, so it is left out of this app." | Pick a different icon for that component in the properties panel. |
+
+## Other messages
+
+<Accordion>
+  <AccordionItem value="stopped-early" title="The build stopped early. Open the console for the log.">
+    **Why:** the build server stopped reporting on the build before it finished.
+
+    **Fix:** open the console from the left rail and read the last lines. If there is no diagnosis, start the build again, and [report it](#report-a-problem) if it happens again.
+  </AccordionItem>
+  <AccordionItem value="deleted" title="This project was deleted, so its build was stopped.">
+    **Why:** someone deleted the project while it was building.
+
+    **Fix:** nothing to fix. Build from a project that still exists.
+  </AccordionItem>
+  <AccordionItem value="expired-link" title="This download link has expired. Build the app again to get a new one.">
+    **Why:** a release build's file and its links last one hour.
+
+    **Fix:** build again, and download or install the app straight away. See [Build the app](/getting-started/build-the-app#install-the-app-on-a-phone).
+  </AccordionItem>
+</Accordion>
+
+## Report a problem
+
+<Steps>
+  <Step>Open the console from the left rail and note the build ID under its title.</Step>
+  <Step>Press **Download logs** beside **Build log** to save the log as a file.</Step>
+  <Step>Press **Report a Bug/Issue** in the left rail. In **Report a bug**, describe what happened, include the build ID, and attach a screenshot if it helps. Never include passwords or keys.</Step>
+</Steps>
+
+You can also ask in the [Duddy Discord](https://duddy.io/social/discord), or email
+support@duddy.io if you are on a paid plan. For problems that affect everyone, check
+[status.duddy.io](https://status.duddy.io) first.
+
+## Next steps
+
+<CardGrid>
+  <Card title="Build the app" href="/getting-started/build-the-app">
+    Targets, the build console and what builds cost.
+  </Card>
+  <Card title="iOS builds" href="/build/ios-builds">
+    The Apple checks, Mac build workers and installing on iPhone.
+  </Card>
+  <Card title="Firebase" href="/integration/firebase">
+    Connect Firebase and attach its config files.
+  </Card>
+</CardGrid>

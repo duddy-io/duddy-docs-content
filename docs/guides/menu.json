@@ -34,6 +34,11 @@
         "title": "Images, fonts and files",
         "href": "/guides/designing/assets",
         "section": "guides"
+      },
+      {
+        "title": "Views",
+        "href": "/guides/designing/views",
+        "section": "guides"
       }
     ]
   },
@@ -50,6 +55,21 @@
       {
         "title": "Data, APIs and storage",
         "href": "/guides/logic/data-and-apis",
+        "section": "guides"
+      },
+      {
+        "title": "Notifications",
+        "href": "/guides/logic/notifications",
+        "section": "guides"
+      },
+      {
+        "title": "Payments",
+        "href": "/guides/logic/payments",
+        "section": "guides"
+      },
+      {
+        "title": "Multilingual apps",
+        "href": "/guides/logic/multilingual-apps",
         "section": "guides"
       }
     ]
@@ -83,6 +103,11 @@
     "icon": "hgi-store-01",
     "section": "guides",
     "children": [
+      {
+        "title": "Import components",
+        "href": "/guides/marketplace/import-components",
+        "section": "guides"
+      },
       {
         "title": "Publish a component",
         "href": "/guides/marketplace/publish-a-component",

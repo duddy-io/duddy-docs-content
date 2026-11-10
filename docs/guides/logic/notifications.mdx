@@ -1,0 +1,172 @@
+---
+title: "Notifications: reminders, push and alarms"
+description: "Schedule reminders with LocalNotifications, receive Firebase push messages on Android, ring real alarms with Alarm, and ask for the notification permission."
+isNew: true
+---
+
+Three logic-only components put a message on the phone's lock screen or notification tray, each
+for a different job. None of them is in a new project, so add the one you need with
+**Import component** (see [Import components](/guides/marketplace/import-components)).
+
+## Choose a component
+
+| You want to | Use | Works on |
+|---|---|---|
+| Remind someone in a few minutes or hours, even with the app closed | [LocalNotifications](/components/connectivity#localnotifications) | Android, iOS |
+| Receive messages sent from the Firebase console or your own server | [FirebaseNotifications](/components/firebase#firebasenotifications) | Android |
+| Ring at an exact time with the phone locked or silent, like an alarm clock | [Alarm](/components/connectivity#alarm) | Android, iOS |
+| Show a short message while the app is open | [Notifier](/components/content#notifier), with **Show Toast** or **Show Alert** | Android, iOS |
+
+## Before you start
+
+- Test on a real phone, with [Live test](/build/live-test) or a release build. Rebuild your Live
+  test app after you import one of these components, because it adds to what the app can do.
+- For push messages, connect your Firebase project for Android first; see
+  [Firebase](/integration/firebase).
+
+## Ask for permission
+
+Phones only show notifications from apps the person has allowed. Ask at the moment it makes sense,
+such as when someone turns reminders on, not as the app opens.
+
+<Steps>
+  <Step>Put `call LocalNotifications1.Request Permission` in the handler for the tap that turns reminders on.</Step>
+  <Step>Handle **Permission Granted** to go ahead, for example to schedule the first reminder.</Step>
+  <Step>Handle **Permission Denied** by explaining that reminders stay off until notifications are allowed in the phone's settings.</Step>
+</Steps>
+
+On iPhone and on Android 13 and later this shows the system prompt. When notifications have been
+switched off in the phone's settings, the app cannot ask again and **Permission Denied** fires
+straight away. The **Permission Granted** property tells you the current answer at any time.
+Alarm has its own **Request Permission**, which also asks for exact alarms where Android needs
+that.
+
+## Schedule a reminder
+
+<Steps>
+  <Step>Import **LocalNotifications** and drag it onto the screen where reminders are turned on.</Step>
+  <Step>Ask for permission, as above.</Step>
+  <Step>In **Permission Granted**, call **Schedule** with an id, a title, a message and a delay in seconds, for example id `1`, "Time to stretch", "Stand up for two minutes" and `3600` for an hour.</Step>
+  <Step>To change the reminder, schedule again with the same id; it replaces the earlier one. To stop it, call **Cancel** with that id.</Step>
+</Steps>
+
+| Function | What it does |
+|---|---|
+| **Notify** (id, title, message) | Shows a notification now. The same id replaces the one already showing. |
+| **Schedule** (id, title, message, delaySeconds) | Shows it that many seconds from now, even if the app is closed. A delay of 0 or less shows it at once. |
+| **Cancel** (id) | Removes that notification, or stops it if it has not shown yet. |
+| **Cancel All** | Clears every notification the app has shown and every reminder scheduled since the app opened. |
+
+<Callout type="warning" title="Reminders are approximate on Android">
+  Android may deliver a scheduled notification a few minutes late, forgets it if the phone restarts
+  before it shows, and cannot list reminders set in an earlier session, so cancel those by id. For
+  an exact time that survives a restart, use [Alarm](#ring-an-alarm).
+</Callout>
+
+## Open the right screen from a tapped notification
+
+**Notification Tapped**, which gives the notification's `id`, fires when a tap on one of your
+notifications opens the app. On Android the tap opens the app on its entry screen, and only a
+LocalNotifications on that screen hears it, so put one there and use the id to open the right
+screen with `open another screen with start value`. Delivery of the tap is best effort on both
+platforms, so the screen must also make sense without it.
+
+## Receive push notifications
+
+[FirebaseNotifications](/components/firebase#firebasenotifications) receives messages sent through
+Firebase Cloud Messaging: from the Firebase console, a Cloud Function or your own server.
+
+<Callout type="info" title="Android only for now">
+  Duddy's iOS builds do not yet include the push capability Apple requires, so do not rely on push
+  messages reaching iPhones. Use LocalNotifications for reminders on both platforms.
+</Callout>
+
+<Steps>
+  <Step>Import **FirebaseNotifications** and put it on your entry screen, which is where a tapped push opens the app.</Step>
+  <Step>Add a **LocalNotifications** to the same screen and call its **Request Permission** at a sensible moment. FirebaseNotifications does not ask on its own, and on Android 13 and later a push stays out of sight until notifications are allowed.</Step>
+  <Step>Handle **Token Received**, which gives `token`. The component asks Firebase for it when the screen opens, and Firebase may change it later. Save it where your server can read it, such as the user's document in Firestore.</Step>
+  <Step>Send a test message to that token from the Messaging page of the Firebase console.</Step>
+  <Step>Handle **Notification Opened**, which gives `title`, `body` and `dataJson`. Put `dataJson` through `parse json` and open the screen the message is about.</Step>
+</Steps>
+
+- **Notification Received** fires when a push arrives while a screen with the component is open.
+  While your app is in front, Firebase hands the message to the app instead of the tray, so show it
+  yourself, for example with a Notifier **Show Toast**.
+- To message everyone interested in a subject, use topics: **Subscribe To Topic** joins one and
+  fires **Subscribe Success** or **Subscribe Failed**, **Unsubscribe From Topic** leaves it, and
+  **Auto Subscribe Topic** joins one without any blocks. Then send to the topic instead of a token.
+
+<Callout type="warning" title="Sending stays on a server">
+  The credentials that send push messages can message every user of your app. Send from the
+  Firebase console, a Cloud Function or your own server, and never put those credentials in the
+  app. See
+  [Keep secrets off the phone](/guides/logic/data-and-apis#keep-secrets-off-the-phone).
+</Callout>
+
+## Ring an alarm
+
+[Alarm](/components/connectivity#alarm) is a real alarm clock. It rings at the exact minute with
+the phone locked or on silent, shows a ringing screen with **Snooze** and **Dismiss**, and on Android
+keeps its alarms after a restart. On iPhone it uses the system's own alarm alert.
+
+<Steps>
+  <Step>Import **Alarm** and drag it onto the screen where people set alarms.</Step>
+  <Step>Call **Request Permission** once, before the first alarm, and continue in **Permission Granted**.</Step>
+  <Step>Set an alarm: **Set** (id, hour, minute) rings once at the next 24-hour time, **Set Repeating** (id, hour, minute, days) rings every week on days such as `Mon,Wed,Fri` or `Daily`, and **Set In** (id, seconds) works as a timer.</Step>
+  <Step>Call **Cancel** with the id to remove one, or **Cancel All**. Setting an id again replaces that alarm.</Step>
+</Steps>
+
+| Property | What it does |
+|---|---|
+| **Label** | The words on the ringing screen and in the alarm notification. |
+| **Snooze Minutes** | How long **Snooze** puts the alarm off for. The default is 9. |
+| **Vibrate** | Whether the phone vibrates while it rings. |
+| **Sound** | The name of an uploaded sound asset. Empty plays the phone's own alarm sound. |
+| **Ring Screen** | One of your screens to open when the alarm rings, instead of the built-in one. |
+
+Label, Snooze Minutes and Ring Screen apply to alarms set after you change them. With a
+**Ring Screen**, Android opens that screen over the lock screen, and on iPhone the alarm alert's
+**Open** button brings the app to it. The screen gets the alarm's id as its start value and should
+call **Dismiss** or **Snooze** with it. **Is Set** and **Next Time** tell you whether an alarm is
+waiting and when it rings.
+
+**Fired** fires only while the app is open; the alarm rings either way. **Dismissed** and
+**Snoozed** report what the person did.
+
+Alarm adds Android permissions for exact alarms and full-screen alerts. Google Play restricts these
+to apps whose main purpose needs them, such as alarm clocks and calendars, so use LocalNotifications
+for ordinary reminders.
+
+## Troubleshooting
+
+<Accordion>
+  <AccordionItem value="no-notification" title="A notification never appears">
+    **Why:** notifications are not allowed for the app, which is the default on Android 13 and later until the person agrees.
+    **Fix:** call LocalNotifications **Request Permission** and check its **Permission Granted** property. If the person refused, they must turn notifications on in the phone's settings.
+  </AccordionItem>
+  <AccordionItem value="late" title="A scheduled reminder arrives late or not at all">
+    **Why:** Android delivers scheduled notifications approximately and forgets them when the phone restarts.
+    **Fix:** use Alarm when the exact time matters.
+  </AccordionItem>
+  <AccordionItem value="no-push" title="Push messages do not arrive">
+    **Why:** Firebase is not connected for Android, the Live test app was built before you connected it, or notifications are not allowed.
+    **Fix:** connect Firebase under **Settings → Integrations**, rebuild the test app when the Live test panel asks, and ask for permission with LocalNotifications. Check the token you send to is the latest one **Token Received** gave.
+  </AccordionItem>
+  <AccordionItem value="no-received" title="Notification Received never fires">
+    **Why:** it fires only while a screen with FirebaseNotifications is open. Pushes that arrive while the app is closed go to the tray.
+    **Fix:** handle **Notification Opened** for the tap that opens the app.
+  </AccordionItem>
+  <AccordionItem value="tapped" title="Notification Tapped does not fire">
+    **Why:** on Android the tap opens the app on its entry screen, and only a LocalNotifications on that screen hears it. Delivery is best effort.
+    **Fix:** put a LocalNotifications on the entry screen and handle the event there.
+  </AccordionItem>
+</Accordion>
+
+## Next steps
+
+<CardGrid>
+  <Card title="Firebase" href="/integration/firebase">Connect a Firebase project so push messages can reach your app.</Card>
+  <Card title="Data, APIs and storage" href="/guides/logic/data-and-apis">Save a device's push token or a setting on a server or the phone.</Card>
+  <Card title="Logic blocks" href="/guides/logic/blocks">Events, start values and procedures used on this page.</Card>
+  <Card title="Live test" href="/build/live-test">Try notifications on your own phone as you build.</Card>
+</CardGrid>

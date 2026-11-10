@@ -1,0 +1,114 @@
+---
+title: "Multilingual apps: Localizer and right to left"
+description: "Translate your Duddy app with the Localizer component, let people pick their language, and mirror screens for Arabic, Hebrew, Persian and Urdu readers."
+isNew: true
+---
+
+A Duddy app can switch language while it runs. The [Localizer](/components/other#localizer)
+component holds your texts in each language and hands back the right one, and a screen's
+**Layout Direction** mirrors it for languages read from right to left.
+
+Text you type into the properties panel is not translated by itself. A translated app sets its
+texts from blocks, through Localizer, as this page shows.
+
+## How Localizer works
+
+Localizer's **Strings** property holds every text, as one JSON object: each language code maps your
+own keys to that language's words.
+
+<CodeBlock language="json" code={`{
+  "en": { "title": "My recipes", "add": "Add a recipe" },
+  "hi": { "title": "मेरी रेसिपी", "add": "रेसिपी जोड़ें" },
+  "es": { "title": "Mis recetas", "add": "Añadir una receta" }
+}`} />
+
+- **Translate** (key) returns the key's text in the current language. A key the language lacks is
+  looked up in its base language (`pt` for `pt-BR`), then in **Fallback Language**. A key found
+  nowhere comes back as itself, so you can use the English text as the key.
+- The current language, the **Language** property, is the one the person picked with
+  **Set Language**. Until they pick one, it is **Default Language**, else the phone's language when
+  **Strings** has it, else **Fallback Language** (`en` unless you change it).
+- **Set Language** (code) saves the choice on the phone. Every screen's Localizer answers in it from
+  then on, and the app opens in it next time. When the language really changes, that Localizer
+  fires **Language Changed**, which gives `code`.
+- **Languages** returns the codes **Strings** has, in its order, as one text such as `en,hi,es`.
+
+## Before you start
+
+- Choose your keys, and write the text for each language. Every key needs a text in the
+  **Fallback Language** at least.
+- Localizer is not in a new project. Add it with **Import component**; see
+  [Import components](/guides/marketplace/import-components).
+
+## Translate a screen
+
+<Steps>
+  <Step>Import **Localizer** and drag it onto the screen. It has no box on the canvas.</Step>
+  <Step>Paste your JSON into its **Strings** property, and check **Fallback Language** names the language every key is written in.</Step>
+  <Step>In the block editor, make a procedure called `apply texts` that sets each text on the screen, such as `set TitleLabel.Text to` `call Localizer1.Translate` with `title`.</Step>
+  <Step>Call `apply texts` from the screen's **Initialize** and **Resume** events, and from `when Localizer1.Language Changed`.</Step>
+  <Step>Repeat on every screen that shows translated text, with the same **Strings** on each Localizer.</Step>
+</Steps>
+
+**Resume** matters because a screen that was open underneath does not hear another screen's
+**Language Changed**: it sets its texts again when it comes back to the front.
+
+## Let people pick a language
+
+<Steps>
+  <Step>Add a [DropdownMenu](/components/input#dropdownmenu) to a settings screen.</Step>
+  <Step>In the screen's **Initialize**, `set DropdownMenu1.Items to` `call Localizer1.Languages`. The menu lists the language codes.</Step>
+  <Step>In `when DropdownMenu1.Item Selected`, which gives `item`, call **Set Language** with `item`.</Step>
+</Steps>
+
+Once someone picks a language, the app keeps it, even if they later change the phone's language.
+
+## Support right-to-left languages
+
+Arabic, Hebrew, Persian and Urdu read from right to left. Set a screen's **Layout Direction** to
+**Right to Left** and the screen is drawn as a mirror image: a Row's first child sits on the right,
+and a left alignment, margin, padding or text alignment sits on the right. Each text keeps its own
+letters, and the screen's sheets and dialogs are mirrored too. Corners, borders and shadows stay as
+you set them.
+
+- **For a screen that is always right to left**, select the screen and set **Layout Direction** in
+  the properties panel. The canvas draws it mirrored, so you can check the layout as you design.
+- **For an app that switches language**, set it from blocks inside `apply texts`: if
+  `get Localizer1.Language` `is in list?` of `ar`, `fa`, `he` and `ur`, set the screen's
+  **Layout Direction** to `Right to Left`, otherwise to `Left to Right`.
+
+Layout Direction belongs to each screen, so set it on every screen.
+
+## Test it
+
+Run the app with [Live test](/build/live-test). To see the start-up rules at work, change the
+phone's language before you pick one in the app; after you pick one, the app keeps your choice.
+
+## Troubleshooting
+
+<Accordion>
+  <AccordionItem value="keys" title="A text shows its key instead of the words">
+    **Why:** the key is missing from the current language and from **Fallback Language**, or is spelt differently.
+    **Fix:** add the key to **Strings** for the fallback language at least, and check the spelling matches the **Translate** block.
+  </AccordionItem>
+  <AccordionItem value="nothing" title="Nothing is translated">
+    **Why:** **Strings** is not a valid JSON object, so Localizer holds no texts and every **Translate** returns its key.
+    **Fix:** check the JSON: every language and key in double quotes, commas between entries, and braces that match.
+  </AccordionItem>
+  <AccordionItem value="old-language" title="A screen stays in the old language">
+    **Why:** it set its texts when it opened and was not told about the change.
+    **Fix:** call `apply texts` from the screen's **Resume** as well as **Initialize**.
+  </AccordionItem>
+  <AccordionItem value="not-mirrored" title="Only one screen is mirrored">
+    **Why:** **Layout Direction** is set per screen.
+    **Fix:** set it on every screen, or from each screen's `apply texts`.
+  </AccordionItem>
+</Accordion>
+
+## Next steps
+
+<CardGrid>
+  <Card title="Logic blocks" href="/guides/logic/blocks">Procedures, events and the list blocks used on this page.</Card>
+  <Card title="Layout and sizing" href="/guides/designing/layout-and-sizing">How Rows, Columns and alignment place components.</Card>
+  <Card title="Device and utilities" href="/components/other#localizer">Every Localizer block, with its inputs.</Card>
+</CardGrid>

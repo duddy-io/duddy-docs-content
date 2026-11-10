@@ -1,12 +1,13 @@
 ---
 title: Apple
-description: Connect an App Store Connect API key so Duddy can sign your iOS builds and send them to TestFlight.
+description: Connect an App Store Connect API key so Duddy can sign your iOS builds (beta) for the iPhones registered in your Apple developer account.
 isExperimental: true
 ---
 
 iOS builds have to be signed by Apple, with your account — nobody else can do it for you.
-Duddy uses an **App Store Connect API key** to sign a build and, when you want it, upload
-that build to TestFlight.
+Duddy uses an **App Store Connect API key** to sign a build. iOS builds are in beta and are
+ad hoc: they install on the iPhones registered in your developer account, and Duddy does not
+upload them to TestFlight or App Store Connect.
 
 Without a key connected, iOS builds cannot be produced at all.
 
@@ -57,7 +58,7 @@ what it found:
 </Callout>
 
 <Callout type="info" title="Live test apps">
-  A [live test](/getting-started/build-the-app#test-it-live-on-a-device) app for iOS is
+  A [live test](/build/live-test) app for iOS is
   signed with the same key but installed ad hoc, which Apple allows only onto devices
   registered in your developer account. Register your phone under Certificates, Identifiers
   & Profiles → Devices first — the preflight refuses a test build while the account has no
@@ -66,9 +67,10 @@ what it found:
 
 ## After the build
 
-A finished `.ipa` can go to TestFlight for testers, and from there to review. iOS builds
-cannot be installed from a link the way an Android `.apk` can — that is Apple's rule, not
-Duddy's.
+A finished build installs from its link or QR code, but only on iPhones registered in your
+developer account — that is Apple's rule for ad hoc builds, not Duddy's. An ad hoc build cannot
+go to TestFlight or the App Store. See [iOS builds](/build/ios-builds) for installing and
+[Share and publish](/build/share-and-publish) for what each store needs.
 
 <Callout type="warning">
   If the integration row turns amber, Apple has rejected the key and iOS builds are paused until
