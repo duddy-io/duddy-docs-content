@@ -63,9 +63,9 @@ A tappable control with a text label and an optional icon. Use it to submit a fo
 | **Font Size**, **Text Alignment** | 16, centred | The label's size and where it sits inside the button. |
 
 **Events**
-- **Click** — the button was tapped and released. Run the button's action here.
-- **Long Press** — a press and hold. Handling it consumes the gesture, so **Click** does not also fire.
-- **Press In** and **Press Out** — a finger touched the button, and lifted off or the touch was cancelled. Use them for a custom pressed look.
+- **Click**: the button was tapped and released. Run the button's action here.
+- **Long Press**: a press and hold. Handling it consumes the gesture, so **Click** does not also fire.
+- **Press In** and **Press Out**: a finger touched the button, and lifted off or the touch was cancelled. Use them for a custom pressed look.
 
 ## Input
 
@@ -92,16 +92,16 @@ A text field the person types into: on one line, or on several with **Input Type
 | **Enabled** | on | Off stops the field taking input. |
 
 **Events**
-- **Text Changed** (value) — on every keystroke, and when your logic sets a **Text** that differs from the field's, with the full text now in the field.
-- **Focus** — the field gained focus and the keyboard opened.
-- **Blur** — the field lost focus. Check what was typed here.
-- **Submit** — the person pressed the keyboard's Done or Search key.
-- **Left Icon Press** and **Right Icon Press** — an icon inside the field was tapped.
+- **Text Changed** (value): on every keystroke, and when your logic sets a **Text** that differs from the field's, with the full text now in the field.
+- **Focus**: the field gained focus and the keyboard opened.
+- **Blur**: the field lost focus. Check what was typed here.
+- **Submit**: the person pressed the keyboard's Done or Search key.
+- **Left Icon Press** and **Right Icon Press**: an icon inside the field was tapped.
 
 **Functions**
-- **Toggle Show Text** — flips a **Password** field between hidden and shown. Wire it to **Right Icon Press** for an eye toggle. It does nothing on other input types.
-- **Request Focus** — puts the cursor in the field, raises the keyboard and fires **Focus**. A disabled or hidden field takes no focus.
-- **Clear Focus** — takes the cursor out, lowers the keyboard and fires **Blur**.
+- **Toggle Show Text**: flips a **Password** field between hidden and shown. Wire it to **Right Icon Press** for an eye toggle. It does nothing on other input types.
+- **Request Focus**: puts the cursor in the field, raises the keyboard and fires **Focus**. A disabled or hidden field takes no focus.
+- **Clear Focus**: takes the cursor out, lowers the keyboard and fires **Blur**.
 
 ## Checkbox
 
@@ -116,7 +116,7 @@ A square box the person taps to tick or untick, for yes or no answers and for pi
 | **Enabled** | on | Off stops the person changing it. |
 
 **Events**
-- **Changed** (checked) — the box was ticked or unticked, with the new value. It also fires when your logic changes **Checked**.
+- **Changed** (checked): the box was ticked or unticked, with the new value. It also fires when your logic changes **Checked**.
 
 ## Switch
 
@@ -132,7 +132,7 @@ An on and off toggle the person slides or taps, for a single setting such as not
 | **Enabled** | on | Off dims the switch and it ignores taps. |
 
 **Events**
-- **Changed** (value) — the switch was turned on or off, with the new value. It also fires when your logic changes **Checked**.
+- **Changed** (value): the switch was turned on or off, with the new value. It also fires when your logic changes **Checked**.
 
 ## RadioButton
 
@@ -147,7 +147,7 @@ A round option the person taps to choose it. Each RadioButton is independent: Du
 | **Enabled** | on | Off dims the option and it cannot be selected. |
 
 **Events**
-- **Changed** (checked) — the option was selected or cleared, by a tap or by your logic.
+- **Changed** (checked): the option was selected or cleared, by a tap or by your logic.
 
 To make a group, handle each RadioButton's **Changed**: when checked is true, set **Checked** to false on the others in the group.
 
@@ -167,8 +167,8 @@ A small pill for a filter, a tag or a category, with an optional icon and an opt
 | **Enabled** | on | Off fades the chip and it ignores taps. |
 
 **Events**
-- **Click** — the chip was tapped. Toggle **Selected** or apply its filter here.
-- **Remove** — the × was tapped. Take the chip out of your list here; **Click** does not also fire.
+- **Click**: the chip was tapped. Toggle **Selected** or apply its filter here.
+- **Remove**: the × was tapped. Take the chip out of your list here; **Click** does not also fire.
 
 ## SegmentedControl
 
@@ -184,7 +184,7 @@ A row of options with exactly one selected: a sort order, a view switch, a Day, 
 | **Enabled** | on | Off fades the control. |
 
 **Events**
-- **Changed** (index) — the person tapped a segment and the selection moved, counting from 0. Setting **Selected Index** from logic does not fire it.
+- **Changed** (index): the person tapped a segment and the selection moved, counting from 0. Setting **Selected Index** from logic does not fire it.
 
 ## Slider
 
@@ -202,7 +202,7 @@ A track the person drags to pick a number between a minimum and a maximum, for v
 | **Enabled** | on | Off dims the slider to half opacity and it cannot be dragged. |
 
 **Events**
-- **Changed** (value) — the value changed, with the new number. It fires while the person drags, and also when your logic sets **Value**.
+- **Changed** (value): the value changed, with the new number. It fires while the person drags, and also when your logic sets **Value**.
 
 ## Stepper
 
@@ -219,10 +219,10 @@ Minus and plus buttons around a number, for choosing how many of something withi
 | **Enabled** | on | Off fades the stepper. |
 
 **Events**
-- **Changed** (value) — a button tap, **Increment** or **Decrement** changed the value. Setting **Value** from logic does not fire it.
+- **Changed** (value): a button tap, **Increment** or **Decrement** changed the value. Setting **Value** from logic does not fire it.
 
 **Functions**
-- **Increment** and **Decrement** — add or subtract **Step**, within the range, and fire **Changed**, as tapping plus or minus does.
+- **Increment** and **Decrement**: add or subtract **Step**, within the range, and fire **Changed**, as tapping plus or minus does.
 
 ## RatingBar
 
@@ -239,7 +239,7 @@ A row of tappable stars for collecting a rating, or for showing a score read-onl
 | **Filled Color**, **Empty Color** | amber, faint white | The filled and empty stars. |
 
 **Events**
-- **Rating Changed** (rating) — the person tapped a star, with the new rating as a whole number of stars. Setting **Rating** from logic does not fire it.
+- **Rating Changed** (rating): the person tapped a star, with the new rating as a whole number of stars. Setting **Rating** from logic does not fire it.
 
 ## DropdownMenu
 
@@ -255,7 +255,7 @@ A field that shows the current choice and opens a list of options when tapped, f
 | **Enabled** | on | Off dims the field and it cannot be opened. |
 
 **Events**
-- **Item Selected** (item) — the person picked an option, with its text.
+- **Item Selected** (item): the person picked an option, with its text.
 
 ## ListPicker
 
@@ -269,17 +269,17 @@ Opens a dialog with a list of options and reports the one the person picks. It d
 | **Title** | `Select an option` | The heading at the top of the dialog. |
 
 **Events**
-- **Item Selected** (index, item) — the person tapped an option and the dialog closed, with its position, counting from 0, and its text.
-- **Cancelled** — the person closed the dialog without picking. It also fires when **Open Picker** is called with an empty list.
+- **Item Selected** (index, item): the person tapped an option and the dialog closed, with its position, counting from 0, and its text.
+- **Cancelled**: the person closed the dialog without picking. It also fires when **Open Picker** is called with an empty list.
 
 **Functions**
-- **Open Picker** — shows the dialog.
-- **Set Selected Index** (index) — opens the dialog with that option ticked. An index out of range is ignored.
-- **Get Item** (index) — returns an option's text, or empty text when there is none.
-- **Add Item** (item) — adds an option to the end. A blank value is ignored.
-- **Clear Items** — removes every option.
+- **Open Picker**: shows the dialog.
+- **Set Selected Index** (index): opens the dialog with that option ticked. An index out of range is ignored.
+- **Get Item** (index): returns an option's text, or empty text when there is none.
+- **Add Item** (item): adds an option to the end. A blank value is ignored.
+- **Clear Items**: removes every option.
 
-**Read from blocks** — **Selected Index** (−1 before anything is picked), **Selected Item** and **Item Count**.
+**Read from blocks**: **Selected Index** (−1 before anything is picked), **Selected Item** and **Item Count**.
 
 ## DatePicker
 
@@ -294,15 +294,15 @@ Opens the system calendar dialog and reports the date the person chooses. It dra
 | **Format** | `dd/MM/yyyy` | How the chosen date is written out, such as `MMM d yyyy` or `yyyy-MM-dd`. |
 
 **Events**
-- **Date Set** (year, month, day, formatted) — the person confirmed a date. The month runs from 1 for January to 12 for December, and formatted is the date written with **Format**.
-- **Cancelled** — the person closed the calendar without confirming.
+- **Date Set** (year, month, day, formatted): the person confirmed a date. The month runs from 1 for January to 12 for December, and formatted is the date written with **Format**.
+- **Cancelled**: the person closed the calendar without confirming.
 
 **Functions**
-- **Open Picker** — shows the calendar, starting on the date it holds and limited by **Min Date** and **Max Date**.
-- **Set Date** (year, month, day) — sets the date it holds without opening the dialog or firing **Date Set**.
-- **Format Date** (pattern) — returns the held date written with a one-off pattern, such as `EEEE d MMMM`. It returns empty text when the pattern is not valid.
+- **Open Picker**: shows the calendar, starting on the date it holds and limited by **Min Date** and **Max Date**.
+- **Set Date** (year, month, day): sets the date it holds without opening the dialog or firing **Date Set**.
+- **Format Date** (pattern): returns the held date written with a one-off pattern, such as `EEEE d MMMM`. It returns empty text when the pattern is not valid.
 
-**Read from blocks** — **Year**, **Month**, **Day** and **Selected Date** (the date written with **Format**, empty until a date is picked or set).
+**Read from blocks**: **Year**, **Month**, **Day** and **Selected Date** (the date written with **Format**, empty until a date is picked or set).
 
 ## TimePicker
 
@@ -317,15 +317,15 @@ Opens the system time dialog and reports the time the person chooses. It draws n
 | **Format** | `hh:mm a` | How the chosen time is written out, such as `HH:mm`. |
 
 **Events**
-- **Time Set** (hour, minute, formatted) — the person confirmed a time. Hour runs from 0 to 23.
-- **Cancelled** — the person closed the dialog without picking.
+- **Time Set** (hour, minute, formatted): the person confirmed a time. Hour runs from 0 to 23.
+- **Cancelled**: the person closed the dialog without picking.
 
 **Functions**
-- **Open Picker** — shows the time dialog.
-- **Set Time** (hour, minute) — stores a time without opening the dialog. No event fires.
-- **Format Time** (pattern) — returns the stored time written with a pattern such as `h:mm a`, or empty text when the pattern is not valid.
+- **Open Picker**: shows the time dialog.
+- **Set Time** (hour, minute): stores a time without opening the dialog. No event fires.
+- **Format Time** (pattern): returns the stored time written with a pattern such as `h:mm a`, or empty text when the pattern is not valid.
 
-**Read from blocks** — **Hour**, **Minute** and **Selected Time** (empty until a time is chosen or set).
+**Read from blocks**: **Hour**, **Minute** and **Selected Time** (empty until a time is chosen or set).
 
 ## CalendarView
 
@@ -343,14 +343,14 @@ A month calendar drawn on the screen, for habit trackers, bookings and event app
 | **Show Header** | on | Shows the month name with previous and next arrows. |
 
 **Events**
-- **Day Selected** (date) — the person tapped a day, with its date as `yyyy-MM-dd`. That day is already the **Selected Date**.
-- **Month Changed** (month) — the month on show changed, by the arrows or by your logic, with the new month as `yyyy-MM`. Load that month's marks here.
+- **Day Selected** (date): the person tapped a day, with its date as `yyyy-MM-dd`. That day is already the **Selected Date**.
+- **Month Changed** (month): the month on show changed, by the arrows or by your logic, with the new month as `yyyy-MM`. Load that month's marks here.
 
 **Functions**
-- **Next Month** and **Previous Month** — show the month after or before.
-- **Go To Date** (date) — shows the month that holds a date. It does not select the date; set **Selected Date** for that.
-- **Mark Day** (date, color) — marks one day, in a colour such as `#RRGGBB` or a theme colour name, or in **Mark Color** when the colour is empty.
-- **Unmark Day** (date) — removes one day's mark.
+- **Next Month** and **Previous Month**: show the month after or before.
+- **Go To Date** (date): shows the month that holds a date. It does not select the date; set **Selected Date** for that.
+- **Mark Day** (date, color): marks one day, in a colour such as `#RRGGBB` or a theme colour name, or in **Mark Color** when the colour is empty.
+- **Unmark Day** (date): removes one day's mark.
 
 The canvas draws a CalendarView as a box with its name. Use [Live test](/build/live-test) to see the month.
 
@@ -368,7 +368,7 @@ A grid of colour swatches the person picks from, returning the chosen colour as 
 | **Selection Ring** | `primary` | The ring around the selected swatch. |
 
 **Events**
-- **Changed** (hex) — the person tapped a swatch, with its colour as `#RRGGBB`. Setting **Selected** from logic does not fire it.
+- **Changed** (hex): the person tapped a swatch, with its colour as `#RRGGBB`. Setting **Selected** from logic does not fire it.
 
 ## DrawingCanvas
 
@@ -385,13 +385,13 @@ A box the person draws on with a finger, for signatures, sketches and handwritte
 DrawingCanvas has no **Padding** row.
 
 **Events**
-- **Changed** — the drawing changed: after each stroke, and after **Undo** or **Clear** removed something.
+- **Changed**: the drawing changed: after each stroke, and after **Undo** or **Clear** removed something.
 
 **Functions**
-- **Undo** — removes the most recent stroke.
-- **Clear** — removes every stroke.
+- **Undo**: removes the most recent stroke.
+- **Clear**: removes every stroke.
 
-**Read from blocks** — **Is Empty** (true before anything is drawn and after **Clear**; use it to require a signature) and **PNG Data URL** (the drawing as a PNG data URL, at twice the canvas's size, to upload or store).
+**Read from blocks**: **Is Empty** (true before anything is drawn and after **Clear**; use it to require a signature) and **PNG Data URL** (the drawing as a PNG data URL, at twice the canvas's size, to upload or store).
 
 The canvas draws a DrawingCanvas as a box with its name. Use [Live test](/build/live-test) to draw on it.
 
@@ -402,15 +402,15 @@ Opens the device's contacts app so the person can choose one contact, then repor
 **Draws:** nothing (logic only) · **In new projects:** no, import it
 
 **Events**
-- **Contact Picked** (name, phone, email) — the person chose a contact. The email is empty when the contact has none.
-- **Cancelled** — the person backed out without choosing.
-- **Error** (message) — the device has no contacts app, or the chosen contact could not be read.
+- **Contact Picked** (name, phone, email): the person chose a contact. The email is empty when the contact has none.
+- **Cancelled**: the person backed out without choosing.
+- **Error** (message): the device has no contacts app, or the chosen contact could not be read.
 
 **Functions**
-- **Open Picker** — opens the contacts app.
-- **Clear** — forgets the last contact picked.
+- **Open Picker**: opens the contacts app.
+- **Clear**: forgets the last contact picked.
 
-**Read from blocks** — **Contact Name**, **Phone Number** and **Email Address** from the last pick.
+**Read from blocks**: **Contact Name**, **Phone Number** and **Email Address** from the last pick.
 
 ## Troubleshooting input
 

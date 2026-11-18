@@ -1,23 +1,23 @@
 ---
 title: Models
-description: Choosing which AI models write your app — the design pick and the build pick, tiers, thinking, and what each choice costs.
+description: Choosing which AI models write your app, the design pick and the build pick, tiers, thinking, and what each choice costs.
 ---
 
-Vibe mode runs on models from several providers — Google, OpenAI, Anthropic, DeepSeek,
-xAI, Zhipu, Tencent, MiniMax and Mistral — and you choose which ones a turn uses. Open the settings
+Vibe mode runs on models from several providers (Google, OpenAI, Anthropic, DeepSeek,
+xAI, Zhipu, Tencent, MiniMax and Mistral) and you choose which ones a turn uses. Open the settings
 icon in the chat header and pick from the **Models** section.
 
 ## Design and build are two picks
 
 | Setting | Used for |
 |---|---|
-| **Design model** | The design direction and the look of every screen — what you will actually see. |
+| **Design model** | The design direction and the look of every screen. What you will actually see. |
 | **Build model** | Planning, turning the design into components and logic, wiring the blocks, and the review. |
 
 They can be the same model, but they are not interchangeable: the design model decides how
 a screen looks, and the build model copies that decision out. **Spend on the design model.**
 On the same request, a premium build model produced identical output to a cheap one for
-sixty times the price — the translation step is mechanical, and the cheapest capable model
+sixty times the price. The translation step is mechanical, and the cheapest capable model
 is usually the right answer there.
 
 ## Tiers
@@ -26,12 +26,12 @@ Every model carries a tier, and your plan decides which tiers you can select.
 
 | Tier | Who has it |
 |---|---|
-| **Free** | Every plan, including the trial — two models: DeepSeek V4 Flash and DeepSeek V4.1 Flash. |
+| **Free** | Every plan, including the trial. Two models: DeepSeek V4 Flash and DeepSeek V4.1 Flash. |
 | **Standard** | Paid plans. |
-| **Premium** | The top plans — the largest, most capable models. |
+| **Premium** | The top plans. The largest, most capable models. |
 
 The free tier is two models from one family. DeepSeek V4 Flash is the one Duddy's own
-pipeline runs by default — so a plan with no model features still plans and builds whole
+pipeline runs by default, so a plan with no model features still plans and builds whole
 apps, on exactly the model the builder would have chosen for you. DeepSeek V4.1 Flash is its
 newer sibling, and it can see images. V4 Flash is text-only, and that does not hold you
 back: attach a screenshot and Duddy swaps a vision-capable model in for that turn, on any
@@ -43,18 +43,18 @@ answered.
 
 <Callout type="info">
   New accounts start on DeepSeek V4 Flash and can switch to DeepSeek V4.1 Flash; those two
-  are all they can select — a paid plan is what opens the rest of the picker.
+  are all they can select: a paid plan is what opens the rest of the picker.
 </Callout>
 
 ## What the badges mean
 
-- **Free** — the model is on every plan, including the trial. It still spends credits like
+- **Free**: the model is on every plan, including the trial. It still spends credits like
   any other model; what the badge says is that no plan locks it.
-- **Relative cost (`×`)** — how expensive a model is against the picker's baseline model.
+- **Relative cost (`×`)**: how expensive a model is against the picker's baseline model.
   A `4×` model costs roughly four times as much per turn as a `1×` one for the same work.
-- **Vision** — the model can look at images. Not a requirement: a model that cannot see is
+- **Vision**: the model can look at images. Not a requirement: a model that cannot see is
   swapped for one that can whenever a turn carries an image or runs the Best-quality review.
-- **Thinking** — the model can reason before answering. Some models offer graded levels
+- **Thinking**: the model can reason before answering. Some models offer graded levels
   (Low / Medium / High), others are simply on or off, and a few cannot think at all. The
   Thinking control shows only the levels the selected model actually supports.
 
@@ -62,21 +62,21 @@ answered.
 
 | What you are doing | Design model | Build model | Settings |
 |---|---|---|---|
-| **Questions, small edits, renames** | Free tier | Free tier | The small ones — a wording tweak does not need Best. |
+| **Questions, small edits, renames** | Free tier | Free tier | The small ones: a wording tweak does not need Best. |
 | **A screen you care about** | Standard | The cheapest capable one | Quality on Balanced. |
 | **A whole app, or a hard layout** | Premium | The cheapest capable one | Quality on Best with the designer open, Thinking Medium or High. |
-| **Working from a screenshot or a sketch** | Whatever you have picked | Whatever you have picked | Nothing to change — a vision model is swapped in for the turn if yours cannot see. |
+| **Working from a screenshot or a sketch** | Whatever you have picked | Whatever you have picked | Nothing to change: a vision model is swapped in for the turn if yours cannot see. |
 
 <Callout type="warning">
   Quality and Thinking multiply what a turn costs. If credits matter more than the last 10% of
-  polish, turn Thinking down before you switch to a cheaper model — deliberation is usually the
+  polish, turn Thinking down before you switch to a cheaper model: deliberation is usually the
   larger share of the bill.
 </Callout>
 
 ## The catalogue changes
 
 Models are added, re-priced and retired by their providers, so the picker in the builder is
-the authoritative list — it shows what you can select today, with each model's tier, cost
+the authoritative list. It shows what you can select today, with each model's tier, cost
 multiplier and capabilities. This page describes how the choice works, not which models
 exist this week.
 

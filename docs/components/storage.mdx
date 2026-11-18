@@ -38,10 +38,10 @@ Save small pieces of text under keys so they survive the app closing: a setting,
 | **Name** | `Duddy` | The storage area the values live in. Use different names to keep unrelated groups apart. |
 
 **Functions**
-- **Store Value** (key, value) — saves the text under the key, replacing anything stored there.
-- **Get Value** (key, defaultValue) — returns the text saved under the key, or defaultValue when nothing was saved.
-- **Remove Value** (key) — deletes one key.
-- **Clear Storage** — deletes every key in the current **Name** area. It cannot be undone.
+- **Store Value** (key, value): saves the text under the key, replacing anything stored there.
+- **Get Value** (key, defaultValue): returns the text saved under the key, or defaultValue when nothing was saved.
+- **Remove Value** (key): deletes one key.
+- **Clear Storage**: deletes every key in the current **Name** area. It cannot be undone.
 
 ### Save a list or object in AppStorage
 
@@ -59,17 +59,17 @@ Keep records in a SQLite database on the phone, in tables you can search, sort a
 | **Version** | `1` | A version number for your table design. Duddy records it but changes no tables when you raise it. |
 
 **Events**
-- **Sql Executed** (rowsAffected) — a statement run with **Execute Sql** finished.
-- **Query Result** (jsonRecordsString) — a **Query** finished. The rows arrive as a JSON array of objects keyed by column name, or `[]` when nothing matched.
-- **Database Error** (errorMessage) — the database could not open or a statement failed, with SQLite's message.
+- **Sql Executed** (rowsAffected): a statement run with **Execute Sql** finished.
+- **Query Result** (jsonRecordsString): a **Query** finished. The rows arrive as a JSON array of objects keyed by column name, or `[]` when nothing matched.
+- **Database Error** (errorMessage): the database could not open or a statement failed, with SQLite's message.
 
 **Functions**
-- **Execute Sql** (sql, jsonArrayParams) — runs a statement that returns no rows, such as `CREATE TABLE` or `INSERT`, and fires **Sql Executed**.
-- **Query** (sql, jsonArrayParams) — runs a `SELECT` and fires **Query Result**.
-- **Insert** (tableName, jsonObjectValues) — adds one row from a JSON object of column names and values, and returns the new row's id, or `-1` if it failed.
-- **Update** (tableName, jsonObjectValues, whereClause, jsonArrayParams) — changes the matching rows and returns how many changed, or `-1`.
-- **Delete** (tableName, whereClause, jsonArrayParams) — removes the matching rows and returns how many, or `-1`.
-- **Close Database** — closes the file. Every later call fails until **Database Name** or **Version** is set again.
+- **Execute Sql** (sql, jsonArrayParams): runs a statement that returns no rows, such as `CREATE TABLE` or `INSERT`, and fires **Sql Executed**.
+- **Query** (sql, jsonArrayParams): runs a `SELECT` and fires **Query Result**.
+- **Insert** (tableName, jsonObjectValues): adds one row from a JSON object of column names and values, and returns the new row's id, or `-1` if it failed.
+- **Update** (tableName, jsonObjectValues, whereClause, jsonArrayParams): changes the matching rows and returns how many changed, or `-1`.
+- **Delete** (tableName, whereClause, jsonArrayParams): removes the matching rows and returns how many, or `-1`.
+- **Close Database**: closes the file. Every later call fails until **Database Name** or **Version** is set again.
 
 ### Query a SQLite table with parameters
 
@@ -99,16 +99,16 @@ Read and write whole text files on the phone, such as an exported list or a save
 **Draws:** nothing (logic only) · **Platforms:** Android, iOS
 
 **Events**
-- **File Written** (filename) — **Write File** saved the file.
-- **Error Occurred** (message) — a read or write failed, or the file name was empty.
+- **File Written** (filename): **Write File** saved the file.
+- **Error Occurred** (message): a read or write failed, or the file name was empty.
 
 **Functions**
-- **Write File** (filename, content) — writes the text, replacing what was there and creating any missing folders.
-- **Read File** (filename) — returns the file's text, or empty text if the file is missing or unreadable. Check **File Exists** first to tell the two apart.
-- **Delete File** (filename) — deletes the file. It fires no event either way.
-- **File Exists** (filename) — true if the file is there.
-- **Get Documents Directory** — the full path of the app's private files folder.
-- **Get Cache Directory** — the full path of the app's cache folder, for temporary files the phone may delete when space runs low.
+- **Write File** (filename, content): writes the text, replacing what was there and creating any missing folders.
+- **Read File** (filename): returns the file's text, or empty text if the file is missing or unreadable. Check **File Exists** first to tell the two apart.
+- **Delete File** (filename): deletes the file. It fires no event either way.
+- **File Exists** (filename): true if the file is there.
+- **Get Documents Directory**: the full path of the app's private files folder.
+- **Get Cache Directory**: the full path of the app's cache folder, for temporary files the phone may delete when space runs low.
 
 A plain file name such as `notes.txt` is saved in the app's private files folder, which is kept until the app is uninstalled. A full path is used as given.
 
@@ -126,15 +126,15 @@ Let the person choose a file from the phone, such as a PDF to upload or a docume
 **Read from blocks:** **Selected Path**, **Selected Name** and **Selected Count**, for the current choice.
 
 **Events**
-- **File Picked** (path, name) — after every successful choice, with the first file.
-- **Files Picked** (paths, count) — straight after **File Picked** when more than one file was chosen. paths are joined by commas.
-- **Cancelled** — the person closed the chooser without choosing.
-- **Error** (message) — there is no file chooser, or the file cannot be read.
+- **File Picked** (path, name): after every successful choice, with the first file.
+- **Files Picked** (paths, count): straight after **File Picked** when more than one file was chosen. paths are joined by commas.
+- **Cancelled**: the person closed the chooser without choosing.
+- **Error** (message): there is no file chooser, or the file cannot be read.
 
 **Functions**
-- **Open Picker** — opens the phone's file chooser, filtered by **File Type**.
-- **Get Path** (index) and **Get Name** (index) — the path or name of the chosen file at that position, counting from `0`.
-- **Clear** — forgets the current choice.
+- **Open Picker**: opens the phone's file chooser, filtered by **File Type**.
+- **Get Path** (index) and **Get Name** (index): the path or name of the chosen file at that position, counting from `0`.
+- **Clear**: forgets the current choice.
 
 The path you get is a copy of the file in the app's cache folder, which the phone may clear. To keep the file, write it somewhere permanent with [FileManager](#filemanager) or upload it with [FirebaseStorage](/components/firebase#firebasestorage).
 
@@ -145,12 +145,12 @@ Download a file from an `https://` address and save it on the phone, showing pro
 **Draws:** nothing (logic only) · **Platforms:** Android, iOS
 
 **Events**
-- **Download Progress** (progress) — the percentage done, from `0` to `100`. It stays silent when the server does not say how big the file is.
-- **Download Completed** (path) — the full path the file was saved to.
-- **Download Failed** (error) — the download could not finish: a missing address, a lost connection or an error from the server.
+- **Download Progress** (progress): the percentage done, from `0` to `100`. It stays silent when the server does not say how big the file is.
+- **Download Completed** (path): the full path the file was saved to.
+- **Download Failed** (error): the download could not finish: a missing address, a lost connection or an error from the server.
 
 **Functions**
-- **Download File** (urlString, destPath) — downloads the file to destPath, creating any missing folders. A path without a leading `/`, such as `downloads/menu.pdf`, is saved in the app's private files folder.
+- **Download File** (urlString, destPath): downloads the file to destPath, creating any missing folders. A path without a leading `/`, such as `downloads/menu.pdf`, is saved in the app's private files folder.
 
 ## Clipboard
 
@@ -161,13 +161,13 @@ Copy text out of your app for the person to paste elsewhere, or read text they c
 **Read from blocks:** **Has Text** (the clipboard holds something to paste).
 
 **Events**
-- **Copied** — **Copy** succeeded. Show a "Copied" message here.
-- **Error** (message) — the phone has no clipboard to copy to.
+- **Copied**: **Copy** succeeded. Show a "Copied" message here.
+- **Error** (message): the phone has no clipboard to copy to.
 
 **Functions**
-- **Copy** (text) — puts the text on the clipboard, replacing what was there.
-- **Paste** — returns the text on the clipboard, or empty text.
-- **Clear** — empties the clipboard. It does not fire **Copied**.
+- **Copy** (text): puts the text on the clipboard, replacing what was there.
+- **Paste**: returns the text on the clipboard, or empty text.
+- **Clear**: empties the clipboard. It does not fire **Copied**.
 
 On Android 10 and later an app can read the clipboard only while it is in front and has focus, so **Paste** in a screen's **Initialize** event returns empty text. Paste in response to a tap instead.
 

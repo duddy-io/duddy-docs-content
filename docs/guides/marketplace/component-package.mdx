@@ -1,6 +1,6 @@
 ---
 title: duddy-package.json
-description: The manifest every Duddy component carries — version, visibility, dependencies, permissions and iOS pods.
+description: The manifest every Duddy component carries, version, visibility, dependencies, permissions and iOS pods.
 isExperimental: true
 ---
 
@@ -8,7 +8,7 @@ Every component directory carries a `duddy-package.json` beside its sources. It 
 the Java source cannot state: the version, how it is listed, and what it needs from the
 platforms to compile.
 
-The component's **name, description and category** are not here — they come from the
+The component's **name, description and category** are not here. They come from the
 `@Component` annotation in the Java source, which is parsed at build time.
 
 <CodeBlock language="json" filename="duddy-package.json" code={`{
@@ -40,9 +40,9 @@ The component's **name, description and category** are not here — they come fr
 | Key | Type | Means |
 |---|---|---|
 | `version` | string | Semantic version. Every upload must be **strictly greater** than the last approved one. |
-| `public` | boolean | Whether the component is listed in the marketplace. **A missing value reads as `false`** — the component uploads and is never offered to anyone. |
+| `public` | boolean | Whether the component is listed in the marketplace. **A missing value reads as `false`**. The component uploads and is never offered to anyone. |
 | `visible` | boolean | Whether the component draws something. `true` for widgets; `false` for logic-only components that contribute blocks and no view. |
-| `credits` | number | What importing it costs. Must be a **number** — a string fails the parse. |
+| `credits` | number | What importing it costs. Must be a **number**: a string fails the parse. |
 | `link` | string | An optional link to your own page for the component. |
 
 ## permissions
@@ -50,7 +50,7 @@ The component's **name, description and category** are not here — they come fr
 Android permission strings the component genuinely needs, listed in full
 (`android.permission.CAMERA`). Ask only on the API levels that require it, pair each with a
 Request Permission function and Granted/Denied events, and prefer a system picker where one
-exists — the image, file and contact pickers need no permission at all.
+exists. The image, file and contact pickers need no permission at all.
 
 ## dependencies and repositories
 
@@ -59,7 +59,7 @@ Android libraries resolved by Gradle on the build server. Each entry is a `group
 
 <Callout type="warning">
   Everything a component imports beyond the platform SDK must be declared here. Libraries resolved
-  locally by `duddy install` are for your IDE only — an undeclared import compiles on your machine
+  locally by `duddy install` are for your IDE only: an undeclared import compiles on your machine
   and fails on the build server.
 </Callout>
 
@@ -68,7 +68,7 @@ Android libraries resolved by Gradle on the build server. Each entry is a `group
 | Key | Holds |
 |---|---|
 | `pods` | CocoaPods dependencies, as a **list** of `{ name, version }` objects. A non-empty list is what switches the iOS build to a workspace build. |
-| `infoPlist` | String values written into the app's `Info.plist` — permission usage strings live here. Values must be **strings**. |
+| `infoPlist` | String values written into the app's `Info.plist`: permission usage strings live here. Values must be **strings**. |
 | `frameworks` | Extra frameworks to link. System frameworks such as `MessageUI` and `CallKit` auto-link and need no entry. |
 
 <Callout type="info">

@@ -60,14 +60,14 @@ reach App Store Connect is reported as unknown and never blocks a build.
 
 | Check | Fails when | Warns when | What to do |
 |---|---|---|---|
-| **Apple Developer account connected** | No App Store Connect API key is connected to your account. | — | Connect **Apple Developer** on the dashboard's **Integrations** page. |
-| **API key is valid** | The issuer ID, key ID or `.p8` file is malformed, or App Store Connect rejected the key. | — | Check the key is not revoked and its role includes **App Manager**, then reconnect it. |
-| **Bundle ID set** | The project has no package name, or it is not a valid bundle identifier. | — | Set the **Package name** in **Settings → Project**. |
-| **Bundle ID registered with Apple** | The package name is not registered in this Apple Developer account. | — | Register it under **Identifiers**, or change the package name to one that is registered. |
-| **Signing certificate available** | — | There is no distribution certificate yet, or the account has Apple's maximum. | Nothing, unless you are at the maximum: then revoke an unused certificate under **Certificates**. |
-| **Provisioning profile ready** | — | There is no profile for this app yet, or the old ones are expired or invalid. | Nothing. The build creates a fresh one. |
-| **Test devices registered** | — | No devices are registered, so the app will build but install on no iPhone. | Add each iPhone's UDID under **Devices**, then build again so the profile includes it. |
-| **A build worker is online** | No macOS build worker is online. | — | Try again shortly. |
+| **Apple Developer account connected** | No App Store Connect API key is connected to your account. | - | Connect **Apple Developer** on the dashboard's **Integrations** page. |
+| **API key is valid** | The issuer ID, key ID or `.p8` file is malformed, or App Store Connect rejected the key. | - | Check the key is not revoked and its role includes **App Manager**, then reconnect it. |
+| **Bundle ID set** | The project has no package name, or it is not a valid bundle identifier. | - | Set the **Package name** in **Settings → Project**. |
+| **Bundle ID registered with Apple** | The package name is not registered in this Apple Developer account. | - | Register it under **Identifiers**, or change the package name to one that is registered. |
+| **Signing certificate available** | - | There is no distribution certificate yet, or the account has Apple's maximum. | Nothing, unless you are at the maximum: then revoke an unused certificate under **Certificates**. |
+| **Provisioning profile ready** | - | There is no profile for this app yet, or the old ones are expired or invalid. | Nothing. The build creates a fresh one. |
+| **Test devices registered** | - | No devices are registered, so the app will build but install on no iPhone. | Add each iPhone's UDID under **Devices**, then build again so the profile includes it. |
+| **A build worker is online** | No macOS build worker is online. | - | Try again shortly. |
 
 When the key or the package name fails, the checks after it are skipped: there is no point
 asking Apple about a Bundle ID with a key it rejects.

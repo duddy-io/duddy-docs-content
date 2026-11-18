@@ -34,7 +34,7 @@ Only some sensors need a permission. Ask for it at the moment the person uses th
 | [Pedometer](#pedometer) | Physical activity on Android 10 and later (`ACTIVITY_RECOGNITION`); motion on iOS | **Request Permission**, then read **Permission Granted** |
 | [Barometer](#barometer) | Motion, on iOS only | iOS asks by itself at the first reading |
 | [BarcodeScanner](#barcodescanner) | The camera, on iOS only | iOS asks by itself the first time it scans |
-| Accelerometer, Gyroscope, Compass, LightSensor, ProximitySensor, Vibration | None | — |
+| Accelerometer, Gyroscope, Compass, LightSensor, ProximitySensor, Vibration | None | - |
 
 ## LocationSensor
 
@@ -51,15 +51,15 @@ Find out where the phone is, how fast it is moving and how far it is from somewh
 **Read from blocks:** **Latitude** and **Longitude** (decimal degrees; `0` until the first reading), **Altitude** (metres), **Accuracy** (metres; smaller is better), **Speed** (metres per second), **Has Location** (a reading has arrived), **Permission Granted**, **Location Enabled** (location is switched on for the phone).
 
 **Events**
-- **Location Changed** (latitude, longitude, accuracy) — a new reading arrived.
-- **Permission Granted** — the person allowed location, or already had. Readings start here if **Enabled** is on.
-- **Permission Denied** — the person refused. No readings arrive until you ask again and they allow it.
-- **Error** (message) — no location can be delivered: location services are unavailable or switched off, or the permission was taken away.
+- **Location Changed** (latitude, longitude, accuracy): a new reading arrived.
+- **Permission Granted**: the person allowed location, or already had. Readings start here if **Enabled** is on.
+- **Permission Denied**: the person refused. No readings arrive until you ask again and they allow it.
+- **Error** (message): no location can be delivered: location services are unavailable or switched off, or the permission was taken away.
 
 **Functions**
-- **Request Permission** — asks for location access.
-- **Get Address** — returns a one-line street address for the latest reading, or empty text if there is none or the lookup fails.
-- **Distance To** (latitude, longitude) — returns the straight-line distance in metres from the latest reading to that point, or `-1` before the first reading.
+- **Request Permission**: asks for location access.
+- **Get Address**: returns a one-line street address for the latest reading, or empty text if there is none or the lookup fails.
+- **Distance To** (latitude, longitude): returns the straight-line distance in metres from the latest reading to that point, or `-1` before the first reading.
 
 ### Get the user's location
 
@@ -88,8 +88,8 @@ Measure how the phone moves along three axes, and react when the person shakes i
 **Read from blocks:** **X** (left to right across the screen), **Y** (bottom to top), **Z** (out of the screen), all in m/s² and including gravity, so **Z** is about `9.81` with the phone lying flat. **Available**.
 
 **Events**
-- **Reading** (x, y, z) — every new sample while **Enabled** is on.
-- **Shake** — the phone was shaken harder than **Shake Threshold**. It fires at most once every 800 milliseconds.
+- **Reading** (x, y, z): every new sample while **Enabled** is on.
+- **Shake**: the phone was shaken harder than **Shake Threshold**. It fires at most once every 800 milliseconds.
 
 ### Detect a shake
 
@@ -109,7 +109,7 @@ Measure how fast the phone is rotating, for steering in a game or a spirit level
 **Read from blocks:** **X** (positive when the top of the phone tilts away from you), **Y** (positive when it rolls to the right), **Z** (positive for an anticlockwise turn with the screen facing up), all in radians per second. **Available**.
 
 **Events**
-- **Reading** (x, y, z) — every new sample while **Enabled** is on.
+- **Reading** (x, y, z): every new sample while **Enabled** is on.
 
 ## Compass
 
@@ -124,7 +124,7 @@ Find which way the phone is pointing, for a compass or a "this way" arrow.
 **Read from blocks:** **Heading** (degrees clockwise from magnetic north: `0` north, `90` east, `180` south, `270` west; `0` until the first reading), **Available**.
 
 **Events**
-- **Heading Changed** (heading) — the heading moved by at least one degree.
+- **Heading Changed** (heading): the heading moved by at least one degree.
 
 ## Barometer
 
@@ -139,7 +139,7 @@ Read the air pressure, for a weather or hiking app.
 **Read from blocks:** **Pressure** (hPa, the same as millibars: about `1013` at sea level; `0` until the first reading), **Available**.
 
 **Events**
-- **Reading** (pressure) — the pressure changed noticeably.
+- **Reading** (pressure): the pressure changed noticeably.
 
 ## LightSensor
 
@@ -154,7 +154,7 @@ Read the light level around the phone, to dim a reading screen in the dark or su
 **Read from blocks:** **Lux** (about `0` in the dark, a few hundred indoors, over `10000` in direct sunlight; `0` until the first reading), **Available**.
 
 **Events**
-- **Reading** (lux) — the light level changed noticeably.
+- **Reading** (lux): the light level changed noticeably.
 
 Check **Available** before you rely on it, so an iPhone gets a sensible default.
 
@@ -173,11 +173,11 @@ Pedometer has no web version, so it can be imported only once **Web** is off und
 **Read from blocks:** **Steps** (steps since **Enabled** was turned on or **Reset** was called; not the phone's lifetime total), **Available** (the phone has a step sensor), **Permission Granted**.
 
 **Events**
-- **Step** (steps) — the count changed. steps is the running total since **Enabled** or **Reset**.
+- **Step** (steps): the count changed. steps is the running total since **Enabled** or **Reset**.
 
 **Functions**
-- **Request Permission** — shows the system prompt for step counting. Call it before you turn **Enabled** on. It fires no event: read **Permission Granted** afterwards.
-- **Reset** — starts the count again from zero.
+- **Request Permission**: shows the system prompt for step counting. Call it before you turn **Enabled** on. It fires no event: read **Permission Granted** afterwards.
+- **Reset**: starts the count again from zero.
 
 Because **Steps** starts from zero each time, a daily count needs a saved total: keep today's total in [AppStorage](/components/storage#appstorage) under today's date, and add the new steps each time **Step** fires.
 
@@ -196,7 +196,7 @@ ProximitySensor has no web version, so it can be imported only once **Web** is o
 **Read from blocks:** **Near** (something is close: the reading to trust), **Distance** (centimetres; most phones report only `0` for near and their maximum for far), **Available**.
 
 **Events**
-- **Proximity Changed** (near, distance) — fires only when the state flips between near and far.
+- **Proximity Changed** (near, distance): fires only when the state flips between near and far.
 
 ## Vibration
 
@@ -207,9 +207,9 @@ Buzz the phone once or in a rhythm, to confirm a tap or alert the person.
 **Read from blocks:** **Available** (the phone can vibrate; false on an iPad).
 
 **Functions**
-- **Vibrate** (milliseconds) — buzzes once for that long.
-- **Vibrate Pattern** (pattern, repeat) — plays a comma-separated list of durations in milliseconds that alternate pause and buzz, starting with a pause, such as `0,200,100,200`. With repeat true it loops until **Cancel**.
-- **Cancel** — stops the buzz or pattern.
+- **Vibrate** (milliseconds): buzzes once for that long.
+- **Vibrate Pattern** (pattern, repeat): plays a comma-separated list of durations in milliseconds that alternate pause and buzz, starting with a pause, such as `0,200,100,200`. With repeat true it loops until **Cancel**.
+- **Cancel**: stops the buzz or pattern.
 
 iPhones cannot vibrate for an exact time. On iPhone the length picks a lighter or stronger tap instead, and a pattern plays as a series of taps at the same timings.
 
@@ -230,15 +230,15 @@ On Android the scan opens the system scanner, so your app needs no camera permis
 **Read from blocks:** **Last Value** and **Last Format** (the last code read; empty until one is), **Available**.
 
 **Events**
-- **Scanned** (value, format) — a code was read. format is a name such as `QR Code` or `EAN-13`.
-- **Cancelled** — the person closed the scanner without reading a code.
-- **Error** (message) — the scanner could not start, or a picture held no code.
+- **Scanned** (value, format): a code was read. format is a name such as `QR Code` or `EAN-13`.
+- **Cancelled**: the person closed the scanner without reading a code.
+- **Error** (message): the scanner could not start, or a picture held no code.
 
 **Functions**
-- **Scan** — opens the scanner, which has its own torch button, and reads one code.
-- **Scan Image** (path) — reads a code from a picture on the phone, such as the path an [ImagePicker](/components/media#imagepicker) or a [FilePicker](/components/storage#filepicker) hands you.
-- **Content Kind** (value) — what the text is: `url`, `wifi`, `contact`, `email`, `phone`, `sms`, `location`, `event` or `text`.
-- **Wifi Field** (value, field) — one field of a Wi-Fi code: `ssid`, `password`, `security` (`WPA`, `WEP` or `nopass`) or `hidden` (`true` or `false`). Empty if the text is not a Wi-Fi code.
+- **Scan**: opens the scanner, which has its own torch button, and reads one code.
+- **Scan Image** (path): reads a code from a picture on the phone, such as the path an [ImagePicker](/components/media#imagepicker) or a [FilePicker](/components/storage#filepicker) hands you.
+- **Content Kind** (value): what the text is: `url`, `wifi`, `contact`, `email`, `phone`, `sms`, `location`, `event` or `text`.
+- **Wifi Field** (value, field): one field of a Wi-Fi code: `ssid`, `password`, `security` (`WPA`, `WEP` or `nopass`) or `hidden` (`true` or `false`). Empty if the text is not a Wi-Fi code.
 
 ### Read a Wi-Fi QR code
 

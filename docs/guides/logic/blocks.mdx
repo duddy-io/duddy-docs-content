@@ -218,14 +218,14 @@ button shows two counts: warnings and errors.
 
 | Message | What it means |
 |---|---|
-| This block is disconnected and never runs — attach it or delete it. | A warning: the block is loose on the workspace. |
-| Button1.Click is handled more than once in this workspace — both handlers run. | An error: two event blocks for the same event. Merge them into one. |
-| 'Label1' is not on this screen any more — this block cannot run. | An error: the block names a component this screen does not have, often after pasting blocks from another screen. |
+| This block is disconnected and never runs. Attach it or delete it. | A warning: the block is loose on the workspace. |
+| Button1.Click is handled more than once in this workspace: both handlers run. | An error: two event blocks for the same event. Merge them into one. |
+| 'Label1' is not on this screen any more. This block cannot run. | An error: the block names a component this screen does not have, often after pasting blocks from another screen. |
 | Variable 'total' is undefined or out of scope here. | An error: the variable is not declared on this screen, or the block sits outside the loop or procedure it belongs to. |
 | Please select a variable. | An error: the block's dropdown still reads `none`. "Please select a procedure to call." is the same for a `call` block. |
 | Duplicate declaration for variable 'total'. | An error: two `create variable` blocks with one name. The same check covers procedures and the screen's other workspaces. |
 | Warning: Division by zero. | A warning: a `÷` block divides by a typed 0. |
-| Nothing is plugged into VALUE — this reads as empty when the app runs. | A warning on AI-written blocks only: a socket the AI left empty. |
+| Nothing is plugged into VALUE. This reads as empty when the app runs. | A warning on AI-written blocks only: a socket the AI left empty. |
 
 ## Ask Vibe mode to write logic
 

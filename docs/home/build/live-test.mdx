@@ -58,7 +58,7 @@ moment. That is why most edits need no rebuild, and why a few do.
 
 To install the same test app on another phone later, open the panel again and press **Download
 the test app again**, or scan the panel's QR code with that phone. A test app's download lasts
-7 days; after that the panel says "The download link has expired — rebuild to download it
+7 days; after that the panel says "The download link has expired, rebuild to download it
 again."
 
 ## Pair your phone
@@ -97,7 +97,7 @@ app was built with different capabilities." and lists what changed under **Added
 | A new version of the Duddy runtime | Rebuild |
 
 Rebuilding does not change the app already on a phone. The panel marks a phone that still runs
-the previous build as **old app** and says "One device is running an older test app — install the
+the previous build as **old app** and says "One device is running an older test app, install the
 current one on it." Install the new build on that phone to clear it.
 
 ## Watch the device log
@@ -120,8 +120,8 @@ pair a phone again, type a current code into its test app.
 - **Free.** Test builds never cost credits and do not count towards your plan's hourly build
   limit.
 - **6 test builds an hour per project.** A test app rarely needs rebuilding, so the seventh
-  build in an hour is refused with "That is a lot of test builds — wait a few minutes before
-  rebuilding again".
+  build in an hour is refused with "That is a lot of test builds. Wait a few minutes before
+  rebuilding again.".
 - **Downloads last 7 days.** Rebuild to get a new download after that. Apps already installed
   are not affected.
 - **Web test apps are coming soon.** The **Web** tab says so and starts no build. Its pairing code
@@ -130,7 +130,7 @@ pair a phone again, type a current code into its test app.
 ## Troubleshooting
 
 <Accordion>
-  <AccordionItem value="rate" title="That is a lot of test builds — wait a few minutes before rebuilding again">
+  <AccordionItem value="rate" title="That is a lot of test builds. Wait a few minutes before rebuilding again.">
     **Why:** this project has had 6 test builds in the last hour.
 
     **Fix:** wait, then press **Rebuild test app** again. Make every capability change you need (components, icon, permissions) before you rebuild, so one build covers them all.
@@ -140,17 +140,17 @@ pair a phone again, type a current code into its test app.
 
     **Fix:** press **Rebuild test app**, then install the new build on each phone.
   </AccordionItem>
-  <AccordionItem value="old-app" title="One device is running an older test app — install the current one on it.">
+  <AccordionItem value="old-app" title="One device is running an older test app, install the current one on it.">
     **Why:** you rebuilt the test app, but that phone still runs the previous one.
 
     **Fix:** on that phone, install the current build from **Download the test app again** or the panel's QR code.
   </AccordionItem>
-  <AccordionItem value="expired-download" title="The download link has expired — rebuild to download it again.">
+  <AccordionItem value="expired-download" title="The download link has expired, rebuild to download it again.">
     **Why:** a test app's download lasts 7 days.
 
     **Fix:** rebuild the test app to get a new download. Phones that already have it installed are not affected.
   </AccordionItem>
-  <AccordionItem value="code-expired" title="That pairing code has expired — open Live Test again for a new one">
+  <AccordionItem value="code-expired" title="That pairing code has expired. Open Live Test again for a new one.">
     **Why:** the code is not the one the project uses now. It is more than 15 minutes old, a newer code has replaced it, or a character was mistyped.
 
     **Fix:** open the Live test panel in the designer and type the code it shows now.
@@ -160,7 +160,7 @@ pair a phone again, type a current code into its test app.
 
     **Fix:** type all 8 characters shown in the Live test panel.
   </AccordionItem>
-  <AccordionItem value="pair-attempts" title="Too many pairing attempts — wait a minute and try again">
+  <AccordionItem value="pair-attempts" title="Too many pairing attempts. Wait a minute and try again.">
     **Why:** too many codes were tried from your network in a short time.
 
     **Fix:** stop for a minute, then type the current code once. Each attempt during the wait restarts the minute.
@@ -175,7 +175,7 @@ pair a phone again, type a current code into its test app.
 
     **Fix:** check your connection and press **Try again** in the panel.
   </AccordionItem>
-  <AccordionItem value="unavailable" title="Test builds are unavailable right now — try again in a moment">
+  <AccordionItem value="unavailable" title="Test builds are unavailable right now. Try again in a moment.">
     **Why:** a problem on Duddy's side stopped the test build from starting. Nothing was built.
 
     **Fix:** try again in a moment. If it persists, check [status.duddy.io](https://status.duddy.io).

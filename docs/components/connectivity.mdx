@@ -41,13 +41,13 @@ Call a REST or JSON web API from your app. HttpRequest sends a request and hands
 | **Tag** | empty | A label handed back with this request's answer, to tell several requests apart. |
 
 **Events**
-- **Got Response** (responseCode, response, tag) — the server answered. A `404` or `500` arrives here too, so check responseCode before you use response.
-- **Error Occurred** (error, tag) — no answer came back: there is no network, the address cannot be reached, or **URL** is empty.
+- **Got Response** (responseCode, response, tag): the server answered. A `404` or `500` arrives here too, so check responseCode before you use response.
+- **Error Occurred** (error, tag): no answer came back: there is no network, the address cannot be reached, or **URL** is empty.
 
 **Functions**
-- **Make Request** — sends the request with the current **URL**, **Method**, **Body**, headers and **Tag**. It takes no arguments. The request is fixed when you call it, so changing a property afterwards does not affect a request already on its way.
-- **Set Header** (name, value) — adds or replaces one header, sent with every request from now on.
-- **Clear Headers** — removes every header added with **Set Header**.
+- **Make Request**: sends the request with the current **URL**, **Method**, **Body**, headers and **Tag**. It takes no arguments. The request is fixed when you call it, so changing a property afterwards does not affect a request already on its way.
+- **Set Header** (name, value): adds or replaces one header, sent with every request from now on.
+- **Clear Headers**: removes every header added with **Set Header**.
 
 Every request also sends `Content-Type: application/json` and `Accept: application/json`; a **Set Header** with the same name replaces either one. Use `https://` addresses: Android and iOS block plain `http://` requests by default, and Duddy builds do not change that.
 
@@ -83,15 +83,15 @@ Keep a two-way connection open to a WebSocket server, so the server can send tex
 | **URL** | empty | The `ws://` or `wss://` address of the server. |
 
 **Events**
-- **Connection Established** — the connection is open and messages can be sent.
-- **Message Received** (message) — a text message arrived. Binary messages are not delivered.
-- **Connection Closed** — the connection ended, whether the app or the server closed it.
-- **Error Occurred** (error) — connecting or sending failed.
+- **Connection Established**: the connection is open and messages can be sent.
+- **Message Received** (message): a text message arrived. Binary messages are not delivered.
+- **Connection Closed**: the connection ended, whether the app or the server closed it.
+- **Error Occurred** (error): connecting or sending failed.
 
 **Functions**
-- **Connect** — opens the connection to **URL**. An empty or unreadable address fires **Error Occurred** instead.
-- **Send Message** (message) — sends one text message. While the connection is not open, nothing is sent and no event fires.
-- **Disconnect** — closes the connection, which fires **Connection Closed**.
+- **Connect**: opens the connection to **URL**. An empty or unreadable address fires **Error Occurred** instead.
+- **Send Message** (message): sends one text message. While the connection is not open, nothing is sent and no event fires.
+- **Disconnect**: closes the connection, which fires **Connection Closed**.
 
 After **Connection Closed**, call **Connect** again to reopen it.
 
@@ -108,11 +108,11 @@ Find out whether the phone can reach the internet, over what kind of connection,
 **Read from blocks:** **Connected** (true when the internet can be reached), **Connection Type** (`WiFi`, `Cellular`, `Ethernet`, `VPN`, `Other` or `None`), **Metered** (true on mobile data or a metered hotspot).
 
 **Events** (only while **Monitoring** is on)
-- **Connected** (connectionType) — the phone came online.
-- **Disconnected** — the phone lost its internet connection.
+- **Connected** (connectionType): the phone came online.
+- **Disconnected**: the phone lost its internet connection.
 
 **Functions**
-- **Check Connection** — returns true or false straight away, without waiting for an event.
+- **Check Connection**: returns true or false straight away, without waiting for an event.
 
 ## WifiManager
 
@@ -129,7 +129,7 @@ Read the phone's Wi-Fi state, with signal strength, speed and band on Android.
 | **Frequency** | Android only | The channel frequency in MHz: about `2400` on 2.4 GHz, `5000` on 5 GHz. `0` when not connected. |
 
 **Functions**
-- **Open Wifi Settings** (Android only) — opens the Wi-Fi settings screen. From Android 10 an app cannot switch Wi-Fi on or off itself, so this is how the person changes network.
+- **Open Wifi Settings** (Android only): opens the Wi-Fi settings screen. From Android 10 an app cannot switch Wi-Fi on or off itself, so this is how the person changes network.
 
 An app that targets iOS cannot use the Android-only blocks: the iOS build is refused and names each one. See [Troubleshooting connectivity](#troubleshooting-connectivity).
 
@@ -142,16 +142,16 @@ Scan for nearby Bluetooth Low Energy devices and list their names and signal str
 **Read from blocks:** **Available** (the phone has Bluetooth at all), **Enabled** (Bluetooth is switched on), **Scanning**, **Permission Granted**.
 
 **Events**
-- **Device Found** (name, address, rssi) — once for each new device. The address is the hardware address on Android; on iOS it is an identifier Apple gives the device, not its hardware address. rssi is the signal strength in dBm.
-- **Scan Started** — a scan has begun.
-- **Scan Stopped** (deviceCount) — **Stop Scan** ended the scan, with how many devices it found.
-- **Permission Granted** and **Permission Denied** — the answer to **Request Permission**.
-- **Error** (message) — a scan could not start or failed, for example because Bluetooth is off.
+- **Device Found** (name, address, rssi): once for each new device. The address is the hardware address on Android; on iOS it is an identifier Apple gives the device, not its hardware address. rssi is the signal strength in dBm.
+- **Scan Started**: a scan has begun.
+- **Scan Stopped** (deviceCount): **Stop Scan** ended the scan, with how many devices it found.
+- **Permission Granted** and **Permission Denied**: the answer to **Request Permission**.
+- **Error** (message): a scan could not start or failed, for example because Bluetooth is off.
 
 **Functions**
-- **Request Permission** — asks for the Bluetooth permissions a scan needs. If they are already granted, **Permission Granted** fires at once.
-- **Start Scan** — starts scanning.
-- **Stop Scan** — stops scanning and fires **Scan Stopped**.
+- **Request Permission**: asks for the Bluetooth permissions a scan needs. If they are already granted, **Permission Granted** fires at once.
+- **Start Scan**: starts scanning.
+- **Stop Scan**: stops scanning and fires **Scan Stopped**.
 
 On iOS the Bluetooth prompt appears the first time you call **Request Permission** or **Start Scan**, not when the screen opens.
 
@@ -171,14 +171,14 @@ Show a web page inside a screen, with back and forward history and the option to
 Read from blocks, **URL** is the address of the page showing now, and it is empty until a page has loaded.
 
 **Events**
-- **Page Loaded** (url) — each time a page finishes loading, including pages reached by tapping a link.
-- **Evaluate Script Result** (id, result) — a script started with **Evaluate Script** finished. result is JSON text.
+- **Page Loaded** (url): each time a page finishes loading, including pages reached by tapping a link.
+- **Evaluate Script Result** (id, result): a script started with **Evaluate Script** finished. result is JSON text.
 
 **Functions**
-- **Go Back** and **Go Forward** — move through the page history. Nothing happens at either end.
-- **Reload** — loads the current page again.
-- **Stop Loading** — stops the page that is loading.
-- **Evaluate Script** (id, script) — runs JavaScript in the page. The id comes back with the result, so you can tell scripts apart.
+- **Go Back** and **Go Forward**: move through the page history. Nothing happens at either end.
+- **Reload**: loads the current page again.
+- **Stop Loading**: stops the page that is loading.
+- **Evaluate Script** (id, script): runs JavaScript in the page. The id comes back with the result, so you can tell scripts apart.
 
 ## GoogleMaps
 
@@ -201,15 +201,15 @@ GoogleMaps needs a **Google Maps API Key**, set once for the project under **Set
 **Read from blocks:** **Ready** (the map has loaded), and **Latitude**, **Longitude** and **Zoom**, which follow the map as the person pans and pinches.
 
 **Events**
-- **Map Ready** — the map has loaded. This is the earliest moment to add pins or move the camera.
-- **Map Click** (latitude, longitude) — the map was tapped somewhere other than a pin.
-- **Marker Click** (id, latitude, longitude) — a pin was tapped. Its title bubble still opens.
+- **Map Ready**: the map has loaded. This is the earliest moment to add pins or move the camera.
+- **Map Click** (latitude, longitude): the map was tapped somewhere other than a pin.
+- **Marker Click** (id, latitude, longitude): a pin was tapped. Its title bubble still opens.
 
 **Functions**
-- **Move To** (latitude, longitude, zoom) — jumps the camera there.
-- **Add Marker** (id, latitude, longitude, title) — drops a pin. Adding the same id again replaces that pin.
-- **Remove Marker** (id) — removes one pin.
-- **Clear Markers** — removes every pin and leaves the camera where it is.
+- **Move To** (latitude, longitude, zoom): jumps the camera there.
+- **Add Marker** (id, latitude, longitude, title): drops a pin. Adding the same id again replaces that pin.
+- **Remove Marker** (id): removes one pin.
+- **Clear Markers**: removes every pin and leaves the camera where it is.
 
 ## MapView
 
@@ -227,12 +227,12 @@ Show a map with pins that needs no API key. It draws OpenStreetMap maps on Andro
 **Read from blocks:** **Latitude**, **Longitude** and **Zoom**, after any panning.
 
 **Events**
-- **Marker Click** (id, latitude, longitude) — a pin was tapped.
+- **Marker Click** (id, latitude, longitude): a pin was tapped.
 
 **Functions**
-- **Move To** (latitude, longitude, zoom) — glides the map there.
-- **Add Marker** (id, latitude, longitude, title) — drops a pin. Adding the same id again replaces that pin.
-- **Remove Marker** (id) and **Clear Markers** — remove one pin or all of them.
+- **Move To** (latitude, longitude, zoom): glides the map there.
+- **Add Marker** (id, latitude, longitude, title): drops a pin. Adding the same id again replaces that pin.
+- **Remove Marker** (id) and **Clear Markers**: remove one pin or all of them.
 
 ### Google Maps or MapView?
 
@@ -256,16 +256,16 @@ Post a notification from the app itself, straight away or after a delay, even if
 **Read from blocks:** **Permission Granted** (the app may post notifications, checked each time you read it).
 
 **Events**
-- **Permission Granted** — notifications are allowed, or already were.
-- **Permission Denied** — the person refused, or switched notifications off in settings. Nothing posts until they are allowed.
-- **Notification Tapped** (id) — the person tapped one of the app's notifications and it reopened the app. It is delivered when the screen holding this component is next created, so put the component on the screen that should react.
+- **Permission Granted**: notifications are allowed, or already were.
+- **Permission Denied**: the person refused, or switched notifications off in settings. Nothing posts until they are allowed.
+- **Notification Tapped** (id): the person tapped one of the app's notifications and it reopened the app. It is delivered when the screen holding this component is next created, so put the component on the screen that should react.
 
 **Functions**
-- **Request Permission** — asks to allow notifications. On Android 13 and later this shows the system prompt.
-- **Notify** (id, title, message) — posts a notification now. Posting again with the same id replaces it.
-- **Schedule** (id, title, message, delaySeconds) — posts it that many seconds from now. Reusing an id reschedules it.
-- **Cancel** (id) — removes that notification, or drops it if it has not fired yet.
-- **Cancel All** — clears every notification the app has shown and every schedule made since the app opened.
+- **Request Permission**: asks to allow notifications. On Android 13 and later this shows the system prompt.
+- **Notify** (id, title, message): posts a notification now. Posting again with the same id replaces it.
+- **Schedule** (id, title, message, delaySeconds): posts it that many seconds from now. Reusing an id reschedules it.
+- **Cancel** (id): removes that notification, or drops it if it has not fired yet.
+- **Cancel All**: clears every notification the app has shown and every schedule made since the app opened.
 
 A schedule is lost if the phone restarts before it fires, and newer Android versions may deliver it a little late. Use [Alarm](#alarm) when the exact minute matters.
 
@@ -288,19 +288,19 @@ Ring a real alarm at an exact time, with the phone locked or on silent: once, on
 **Read from blocks:** **Ringing**, **Ringing Id** (`-1` when no alarm is ringing), **Ringing Label**, **Permission Granted**, **Available**.
 
 **Events**
-- **Fired** (id) — the alarm started ringing. It fires only while the app is open; the alarm rings either way.
-- **Dismissed** (id) and **Snoozed** (id) — the alarm was dismissed or snoozed, on the ringing screen, from the notification or by your blocks.
-- **Permission Granted** and **Permission Denied** — the answer to **Request Permission**. Without the permissions, alarms may ring late or not at all.
+- **Fired** (id): the alarm started ringing. It fires only while the app is open; the alarm rings either way.
+- **Dismissed** (id) and **Snoozed** (id): the alarm was dismissed or snoozed, on the ringing screen, from the notification or by your blocks.
+- **Permission Granted** and **Permission Denied**: the answer to **Request Permission**. Without the permissions, alarms may ring late or not at all.
 
 **Functions**
-- **Request Permission** — asks for what ringing needs: the notification permission on Android 13 and later, and the exact alarm setting on Android 12 and 13 when it is off. Call it once before the first alarm.
-- **Set** (id, hour, minute) — rings once at the next hour:minute (24-hour clock), today or tomorrow.
-- **Set Repeating** (id, hour, minute, days) — rings every week on the given days, written as `Mon,Wed,Fri` or `Daily`.
-- **Set In** (id, seconds) — rings once that many seconds from now, like a timer.
-- **Cancel** (id) and **Cancel All** — remove one alarm or every alarm the app set.
-- **Snooze** (id) and **Dismiss** (id) — what the ringing screen's buttons do. A dismissed repeating alarm keeps its next day.
-- **Is Set** (id) — whether that alarm is waiting to ring.
-- **Next Time** (id) — when it rings next, as text such as `2026-06-03 07:30`; empty if there is no such alarm.
+- **Request Permission**: asks for what ringing needs: the notification permission on Android 13 and later, and the exact alarm setting on Android 12 and 13 when it is off. Call it once before the first alarm.
+- **Set** (id, hour, minute): rings once at the next hour:minute (24-hour clock), today or tomorrow.
+- **Set Repeating** (id, hour, minute, days): rings every week on the given days, written as `Mon,Wed,Fri` or `Daily`.
+- **Set In** (id, seconds): rings once that many seconds from now, like a timer.
+- **Cancel** (id) and **Cancel All**: remove one alarm or every alarm the app set.
+- **Snooze** (id) and **Dismiss** (id): what the ringing screen's buttons do. A dismissed repeating alarm keeps its next day.
+- **Is Set** (id): whether that alarm is waiting to ring.
+- **Next Time** (id): when it rings next, as text such as `2026-06-03 07:30`; empty if there is no such alarm.
 
 Setting an id that is already in use replaces that alarm. On iPhone the system's own alarm alert rings, with Stop and Snooze; when **Ring Screen** is set, its second button opens your screen instead.
 
@@ -315,11 +315,11 @@ Open the phone's calendar on its add-event screen, already filled in with a titl
 **Read from blocks:** **Available** (a calendar app that can add an event is on the phone).
 
 **Events**
-- **Event Added** — on Android when the add-event screen opens, because Android cannot confirm that the person saved; on iOS only when they save.
-- **Error** (message) — the event could not be added, for example because no calendar app is installed.
+- **Event Added**: on Android when the add-event screen opens, because Android cannot confirm that the person saved; on iOS only when they save.
+- **Error** (message): the event could not be added, for example because no calendar app is installed.
 
 **Functions**
-- **Add Event** (title, location, details, startMs, endMs) — opens the add-event screen. The start and end are times in milliseconds since 1970, the kind [Clock](/components/other#clock)'s **Get Current Time Ms** and **Parse Date Time** give you.
+- **Add Event** (title, location, details, startMs, endMs): opens the add-event screen. The start and end are times in milliseconds since 1970, the kind [Clock](/components/other#clock)'s **Get Current Time Ms** and **Parse Date Time** give you.
 
 ## Biometric
 
@@ -330,12 +330,12 @@ Ask for the phone's fingerprint or face unlock before showing something private,
 **Read from blocks:** **Available** (biometrics are set up on this phone, so **Authenticate** will show a prompt).
 
 **Events**
-- **Succeeded** — the check passed. Open what the prompt was guarding here.
-- **Failed** (message) — no match, a lockout after too many tries, or no biometric hardware.
-- **Cancelled** — the person closed the prompt. Nothing was unlocked.
+- **Succeeded**: the check passed. Open what the prompt was guarding here.
+- **Failed** (message): no match, a lockout after too many tries, or no biometric hardware.
+- **Cancelled**: the person closed the prompt. Nothing was unlocked.
 
 **Functions**
-- **Authenticate** (title, subtitle) — shows the prompt. The title says what is being unlocked; the subtitle may be empty.
+- **Authenticate** (title, subtitle): shows the prompt. The title says what is being unlocked; the subtitle may be empty.
 
 ## OpenVPN
 
@@ -353,14 +353,14 @@ Connect the phone to an OpenVPN server from a profile, and show the tunnel's sta
 **Read from blocks:** **Status** (`disconnected`, `connecting`, `connected`, `disconnecting` or `error`), **Connected**, **Bytes Received**, **Bytes Sent**, **Permission Granted** (the person accepted the system's VPN prompt), **Available**.
 
 **Events**
-- **Status Changed** (status) — the tunnel moved to a new status.
-- **Connected** and **Disconnected** — the tunnel came up or went down.
-- **Error** (message) — connecting or disconnecting failed: a bad profile, a refused prompt, a server that does not answer or a wrong password.
-- **Permission Granted** and **Permission Denied** — the answer to the system's VPN prompt.
+- **Status Changed** (status): the tunnel moved to a new status.
+- **Connected** and **Disconnected**: the tunnel came up or went down.
+- **Error** (message): connecting or disconnecting failed: a bad profile, a refused prompt, a server that does not answer or a wrong password.
+- **Permission Granted** and **Permission Denied**: the answer to the system's VPN prompt.
 
 **Functions**
-- **Request Permission** — shows the system's VPN prompt if the person has never accepted it. **Connect** asks too when needed.
-- **Connect** and **Disconnect** — bring the tunnel up or down.
+- **Request Permission**: shows the system's VPN prompt if the person has never accepted it. **Connect** asks too when needed.
+- **Connect** and **Disconnect**: bring the tunnel up or down.
 
 On iOS the app carries a network extension for the tunnel, and the build adds the Network Extensions capability to your app's identifier for you. Anything typed into the properties panel is built into the app, so set a person's own username and password from blocks rather than in the panel.
 
@@ -380,9 +380,9 @@ Connect the phone to a WireGuard server from a configuration, show the tunnel's 
 **Events:** the same as [OpenVPN](#openvpn): **Status Changed** (status), **Connected**, **Disconnected**, **Error** (message), **Permission Granted** and **Permission Denied**.
 
 **Functions**
-- **Request Permission**, **Connect** and **Disconnect** — as for OpenVPN.
-- **Generate Private Key** — returns a new private key (Base64) for a new peer.
-- **Public Key Of** (privateKey) — returns the matching public key, which the server needs in its `[Peer]` section. Empty if the private key is not valid.
+- **Request Permission**, **Connect** and **Disconnect**, as for OpenVPN.
+- **Generate Private Key**: returns a new private key (Base64) for a new peer.
+- **Public Key Of** (privateKey): returns the matching public key, which the server needs in its `[Peer]` section. Empty if the private key is not valid.
 
 As with OpenVPN, the iOS app carries a network extension, and a private key typed into the panel is built into the app.
 

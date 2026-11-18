@@ -54,8 +54,8 @@ The root of every screen in an app. It holds the components placed on it and own
 | **Layout Direction** | Left to Right | **Right to Left** mirrors the screen for Arabic, Persian, Hebrew and Urdu: a Row's first child sits at the right, while each text keeps its own letters. |
 
 **Events**
-- **Initialize** — once, when the screen has been built and is about to show. Load data and set up components here.
-- **Resume** — each time the screen comes back to the front after being covered: another screen closed onto it, or the app returned from the background. It does not fire on the first show. Reload a list here after an edit screen closes.
+- **Initialize**: once, when the screen has been built and is about to show. Load data and set up components here.
+- **Resume**: each time the screen comes back to the front after being covered: another screen closed onto it, or the app returned from the background. It does not fire on the first show. Reload a list here after an edit screen closes.
 
 ## Column
 
@@ -71,8 +71,8 @@ Stacks its children top to bottom. Use it for forms, the inside of a card and an
 | **Ripple Color** | transparent | The ripple that spreads from a tap. Transparent shows none. |
 
 **Events**
-- **Click** — a tap on the column, including on empty space between its children, so a whole group can act as one button.
-- **Long Click** — a press and hold. It consumes the press, so **Click** does not follow.
+- **Click**: a tap on the column, including on empty space between its children, so a whole group can act as one button.
+- **Long Click**: a press and hold. It consumes the press, so **Click** does not follow.
 
 ## Row
 
@@ -87,8 +87,8 @@ Lays its children out side by side, left to right. Use it for toolbars, strips o
 | **Background**, **Border Radius**, **Stroke**, **Shadow**, **Ripple Color** | none | Style the row as a strip or a pill. |
 
 **Events**
-- **Click** — a tap on the row, including on empty space between its children.
-- **Long Click** — a press and hold. It consumes the press, so **Click** does not follow.
+- **Click**: a tap on the row, including on empty space between its children.
+- **Long Click**: a press and hold. It consumes the press, so **Click** does not follow.
 
 ## Stack
 
@@ -102,8 +102,8 @@ Layers its children on top of each other, the first child at the back. Use it fo
 | **Background**, **Border Radius**, **Stroke**, **Shadow**, **Ripple Color** | none | Style the area behind the layers. |
 
 **Events**
-- **Click** — a tap on the stack, including on empty space no child covers.
-- **Long Click** — a press and hold.
+- **Click**: a tap on the stack, including on empty space no child covers.
+- **Long Click**: a press and hold.
 
 ## ScrollableColumn
 
@@ -120,8 +120,8 @@ A Column inside a scrolling area, so content taller than the space available can
 Inside a scrolling container, Fill on the scrolling axis means "as long as the content"; see [Layout and sizing](/guides/designing/layout-and-sizing).
 
 **Events**
-- **Click** — a tap on the scrolling area itself rather than on one of its children.
-- **Long Click** — a press and hold. It consumes the press, so **Click** does not follow.
+- **Click**: a tap on the scrolling area itself rather than on one of its children.
+- **Long Click**: a press and hold. It consumes the press, so **Click** does not follow.
 
 ## ScrollableRow
 
@@ -136,8 +136,8 @@ A Row that scrolls sideways, for carousels and rails of chips that are wider tha
 | **Enabled** | on | Off ignores touch and dims the row to half opacity. |
 
 **Events**
-- **Click** — a tap on the strip itself rather than on one of its children.
-- **Long Click** — a press and hold. It consumes the press, so **Click** does not follow.
+- **Click**: a tap on the strip itself rather than on one of its children.
+- **Long Click**: a press and hold. It consumes the press, so **Click** does not follow.
 
 ## CardView
 
@@ -154,9 +154,9 @@ A tappable container with rounded corners, a border and a drop shadow, used to g
 | **Enabled** | on | Whether the card responds to taps. |
 
 **Events**
-- **Click** — a tap on the card. Open a detail screen here.
-- **Long Press** — a press and hold, often used for a delete or share menu.
-- **Focus** and **Blur** — the card gains or loses focus, for example under keyboard navigation.
+- **Click**: a tap on the card. Open a detail screen here.
+- **Long Press**: a press and hold, often used for a delete or share menu.
+- **Focus** and **Blur**: the card gains or loses focus, for example under keyboard navigation.
 
 ## Divider
 
@@ -191,8 +191,8 @@ The bar across the top of a screen, with a title, an optional subtitle, a naviga
 TopBar has no **Margin** or **Alignment** rows.
 
 **Events**
-- **Navigation Click** — the navigation icon was tapped. Go back or open a drawer here.
-- **Menu Item Click** (id, name) — an action item was tapped. `id` is its position in **Items**, counting from 0.
+- **Navigation Click**: the navigation icon was tapped. Go back or open a drawer here.
+- **Menu Item Click** (id, name): an action item was tapped. `id` is its position in **Items**, counting from 0.
 
 ## BottomNavigation
 
@@ -210,7 +210,7 @@ A bar pinned to the bottom of the screen with up to five labelled icons, used to
 | **Separator**, **Top Shadow** | 1, 0 | The line above the bar and the shadow lifting it off the content. Set either to 0 to hide it. |
 
 **Events**
-- **Item Selected** (id) — a tab was tapped. `id` is its position, counting from 0. Setting **Selected Index** from logic does not fire it.
+- **Item Selected** (id): a tab was tapped. `id` is its position, counting from 0. Setting **Selected Index** from logic does not fire it.
 
 ### Selected Index
 
@@ -230,11 +230,11 @@ A row of tabs that pairs itself with a ViewPager on the same screen: swiping the
 | **Tab Color** | `primary` | The underline that marks the selected tab. |
 
 **Events**
-- **Tab Selected** (index, title) — a tab became selected, by a tap or by swiping the paired ViewPager.
+- **Tab Selected** (index, title): a tab became selected, by a tap or by swiping the paired ViewPager.
 
 **Functions**
-- **Select Tab** (index) — selects a tab and moves a paired ViewPager with it. Does nothing if there is no tab at that position.
-- **Tab Count** — returns how many tabs there are: the non-blank entries in **Titles**.
+- **Select Tab** (index): selects a tab and moves a paired ViewPager with it. Does nothing if there is no tab at that position.
+- **Tab Count**: returns how many tabs there are: the non-blank entries in **Titles**.
 
 ## ViewPager
 
@@ -250,13 +250,13 @@ A container whose children each become one full-size page the person swipes betw
 | **Enabled** | on | Off stops swiping and dims the pager. |
 
 **Events**
-- **Page Changed** (position) — a different page became the current one, counting from 0.
+- **Page Changed** (position): a different page became the current one, counting from 0.
 
 **Functions**
-- **Next Page** and **Previous Page** — move one page. They do nothing at the last or first page.
-- **Go To Page** (index) — moves to a page, counting from 0. A position outside the pager's pages does nothing.
+- **Next Page** and **Previous Page**: move one page. They do nothing at the last or first page.
+- **Go To Page** (index): moves to a page, counting from 0. A position outside the pager's pages does nothing.
 
-**Read from blocks** — **Page Count** (how many pages it holds) and **Page Index** (the page showing now).
+**Read from blocks**: **Page Count** (how many pages it holds) and **Page Index** (the page showing now).
 
 ## Dialog
 
@@ -274,13 +274,13 @@ A modal window that you fill with any components, shown over the screen. Use it 
 | **Backdrop Opacity** | 50 | How much the screen behind is dimmed, from 0 to 100. |
 
 **Events**
-- **Shown** — the dialog has just appeared. Load or reset its content here.
-- **Dismissed** — the dialog has closed, however it closed: **Dismiss**, a backdrop tap or the back gesture.
+- **Shown**: the dialog has just appeared. Load or reset its content here.
+- **Dismissed**: the dialog has closed, however it closed: **Dismiss**, a backdrop tap or the back gesture.
 
 **Functions**
-- **Show** — opens the dialog and fires **Shown**. Does nothing if it is already open.
-- **Dismiss** — closes it and fires **Dismissed**. Does nothing if it is already closed.
-- **is Showing** — returns true while the dialog is open.
+- **Show**: opens the dialog and fires **Shown**. Does nothing if it is already open.
+- **Dismiss**: closes it and fires **Dismissed**. Does nothing if it is already closed.
+- **is Showing**: returns true while the dialog is open.
 
 Setting **Visible** from a block opens or closes the dialog too.
 
@@ -299,13 +299,13 @@ A panel that slides up from the bottom of the screen over the current content. U
 | **Backdrop Opacity** | 50 | How dark the screen behind goes, from 0 to 100. |
 
 **Events**
-- **Shown** — the sheet has opened, however it was opened.
-- **Dismissed** — the sheet has closed, however it closed: **Dismiss**, a backdrop tap, a swipe down or the back gesture.
+- **Shown**: the sheet has opened, however it was opened.
+- **Dismissed**: the sheet has closed, however it closed: **Dismiss**, a backdrop tap, a swipe down or the back gesture.
 
 **Functions**
-- **Show** — slides the sheet up and fires **Shown**.
-- **Dismiss** — slides it away and fires **Dismissed**. Does nothing when the sheet is not open.
-- **is Showing** — returns true while the sheet is open.
+- **Show**: slides the sheet up and fires **Shown**.
+- **Dismiss**: slides it away and fires **Dismissed**. Does nothing when the sheet is not open.
+- **is Showing**: returns true while the sheet is open.
 
 ## DynamicLoader
 
@@ -318,14 +318,14 @@ A container that renders a Duddy document your server sends while the app runs: 
 | **Source** | empty | A document to render. Setting it loads it; blank clears the loader. |
 
 **Events**
-- **Loaded** — a document has been read and its first screen is showing.
-- **Error Occurred** (error) — a document or a change could not be read or applied, or the logic inside the document reported an error.
+- **Loaded**: a document has been read and its first screen is showing.
+- **Error Occurred** (error): a document or a change could not be read or applied, or the logic inside the document reported an error.
 
 **Functions**
-- **Load** (source) — renders a document, replacing whatever was showing.
-- **Apply** (patch) — applies one change to the loaded document: an object with an `ops` list, or a single op.
-- **Call Block** (request) — runs a procedure the loaded document declares and returns its result as text. The request is `{"procedure": "Name", "args": [...]}`, or just the procedure's name.
-- **Reset** — empties the loader and releases what was rendering the document. The next **Load** starts from nothing.
+- **Load** (source): renders a document, replacing whatever was showing.
+- **Apply** (patch): applies one change to the loaded document: an object with an `ops` list, or a single op.
+- **Call Block** (request): runs a procedure the loaded document declares and returns its result as text. The request is `{"procedure": "Name", "args": [...]}`, or just the procedure's name.
+- **Reset**: empties the loader and releases what was rendering the document. The next **Load** starts from nothing.
 
 ## Troubleshooting layout
 

@@ -50,8 +50,8 @@ Displays read-only text, from a one-word label to a paragraph. For text the pers
 | **Selectable** | off | Lets the person press and hold the text to select and copy it. |
 
 **Events**
-- **Click** — the text was tapped, so a label can act as a link or a "see more" control.
-- **Long Press** — a press and hold. Handling it consumes the gesture, so **Click** does not also fire.
+- **Click**: the text was tapped, so a label can act as a link or a "see more" control.
+- **Long Press**: a press and hold. Handling it consumes the gesture, so **Click** does not also fire.
 
 ## MarkdownView
 
@@ -66,7 +66,7 @@ Shows text written in Markdown: `#` headings, `**bold**`, `*italic*`, `` `inline
 | **Text Color**, **Link Color**, **Code Background** | follow the theme | The text, links, and the fill behind code. |
 
 **Events**
-- **Link Clicked** (url) — a link was tapped. Nothing opens by itself: open the address from your logic, for example with a [WebViewer](/components/connectivity#webviewer) or a new screen.
+- **Link Clicked** (url): a link was tapped. Nothing opens by itself: open the address from your logic, for example with a [WebViewer](/components/connectivity#webviewer) or a new screen.
 
 The canvas draws a MarkdownView as a box with its name. Use [Live test](/build/live-test) to see the text rendered.
 
@@ -78,7 +78,7 @@ A single line of text that scrolls sideways on a loop, for a news ticker, a stri
 
 | Property | Default | What it does |
 |---|---|---|
-| **Text** | `Breaking news — ` | The words that scroll. End it with a separator, such as a dash or a bullet, so the loop reads cleanly where it repeats. |
+| **Text** | `Breaking news · ` | The words that scroll. End it with a separator, such as a dot or a bullet, so the loop reads cleanly where it repeats. |
 | **Speed** | 60 | How fast the text moves, in pixels per second. |
 | **Direction** | left | **left** moves the text right to left, as a ticker usually does; **right** moves it the other way. |
 | **Paused** | off | Holds the text still. |
@@ -99,9 +99,9 @@ A picture with control over how it fills its frame, plus rounded corners, a bord
 | **Width**, **Height** | Fill, 200 | The frame's size. |
 
 **Events**
-- **Click** and **Long Press** — the picture was tapped, or pressed and held.
-- **Load** — the picture was found and drawn. Hide a placeholder here.
-- **Error** — the asset could not be found, or the web address or file failed to load, and the frame was left empty. Show a fallback here.
+- **Click** and **Long Press**: the picture was tapped, or pressed and held.
+- **Load**: the picture was found and drawn. Hide a placeholder here.
+- **Error**: the asset could not be found, or the web address or file failed to load, and the frame was left empty. Show a fallback here.
 
 See [Images, fonts and files](/guides/designing/assets) to add pictures to a project.
 
@@ -118,8 +118,8 @@ A single square icon picked from the built-in icon set, tinted and sized from th
 | **Size** | 30 | The icon's width and height. |
 
 **Events**
-- **Click** — the icon was tapped, so it can act as a control (a close cross, a favourite toggle) without a button around it.
-- **Long Press** — a press and hold. Handling it consumes the gesture, so **Click** does not also fire.
+- **Click**: the icon was tapped, so it can act as a control (a close cross, a favourite toggle) without a button around it.
+- **Long Press**: a press and hold. Handling it consumes the gesture, so **Click** does not also fire.
 
 ## Avatar
 
@@ -153,16 +153,16 @@ Draws a QR code from any text, such as a link, a Wi-Fi network, a contact or a p
 | **Color**, **Background** | `#000000`, `#FFFFFF` | The modules and the space behind them. Keep dark modules on a light background. |
 
 **Events**
-- **Saved** (path) — **Save To Gallery** finished. The value says where the picture went.
-- **Error** (message) — the content does not fit in a QR code, or saving failed.
+- **Saved** (path): **Save To Gallery** finished. The value says where the picture went.
+- **Error** (message): the content does not fit in a QR code, or saving failed.
 
 **Functions**
-- **Wifi Content** (ssid, password, security) — the text that joins a phone to a Wi-Fi network when scanned. Security is `WPA` (also for WPA2 and WPA3), `WEP` or `nopass`.
-- **Contact Content** (name, phone, email), **Email Content** (to, subject, body), **Sms Content** (number, message), **Phone Content** (number) and **Location Content** (latitude, longitude) — the text for a contact card, a new email, a text message, a phone call or a map location.
-- **Save To Gallery** — saves the code as a 1024-pixel PNG in the device's pictures, then fires **Saved** or **Error**.
-- **Image Data Url** — returns the code as a 512-pixel PNG data URL, to show in an Image or upload.
+- **Wifi Content** (ssid, password, security): the text that joins a phone to a Wi-Fi network when scanned. Security is `WPA` (also for WPA2 and WPA3), `WEP` or `nopass`.
+- **Contact Content** (name, phone, email), **Email Content** (to, subject, body), **Sms Content** (number, message), **Phone Content** (number) and **Location Content** (latitude, longitude). The text for a contact card, a new email, a text message, a phone call or a map location.
+- **Save To Gallery**: saves the code as a 1024-pixel PNG in the device's pictures, then fires **Saved** or **Error**.
+- **Image Data Url**: returns the code as a 512-pixel PNG data URL, to show in an Image or upload.
 
-Put a helper's result into **Content**. **Read from blocks** — **Valid** (whether the content fits and a code is drawn) and **Module Count** (how many modules across).
+Put a helper's result into **Content**. **Read from blocks**: **Valid** (whether the content fits and a code is drawn) and **Module Count** (how many modules across).
 
 ## Shape
 
@@ -182,8 +182,8 @@ A vector shape: a rectangle, a circle, one of the expressive shapes such as a co
 | **Stroke Style** | round | The outline's cap, its corner join and its dash pattern. |
 
 **Events**
-- **Click** — the shape was tapped. The whole bounding box responds, not only the painted area.
-- **Long Press** — a press and hold. It consumes the press, so **Click** does not follow.
+- **Click**: the shape was tapped. The whole bounding box responds, not only the painted area.
+- **Long Press**: a press and hold. It consumes the press, so **Click** does not follow.
 
 ## RecyclerView
 
@@ -203,18 +203,18 @@ A scrolling list or grid. You design one row, the *row template*, from the compo
 | **Enabled** | on | Off ignores touch, dims the list and turns pull-to-refresh off. |
 
 **Events**
-- **Bind Item** (position) — a row is scrolling into view, counting from 0. Fill the row in here.
-- **Refresh** — the person pulled the list down. Pull-to-refresh is offered only while this event has a handler.
-- **Reached End** — the last row came into view. It fires again only after the list has grown, so it is the place to load the next page.
-- **Scroll** — the list moved, in either direction.
+- **Bind Item** (position): a row is scrolling into view, counting from 0. Fill the row in here.
+- **Refresh**: the person pulled the list down. Pull-to-refresh is offered only while this event has a handler.
+- **Reached End**: the last row came into view. It fires again only after the list has grown, so it is the place to load the next page.
+- **Scroll**: the list moved, in either direction.
 
 **Functions**
-- **Get Item** (position) — returns the record from **Data** for a row.
-- **Get Row Component** (id) — inside **Bind Item**, returns this row's copy of a component from the row template, given that component's id. It returns nothing outside **Bind Item**.
-- **Refresh Data** — redraws every visible row, firing **Bind Item** again. Call it after the data behind the list changes.
-- **Scroll To Position** (position) — jumps to an item, counting from 0.
+- **Get Item** (position): returns the record from **Data** for a row.
+- **Get Row Component** (id): inside **Bind Item**, returns this row's copy of a component from the row template, given that component's id. It returns nothing outside **Bind Item**.
+- **Refresh Data**: redraws every visible row, firing **Bind Item** again. Call it after the data behind the list changes.
+- **Scroll To Position** (position): jumps to an item, counting from 0.
 
-**Read from blocks** — **Data**, which you also set from blocks.
+**Read from blocks**: **Data**, which you also set from blocks.
 
 ### Fill a list from data
 
@@ -229,8 +229,8 @@ For pull-to-refresh, handle **Refresh**: reload the data, then set **Refreshing*
 
 ## ChatView
 
-A whole conversation in one component: a scrolling list of message bubbles — yours on the
-right, theirs on the left — with times, delivery ticks, avatars, names, date separators and
+A whole conversation in one component: a scrolling list of message bubbles, yours on the
+right, theirs on the left, with times, delivery ticks, avatars, names, date separators and
 a typing line, and a composer at the bottom with a send button and an optional attach
 button. The list keeps its place when the keyboard opens, and stays pinned to the newest
 message when the reader was already there. See [Build a chat app](/guides/apps/chat-app).
@@ -239,14 +239,14 @@ message when the reader was already there. See [Build a chat app](/guides/apps/c
 
 ### A message
 
-**Messages** is a list of records, one per message, oldest first. Setting it redraws the list — pinned to the bottom if the reader was there, else where they were. In the properties panel it takes the same list as JSON text. Each record is a dictionary:
+**Messages** is a list of records, one per message, oldest first. Setting it redraws the list: pinned to the bottom if the reader was there, else where they were. In the properties panel it takes the same list as JSON text. Each record is a dictionary:
 
 | Key | Holds |
 |---|---|
-| `id` | Text that identifies the message — what **Message Click**, **Message Long Press** and **Update Message** name it by. |
+| `id` | Text that identifies the message. What **Message Click**, **Message Long Press** and **Update Message** name it by. |
 | `text` | The message, or a picture's caption. |
 | `senderId`, `senderName` | Who sent it. A `senderId` equal to **My Id** draws on the right. |
-| `avatar` | An image URL, one or two initials, or `""` — drawn beside the bubble when **Show Avatars** is on. |
+| `avatar` | An image URL, one or two initials, or `""`: drawn beside the bubble when **Show Avatars** is on. |
 | `time` | Display text such as `10:42`, under the last bubble of a run when **Show Timestamps** is on. |
 | `date` | A day label such as `Today` or `12 Mar`. When it differs from the previous message's, a centred separator is drawn; `""` draws none. |
 | `status` | `sending`, `sent`, `delivered`, `read`, `failed` or `""`. On your own messages, with **Show Status** on, it draws a clock, one tick, two ticks, two ticks in the accent, or a red mark. |
@@ -269,18 +269,18 @@ width.
 | **Show Timestamps**, **Show Status** | On by default. |
 | **Typing Text** | `Priya is typing…` draws a typing line with animated dots under the list; `""` hides it. |
 | **Empty Text** | Centred in the list when there are no messages (`Say hello`). |
-| **Show Composer**, **Placeholder**, **Send Icon**, **Attach Icon** | The composer (on), its placeholder (`Message`), the send button's icon (`Send`), and the attach button's icon — `""` means no attach button. |
+| **Show Composer**, **Placeholder**, **Send Icon**, **Attach Icon** | The composer (on), its placeholder (`Message`), the send button's icon (`Send`), and the attach button's icon: `""` means no attach button. |
 | **Composer Text** | What is typed. Read it to send a picture with a caption; set it to `""` to clear. |
 
 ### Events and functions
 
-- **Send** (text) — the send button or the keyboard's send key, with the trimmed text, once it is not empty. The composer has already cleared itself.
-- **Attach** — the attach button. Open a picker here and send what it returns as a message with an `imageUrl`.
+- **Send** (text): the send button or the keyboard's send key, with the trimmed text, once it is not empty. The composer has already cleared itself.
+- **Attach**: the attach button. Open a picker here and send what it returns as a message with an `imageUrl`.
 - **Message Click** and **Message Long Press** (id).
-- **Reached Top** — the list reached its first message: load older ones.
-- **Typing** (typing) — true when the composer goes from empty to text, false two seconds after the last keystroke or when it empties.
-- **Add Message** (record) — appends one message and scrolls to it: the optimistic send.
-- **Update Message** (id, record) — replaces only the fields given, such as a status change.
+- **Reached Top**: the list reached its first message: load older ones.
+- **Typing** (typing): true when the composer goes from empty to text, false two seconds after the last keystroke or when it empties.
+- **Add Message** (record): appends one message and scrolls to it: the optimistic send.
+- **Update Message** (id, record): replaces only the fields given, such as a status change.
 - **Scroll To Bottom** and **Clear**.
 
 ## StatTile
@@ -315,12 +315,12 @@ Draws a line, bar or pie chart from a list of labelled values, and reports the p
 For example, `[{"label": "Jan", "value": 12}, {"label": "Feb", "value": 19}]` draws two points.
 
 **Events**
-- **Value Selected** (label, value) — the chart was tapped, with the nearest point or bar, or the slice under the finger.
+- **Value Selected** (label, value): the chart was tapped, with the nearest point or bar, or the slice under the finger.
 
 **Functions**
-- **Set Data** (jsonStringData) — replaces the values and redraws, the same as setting **Data JSON**.
-- **Set Graph Type** (type) — switches between `Line`, `Bar` and `Pie` and redraws the same data.
-- **Clear Data** — removes every value.
+- **Set Data** (jsonStringData): replaces the values and redraws, the same as setting **Data JSON**.
+- **Set Graph Type** (type): switches between `Line`, `Bar` and `Pie` and redraws the same data.
+- **Clear Data**: removes every value.
 
 ## Badge
 
@@ -367,13 +367,13 @@ A timer that counts down from a number of seconds and shows the time left, ticki
 | **Font Size** | 32 | The size of the time. |
 
 **Events**
-- **Tick** (secondsRemaining) — every second while it runs.
-- **Finished** — once, when it reaches zero.
+- **Tick** (secondsRemaining): every second while it runs.
+- **Finished**: once, when it reaches zero.
 
 **Functions**
-- **Reset** — stops the timer and sets it back to **Duration**, ready to start again.
+- **Reset**: stops the timer and sets it back to **Duration**, ready to start again.
 
-**Read from blocks** — **Remaining** (seconds left).
+**Read from blocks**: **Remaining** (seconds left).
 
 ## ProgressBar
 
@@ -388,7 +388,7 @@ A horizontal bar that fills to show how far along a task is, at a set percentage
 | **Color** | `primary` | The filled part of the bar. |
 
 **Events**
-- **Click** — the bar was tapped, for example to show details or offer to cancel.
+- **Click**: the bar was tapped, for example to show details or offer to cancel.
 
 ## CircularProgress
 
@@ -434,7 +434,7 @@ A centred placeholder for an empty list, a search with no results or a failed lo
 | **Action Label** | empty | The button's label, such as `Retry` or `Add item`. Empty hides the button. |
 
 **Events**
-- **Action** — the action button was tapped. Retry the load, clear the search or add the first item here.
+- **Action**: the action button was tapped. Retry the load, clear the search or add the first item here.
 
 ## Callout
 
@@ -463,16 +463,16 @@ Shows brief toast messages, and alert, confirm and popup dialogs, over the curre
 | **Duration** | 0 | How long a toast stays: 0 for a short message, 1 for a longer one. |
 
 **Functions**
-- **Show Toast** (message) — shows a toast with the text you pass.
-- **Show Toast Default** — shows a toast with **Message**. Does nothing when **Message** is empty.
-- **Show Alert** (title, message, buttonText) — a dialog with one button. Tapping outside does not close it.
-- **Show Confirm** (title, message, yesText, noText) — a yes or no question.
-- **Show Popup** (title, message) — a dialog with an OK button that the person can also dismiss.
+- **Show Toast** (message): shows a toast with the text you pass.
+- **Show Toast Default**: shows a toast with **Message**. Does nothing when **Message** is empty.
+- **Show Alert** (title, message, buttonText): a dialog with one button. Tapping outside does not close it.
+- **Show Confirm** (title, message, yesText, noText): a yes or no question.
+- **Show Popup** (title, message): a dialog with an OK button that the person can also dismiss.
 
 **Events**
-- **Alert Closed** — the alert's button was tapped.
-- **Confirm Selected** (yes) — the confirm dialog was answered: true for the yes button, false for the no button.
-- **Popup Closed** — the popup went away, by OK or by being dismissed.
+- **Alert Closed**: the alert's button was tapped.
+- **Confirm Selected** (yes): the confirm dialog was answered: true for the yes button, false for the no button.
+- **Popup Closed**: the popup went away, by OK or by being dismissed.
 
 ## Troubleshooting content
 

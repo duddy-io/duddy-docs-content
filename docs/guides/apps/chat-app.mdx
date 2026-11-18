@@ -1,6 +1,6 @@
 ---
 title: Build a chat app
-description: Sign-in, a list of conversations and a live chat screen on Firebase — one ChatView, a Firestore query, and the blocks that join them.
+description: Sign-in, a list of conversations and a live chat screen on Firebase, one ChatView, a Firestore query, and the blocks that join them.
 ---
 
 A chat app is four screens and no server of your own. Firebase holds the accounts and the
@@ -12,7 +12,7 @@ messages, Firestore pushes every new message to the phones that are looking, and
 
 <Steps>
   <Step>A Firebase project with **Email/Password** turned on under Authentication and a **Cloud Firestore** database created.</Step>
-  <Step>Connect it under **Settings → Integrations → Firebase**: connect your Firebase account with one click on your Google account and pick the project — Duddy pulls `google-services.json` and `GoogleService-Info.plist` for you — or upload the two files by hand.</Step>
+  <Step>Connect it under **Settings → Integrations → Firebase**: connect your Firebase account with one click on your Google account and pick the project (Duddy pulls `google-services.json` and `GoogleService-Info.plist` for you), or upload the two files by hand.</Step>
   <Step>Drop **FirebaseAuth** and **Firestore** onto every screen that needs them. Both draw nothing and contribute blocks.</Step>
 </Steps>
 
@@ -27,9 +27,9 @@ messages, Firestore pushes every new message to the phones that are looking, and
 
 | Collection | A document holds |
 |---|---|
-| `users/{uid}` | `name`, `email` — written at sign-in so other people can find you and name you. |
+| `users/{uid}` | `name`, `email`: written at sign-in so other people can find you and name you. |
 | `rooms/{roomId}` | `members` (a list of uids), `names` (a dictionary of uid → name), `lastMessage`, `updatedAt`, and `typing` (the uid typing right now, or `""`). |
-| `rooms/{roomId}/messages/{id}` | `text`, `senderId`, `senderName`, `sentAt`, `status`, `imageUrl` — the fields a ChatView message carries. |
+| `rooms/{roomId}/messages/{id}` | `text`, `senderId`, `senderName`, `sentAt`, `status`, `imageUrl`. The fields a ChatView message carries. |
 
 Firestore hands every document back as a dictionary with its id under `_id`, and a
 timestamp as ISO text such as `2026-06-03T09:14:05.000Z`, which **format date** turns
@@ -41,13 +41,13 @@ A `SignIn` screen: two Inputs, a sign-in Button, a sign-up Button, FirebaseAuth,
 and a Notifier.
 
 <Steps>
-  <Step>**Screen Initialize** — if **Is Signed In**, open `Chats` and close this screen.</Step>
-  <Step>Sign-in button **Click** — **Sign In With Email** with the two fields' Text. The sign-up button calls **Sign Up With Email** the same way.</Step>
-  <Step>**Sign In Success** and **Sign Up Success** (email, uid) — **Set Document** `users`, the uid, a dictionary of `name` and `email`, then open `Chats`.</Step>
-  <Step>**Sign In Failed** and **Sign Up Failed** (error) — **Show Toast** with the error.</Step>
+  <Step>**Screen Initialize**: if **Is Signed In**, open `Chats` and close this screen.</Step>
+  <Step>Sign-in button **Click**: **Sign In With Email** with the two fields' Text. The sign-up button calls **Sign Up With Email** the same way.</Step>
+  <Step>**Sign In Success** and **Sign Up Success** (email, uid): **Set Document** `users`, the uid, a dictionary of `name` and `email`, then open `Chats`.</Step>
+  <Step>**Sign In Failed** and **Sign Up Failed** (error): **Show Toast** with the error.</Step>
 </Steps>
 
-Keep the signed-in user's uid and name in global variables — every screen below reads them.
+Keep the signed-in user's uid and name in global variables. Every screen below reads them.
 **Get Current User Uid** gives the uid at any time; the name is the one you stored.
 
 ## The chats list
@@ -56,11 +56,11 @@ A `Chats` screen: a TopBar, a RecyclerView whose row is an Avatar, a name, the l
 and a time, a new-chat Button, Firestore and FirebaseAuth.
 
 <Steps>
-  <Step>**Initialize** — **Listen To Query**: collection `rooms`, where `members` `array-contains` the uid, order by `updatedAt`, descending, limit 50.</Step>
-  <Step>**Collection Received** (path, data) — parse the JSON into a list, keep it in a variable and refresh the RecyclerView.</Step>
-  <Step>**Bind Item** — take the room at that index: the other member's name from `names` (the member whose uid is not mine), `lastMessage`, and `updatedAt` through **format date** `09:14`.</Step>
-  <Step>Row **Click** — put the room's `_id` in a global variable and open `Chat`.</Step>
-  <Step>New-chat button **Click** — open `NewChat`.</Step>
+  <Step>**Initialize**: **Listen To Query**: collection `rooms`, where `members` `array-contains` the uid, order by `updatedAt`, descending, limit 50.</Step>
+  <Step>**Collection Received** (path, data): parse the JSON into a list, keep it in a variable and refresh the RecyclerView.</Step>
+  <Step>**Bind Item**: take the room at that index: the other member's name from `names` (the member whose uid is not mine), `lastMessage`, and `updatedAt` through **format date** `09:14`.</Step>
+  <Step>Row **Click**, put the room's `_id` in a global variable and open `Chat`.</Step>
+  <Step>New-chat button **Click**, open `NewChat`.</Step>
 </Steps>
 
 The list is live: a message sent in any room moves that room to the top and refreshes its
@@ -70,15 +70,15 @@ again.
 ## The chat screen
 
 A `Chat` screen: a TopBar and **one ChatView** with Width and Height set to Fill, plus
-Firestore and FirebaseAuth. Everything a conversation needs — bubbles, times, ticks, the
-composer — is inside the one component; see [ChatView](/components/content#chatview).
+Firestore and FirebaseAuth. Everything a conversation needs (bubbles, times, ticks, the
+composer) is inside the one component; see [ChatView](/components/content#chatview).
 
 <Steps>
-  <Step>**Initialize** — set the ChatView's **My Id** to the uid. **Listen To Query**: collection `rooms/` joined with the room id and `/messages`, no filter, order by `sentAt`, ascending, limit 50. **Listen To Document** `rooms`, the room id — that one is for typing, below.</Step>
-  <Step>**Collection Received** (path, data) — when the path is the messages path, build the list of messages: for each document, a dictionary with `id` = its `_id`, `text`, `senderId`, `senderName`, `status`, `imageUrl`, `time` = **format date** `09:14` of `sentAt`, and `date` = **format date** `3 Jun` of `sentAt`. Set the ChatView's **Messages** to that list. It stays pinned to the newest message when the reader was already there, and keeps their place when they were not.</Step>
-  <Step>ChatView **Send** (text) — **Add Document** to the messages path: `text`, `senderId` the uid, `senderName` the name, `sentAt` **Server Timestamp**, `status` `sent`, `imageUrl` `""`. Then **Update Document** `rooms`, the room id, with `lastMessage` the text and `updatedAt` **Server Timestamp**. The composer has already cleared itself.</Step>
+  <Step>**Initialize**: set the ChatView's **My Id** to the uid. **Listen To Query**: collection `rooms/` joined with the room id and `/messages`, no filter, order by `sentAt`, ascending, limit 50. **Listen To Document** `rooms`, the room id, that one is for typing, below.</Step>
+  <Step>**Collection Received** (path, data): when the path is the messages path, build the list of messages: for each document, a dictionary with `id` = its `_id`, `text`, `senderId`, `senderName`, `status`, `imageUrl`, `time` = **format date** `09:14` of `sentAt`, and `date` = **format date** `3 Jun` of `sentAt`. Set the ChatView's **Messages** to that list. It stays pinned to the newest message when the reader was already there, and keeps their place when they were not.</Step>
+  <Step>ChatView **Send** (text), **Add Document** to the messages path: `text`, `senderId` the uid, `senderName` the name, `sentAt` **Server Timestamp**, `status` `sent`, `imageUrl` `""`. Then **Update Document** `rooms`, the room id, with `lastMessage` the text and `updatedAt` **Server Timestamp**. The composer has already cleared itself.</Step>
   <Step>For a bubble that appears before the write lands, call **Add Message** first with the same record, `status` `sending` and `time` `""`; the listener's next delivery replaces it with the stored copy and its tick.</Step>
-  <Step>TopBar navigation **Click** — **Stop Listening** with `""`, then close the screen.</Step>
+  <Step>TopBar navigation **Click**: **Stop Listening** with `""`, then close the screen.</Step>
 </Steps>
 
 <Callout type="info">
@@ -102,8 +102,8 @@ server nothing is there to say so; skip it, and the ticks show `sent` → `read`
 ## Who is typing
 
 <Steps>
-  <Step>ChatView **Typing** (typing) — **Update Document** `rooms`, the room id, with `typing` set to the uid when typing is true and to `""` when false.</Step>
-  <Step>**Document Changed** (id, data) — from the Listen To Document in Initialize: if `typing` is neither `""` nor the uid, set the ChatView's **Typing Text** to the other name joined with ` is typing…`; otherwise set it to `""`.</Step>
+  <Step>ChatView **Typing** (typing): **Update Document** `rooms`, the room id, with `typing` set to the uid when typing is true and to `""` when false.</Step>
+  <Step>**Document Changed** (id, data): from the Listen To Document in Initialize: if `typing` is neither `""` nor the uid, set the ChatView's **Typing Text** to the other name joined with ` is typing…`; otherwise set it to `""`.</Step>
 </Steps>
 
 ## Pictures
@@ -112,9 +112,9 @@ Add an ImagePicker and a FirebaseStorage to the chat screen, and set the ChatVie
 **Attach Icon** to `Paperclip` so the composer shows the button.
 
 <Steps>
-  <Step>ChatView **Attach** — ImagePicker **Open Picker**.</Step>
-  <Step>**Image Picked** (path) — FirebaseStorage **Upload File** with that path and a remote path unique to the message: `rooms/`, the room id, `/`, the uid and **Get Current Time Ms** joined, with `.jpg`.</Step>
-  <Step>**Upload Finished** (remotePath, downloadUrl) — **Add Document** the message as before with `imageUrl` the downloadUrl and `text` the ChatView's **Composer Text** as the caption, update the room, then set Composer Text to `""`.</Step>
+  <Step>ChatView **Attach**: ImagePicker **Open Picker**.</Step>
+  <Step>**Image Picked** (path): FirebaseStorage **Upload File** with that path and a remote path unique to the message: `rooms/`, the room id, `/`, the uid and **Get Current Time Ms** joined, with `.jpg`.</Step>
+  <Step>**Upload Finished** (remotePath, downloadUrl): **Add Document** the message as before with `imageUrl` the downloadUrl and `text` the ChatView's **Composer Text** as the caption, update the room, then set Composer Text to `""`.</Step>
 </Steps>
 
 ChatView draws an image message as the picture with the caption under it inside the bubble.
@@ -124,17 +124,17 @@ ChatView draws an image message as the picture with the caption under it inside 
 A `NewChat` screen: a RecyclerView of people and Firestore.
 
 <Steps>
-  <Step>**Initialize** — **Query Collection** `users`, no filter, order by `name`, ascending, limit 0.</Step>
-  <Step>**Collection Received** — fill the list; **Bind Item** shows each `name` with an Avatar of its initials.</Step>
-  <Step>Row **Click** — **Add Document** `rooms` with `members` a list of the uid and their `_id`, `names` a dictionary of both uids to both names, `lastMessage` `""`, `updatedAt` **Server Timestamp** and `typing` `""`.</Step>
-  <Step>**Operation Success** (operation, documentId) — when the operation is `AddDocument`, put documentId in the room variable and open `Chat`.</Step>
+  <Step>**Initialize**: **Query Collection** `users`, no filter, order by `name`, ascending, limit 0.</Step>
+  <Step>**Collection Received**: fill the list; **Bind Item** shows each `name` with an Avatar of its initials.</Step>
+  <Step>Row **Click**: **Add Document** `rooms` with `members` a list of the uid and their `_id`, `names` a dictionary of both uids to both names, `lastMessage` `""`, `updatedAt` **Server Timestamp** and `typing` `""`.</Step>
+  <Step>**Operation Success** (operation, documentId): when the operation is `AddDocument`, put documentId in the room variable and open `Chat`.</Step>
 </Steps>
 
 ## What needs a server
 
 A phone cannot wake another phone. A push notification for a new message is sent by a
 **Cloud Function** in your Firebase project that runs when a document is added to
-`messages` and sends through Cloud Messaging to the other members — their tokens come from
+`messages` and sends through Cloud Messaging to the other members. Their tokens come from
 [FirebaseNotifications](/components/firebase#firebasenotifications) **Get Token**, stored on
 each `users` document. Duddy builds the app, not that function; write it in the Firebase
 console.

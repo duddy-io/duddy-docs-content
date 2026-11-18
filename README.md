@@ -2,7 +2,7 @@
 
 The documentation source for [docs.duddy.io](https://docs.duddy.io).
 
-This repository is Markdown (MDX), nothing else — no code, no build, no
+This repository is Markdown (MDX), nothing else. No code, no build, no
 dependencies. The site that renders it lives in the `duddy-docs` repository.
 
 ## Layout
@@ -18,7 +18,7 @@ docs/<section>/menu.json               →  that section's sidebar
 
 Sections are `home`, `guides`, `components` and `changelogs`. `home` is
 served at the root, so its files carry no `/home` prefix in the URL. A file
-path is a public URL — renaming a document breaks every external link to it.
+path is a public URL: renaming a document breaks every external link to it.
 
 Every document opens with frontmatter, and unknown keys are rejected:
 
@@ -29,7 +29,7 @@ description: One line, used as the page's meta description.
 ---
 ```
 
-MDX may use Markdown plus the components the renderer registers — nothing
+MDX may use Markdown plus the components the renderer registers. Nothing
 else: `Callout`, `CodeBlock`, `Accordion`/`AccordionItem`, `YouTube`,
 `NextPrev`, `Badge`, `Terminal`, `Card`/`CardGrid`, `Steps`/`Step`, `Figure`
 and `FigureRow`. Any other tag is a render error in production. `menu.json`
@@ -68,7 +68,7 @@ when the site is next deployed.
 ## Before you push
 
 This repository is public. Anything committed is world-readable immediately
-and stays in the history afterwards — no secrets, internal URLs, customer
+and stays in the history afterwards. No secrets, internal URLs, customer
 names or unreleased features, including inside screenshots.
 
 Nothing here runs CI, so check with the renderer before you push. From a

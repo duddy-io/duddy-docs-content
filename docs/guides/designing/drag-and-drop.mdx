@@ -28,7 +28,7 @@ You cannot drop a container into itself or into anything inside it.
 
 ### Components that do not draw on the screen
 
-Some components do their work in the background: [HttpRequest](/components/connectivity#httprequest), [AppStorage](/components/storage#appstorage) and others. While you drag one, the canvas says "Release anywhere — HttpRequest has no on-screen position". Drop it anywhere: the toast confirms it was added, it runs in the background, and its blocks are ready in the block editor.
+Some components do their work in the background: [HttpRequest](/components/connectivity#httprequest), [AppStorage](/components/storage#appstorage) and others. While you drag one, the canvas says "Release anywhere, HttpRequest has no on-screen position". Drop it anywhere: the toast confirms it was added, it runs in the background, and its blocks are ready in the block editor.
 
 [Dialog](/components/layout#dialog) and [BottomSheet](/components/layout#bottomsheet) float over the screen. They are closed until your logic opens them, so after you drop one, the canvas shows it open for you to fill: drop components into it. When you have finished, press **Stop showing it** in the **Not shown here** list to see the screen again.
 
@@ -80,7 +80,7 @@ See [Layout and sizing](/guides/designing/layout-and-sizing) for what **Fill**, 
 
 A screen often holds more than the canvas shows at once: the pages of a ViewPager, the body of each tab, a closed dialog or bottom sheet, other states your logic swaps in, and components that work in the background. When a screen has any of these, a **Not shown here** list appears beside the phone.
 
-Click an entry to show it on the canvas. A banner says "Showing *name* — the app opens without it", and **Stop showing it** puts the canvas back. Showing an entry changes nothing in your design: the app still opens without it.
+Click an entry to show it on the canvas. A banner says "Showing *name*, the app opens without it", and **Stop showing it** puts the canvas back. Showing an entry changes nothing in your design: the app still opens without it.
 
 An ordinary component with **Visible** turned off is not in this list. Find it with the component tree's **Hidden** filter.
 

@@ -1,11 +1,11 @@
 ---
 title: Duddy documentation
-description: Design an app in the browser and compile it for Android, iOS and the web — with drag and drop, logic blocks, or a sentence.
+description: Design an app in the browser and compile it for Android, iOS and the web, with drag and drop, logic blocks, or a sentence.
 ---
 
 Duddy is an app builder that runs in your browser. You design screens on a canvas,
 describe behaviour with blocks that snap together, and Duddy compiles the result into
-a real Android app, a real iOS app, and a web app — from one project.
+a real Android app, a real iOS app, and a web app, from one project.
 
 There is no code to write, and nothing to install.
 
@@ -26,18 +26,18 @@ There is no code to write, and nothing to install.
 
 ## How a project becomes an app
 
-A Duddy project is a set of **screens**. Each screen holds a tree of **components** —
-a Column with a TopBar, some text, an image, a button — and a **logic workspace** where
+A Duddy project is a set of **screens**. Each screen holds a tree of **components**
+(a Column with a TopBar, some text, an image, a button) and a **logic workspace** where
 blocks describe what happens when someone uses it.
 
 When you build, Duddy compiles that project into native source for the target you picked
 and runs the platform's real toolchain over it. An Android build is compiled Java running
-in a real Android app; an iOS build is Swift built with Xcode; a web build — coming soon —
+in a real Android app; an iOS build is Swift built with Xcode; a web build (coming soon)
 is a bundle you can host or install as a PWA. There is no interpreter shipped in the middle,
 which is why the result behaves like an app rather than a website in a wrapper.
 
-While you design, **Live test** runs the same project on your own phone — inside an app
-carrying your package name, icon and keys — and follows every edit as it lands.
+While you design, **Live test** runs the same project on your own phone (inside an app
+carrying your package name, icon and keys) and follows every edit as it lands.
 
 ## Three ways to build the same thing
 
@@ -51,16 +51,16 @@ project, and you can move between them mid-screen.
 | **Vibe (AI)** | Describe a screen or a whole app in the chat and it gets built. | Getting past a blank canvas, and bulk edits. |
 
 <Callout type="info">
-  Anything the AI produces is ordinary project structure — the same component tree and the
+  Anything the AI produces is ordinary project structure: the same component tree and the
   same blocks you get by hand. There is no generated layer to untangle before you can edit it.
 </Callout>
 
 ## What you get
 
-- **Android** — an `.apk` to sideload. The `.aab` Google Play uploads take is on its way.
-- **iOS** <Badge type="beta" /> — an `.ipa`, built on real Xcode and signed with your own
+- **Android**: an `.apk` to sideload. The `.aab` Google Play uploads take is on its way.
+- **iOS** <Badge type="beta" />: an `.ipa`, built on real Xcode and signed with your own
   Apple key.
-- **Web** — a bundle hosted on a live link straight from the builder.
+- **Web**: a bundle hosted on a live link straight from the builder.
   [Coming soon](/getting-started/build-the-app#web-builds-and-hosting).
 
 ## Where to go next

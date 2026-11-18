@@ -6,7 +6,7 @@ description: Video, audio, the camera, animation, and turning speech into text a
 Video, audio, the camera, animation, and turning speech into text and back.
 
 <Callout type="info">
-  The pickers — **ImagePicker**, and the file and contact pickers in other categories — need no
+  The pickers, **ImagePicker**, and the file and contact pickers in other categories, need no
   permission on either platform, because the system UI does the asking. Prefer one wherever it fits.
 </Callout>
 
@@ -29,31 +29,31 @@ A surface that plays a video from a web URL, a file on the device, or a bundled 
 
 *Drawn on the screen.*
 
-**Events** — `Prepared`, `Completed`, `Error`
+**Events**: `Prepared`, `Completed`, `Error`
 
-**Functions** — `Play`, `Pause`, `Stop`, `Seek To`
+**Functions**: `Play`, `Pause`, `Stop`, `Seek To`
 
 ## AudioPlayer
 
 Plays an audio file from a URL or an uploaded asset with no visible view on the screen. Used for background music, sound effects and voice clips.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+*Draws nothing: drop it anywhere on the screen and it contributes blocks only.*
 
-**Events** — `Playback Started`, `Playback Paused`, `Playback Completed`, `Error Occurred`
+**Events**: `Playback Started`, `Playback Paused`, `Playback Completed`, `Error Occurred`
 
-**Functions** — `Play`, `Pause`, `Stop`, `Seek To`
+**Functions**: `Play`, `Pause`, `Stop`, `Seek To`
 
 ## AudioEffects
 
 An equalizer, bass boost and virtualizer for the music an app plays with [AudioPlayer](#audioplayer), for a music player's sound settings. It needs no wiring: while **Enabled** is on it changes the sound of every AudioPlayer in the app, on any screen, so it can sit on a settings screen of its own. Bands are numbered from 0 and set in decibels; use **Min Band Level** and **Max Band Level** as a slider's range.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.* Built for Android and the web, not iOS: importing it into a project that targets iOS is refused.
+*Draws nothing: drop it anywhere on the screen and it contributes blocks only.* Built for Android and the web, not iOS: importing it into a project that targets iOS is refused.
 
-**Properties** — `Enabled`, `Bass Boost Strength` (0–1000), `Virtualizer Strength` (0–1000), `Band Count`, `Min Band Level`, `Max Band Level` (the last three read only)
+**Properties**: `Enabled`, `Bass Boost Strength` (0–1000), `Virtualizer Strength` (0–1000), `Band Count`, `Min Band Level`, `Max Band Level` (the last three read only)
 
-**Events** — `Error Occurred`
+**Events**: `Error Occurred`
 
-**Functions** — `Set Band Level`, `Get Band Level`, `Band Frequency`, `Presets`, `Use Preset`
+**Functions**: `Set Band Level`, `Get Band Level`, `Band Frequency`, `Presets`, `Use Preset`
 
 ## Lottie
 
@@ -61,9 +61,9 @@ Plays a Lottie (JSON) animation from a bundled asset or an https URL, with loopi
 
 *Drawn on the screen.*
 
-**Events** — `Animation Finished`
+**Events**: `Animation Finished`
 
-**Functions** — `Play`, `Pause`, `Stop`
+**Functions**: `Play`, `Pause`, `Stop`
 
 ## CameraView
 
@@ -71,62 +71,62 @@ A live camera preview embedded in the screen, used to show what the lens sees an
 
 *Drawn on the screen.*
 
-**Events** — `Picture Taken`, `Picture Take Error`, `Camera Started`, `Camera Stopped`
+**Events**: `Picture Taken`, `Picture Take Error`, `Camera Started`, `Camera Stopped`
 
-**Functions** — `Start Preview`, `Stop Preview`, `Switch Camera`, `Take Picture`
+**Functions**: `Start Preview`, `Stop Preview`, `Switch Camera`, `Take Picture`
 
-**Android permissions** — `CAMERA`
+**Android permissions**: `CAMERA`
 
 ## CameraCapture
 
 A non-visual component for capturing photos and recording videos using the device camera.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+*Draws nothing: drop it anywhere on the screen and it contributes blocks only.*
 
-**Events** — `Photo Captured`, `Video Recorded`, `Error Occurred`
+**Events**: `Photo Captured`, `Video Recorded`, `Error Occurred`
 
-**Functions** — `Take Photo`, `Record Video`
+**Functions**: `Take Photo`, `Record Video`
 
 ## ImagePicker
 
 A non-visual component that picks images from the device gallery and reports real file paths. Uses the permission-free system photo picker on both platforms.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+*Draws nothing: drop it anywhere on the screen and it contributes blocks only.*
 
-**Events** — `Image Picked`, `Images Picked`, `Cancelled`, `Error`
+**Events**: `Image Picked`, `Images Picked`, `Cancelled`, `Error`
 
-**Functions** — `Open Picker`, `Get Path`, `Clear`
+**Functions**: `Open Picker`, `Get Path`, `Clear`
 
 ## Microphone
 
 Records audio from the device microphone into an m4a file in private app storage, with permission handling and a live amplitude reading for level meters.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+*Draws nothing: drop it anywhere on the screen and it contributes blocks only.*
 
-**Events** — `Recording Started`, `Recording Stopped`, `Permission Granted`, `Permission Denied`, `Error`
+**Events**: `Recording Started`, `Recording Stopped`, `Permission Granted`, `Permission Denied`, `Error`
 
-**Functions** — `Request Permission`, `Start Recording`, `Stop Recording`, `Amplitude`
+**Functions**: `Request Permission`, `Start Recording`, `Stop Recording`, `Amplitude`
 
-**Android permissions** — `RECORD_AUDIO`
+**Android permissions**: `RECORD_AUDIO`
 
 ## SpeechRecognizer
 
 Listens through the microphone and turns speech into text, reporting words as they are spoken. Nothing is drawn, and microphone permission is required.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+*Draws nothing: drop it anywhere on the screen and it contributes blocks only.*
 
-**Events** — `Ready`, `Result`, `Partial Result`, `Permission Granted`, `Permission Denied`, `Error`
+**Events**: `Ready`, `Result`, `Partial Result`, `Permission Granted`, `Permission Denied`, `Error`
 
-**Functions** — `Request Permission`, `Start Listening`, `Stop Listening`, `Cancel`
+**Functions**: `Request Permission`, `Start Listening`, `Stop Listening`, `Cancel`
 
-**Android permissions** — `RECORD_AUDIO`
+**Android permissions**: `RECORD_AUDIO`
 
 ## TextToSpeech
 
 A non-visual component that speaks text aloud using the device's speech engine, with language, pitch and rate control.
 
-*Draws nothing — drop it anywhere on the screen and it contributes blocks only.*
+*Draws nothing: drop it anywhere on the screen and it contributes blocks only.*
 
-**Events** — `Ready`, `Speech Started`, `Speech Finished`, `Error`
+**Events**: `Ready`, `Speech Started`, `Speech Finished`, `Error`
 
-**Functions** — `Speak`, `Speak Queued`, `Stop`, `Is Language Available`
+**Functions**: `Speak`, `Speak Queued`, `Stop`, `Is Language Available`
